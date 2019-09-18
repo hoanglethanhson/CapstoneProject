@@ -1,0 +1,36 @@
+version: '3.7'
+services:
+  server:
+    build:
+      context: ./hovi-server
+    container_name: hovi-server
+    command: npm run start:docker
+    volumes:
+      - ./hovi-server:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: docker
+    ports:
+      - 8080:8080
+    networks:
+      - back-tier
+    depends_on:
+      - mysql
+  mysql:
+    build: ./hovi-database
+    container_name: hovi-database
+    ports:
+      - 3307:3306
+    env_file:
+      - ./hovi-server/config/env-files/.env.docker
+    networks:
+      - back-tier
+  mysql-test:
+    build: ./hovi-database
+    container_name: hovi-database-test
+    ports:
+      - 3308:3306
+    env_file:
+      - ./hovi-server/config/env-files/.env.test
+networks:
+  back-tier:

@@ -1,0 +1,11 @@
+node_modules
+src/**/*.js
+src/**/*.js.map
+
+yarn.lock
+
+#buil folder
+coverage/
+test-report/
+public/
+build/
