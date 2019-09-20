@@ -1,19 +1,18 @@
 # Hovi backend
 
 ## Setup server
-- Install nodejs6.10 or above.
+- Install nodejs8.0.0 or above.
 - Install Docker ([Docker for window](https://docs.docker.com/docker-for-windows/), [Docker for ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/))
-- On folder `fullstack/cocis-server` run `npm install` or `yarn install` to install dependencies.
-- On folder `fullstack` run `docker-compose up --build -d` to build & start all images docker
-- Turn off **cocis-server** image to start in development environment:
+- Run `docker-compose up --build -d` to build & start all images docker
+- Turn off **hovi-backend_server** image to start in development environment:
     - Step 1: Run `docker ps` to list all images running, find image-name* need to stop.
-    - Step 2: Run `docker stop image-name:`  to stop **cocis-server** image.
-    - Step 3: On folder `fullstack/cocis-server` to run `npm dev` or `yarn dev` to start development.
+    - Step 2: Run `docker stop image-name:`  to stop **hovi-backend_server** image.
+    - Step 3: On folder `hovi-backend/hovi-server` to run `npm start` or `yarn start` to start development.
 > Note: Should not stop *mysql* or *mysql_test* image, it is used during server development.
 
 ## Scripts
-- `npm start`: Run server app with docker environment (Use only for docker).
-- `npm dev`: Run server app with development environment.
+- `npm start`: Run server app with local environment (Use for development).
+- `npm run start:docker`: Run server app with docker environment (Use to development in docker).
 - `npm build`: Build server app into *dist* folder.
 - `npm test`: Build & run tests server app.
 - `npm test:watch`: Run tests in watch mode
