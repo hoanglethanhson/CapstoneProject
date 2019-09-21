@@ -13,11 +13,10 @@
     "Hoang Le Thanh Son <SonHLTSE05415@fpt.edu.vn> (https://www.facebook.com/son.hoanglethanh)"
   ],
   "scripts": {
-    "start": "tsc-watch --onSuccess \"node ./build/src/server.js\"",
-    "start:docker": "tsc && NODE_ENV=docker node ./build/src/server.js",
+    "dev": "NODE_ENV=development tsc-watch --onSuccess \"node ./build/src/server.js\"",
+    "start": "tsc && node ./build/src/server.js",
     "build": "tsc",
     "test": "tsc && jest --coverage --verbose",
-    "test:gitlabCI": "tsc && NODE_ENV=gitlabCI jest --coverage --verbose",
     "test:watch": "jest --watch --runInBand"
   },
   "devDependencies": {

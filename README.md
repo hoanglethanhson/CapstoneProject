@@ -11,8 +11,8 @@
 > Note: Should not stop *mysql* or *mysql_test* image, it is used during server development.
 
 ## Scripts
-- `npm start`: Run server app with local environment (Use for development).
-- `npm run start:docker`: Run server app with docker environment (Use to development in docker).
+- `npm dev`: Run server app with local environment (Use for development).
+- `npm start`: Run server app with custom environment (Use for devops).
 - `npm build`: Build server app into *dist* folder.
 - `npm test`: Build & run tests server app.
 - `npm test:watch`: Run tests in watch mode

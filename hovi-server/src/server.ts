@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 require('dotenv-flow').config({
   path: './config/env-files',
-  node_env: process.env.NODE_ENV || 'development',
+  node_env: process.env.NODE_ENV
 });
 
 import http from 'http';

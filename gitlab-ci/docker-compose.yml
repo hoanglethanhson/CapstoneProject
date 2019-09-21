@@ -8,7 +8,7 @@ services:
         - registry.gitlab.com/hovi-team-development/hovi-backend/server:latest
     image: registry.gitlab.com/hovi-team-development/hovi-backend/server:latest
     container_name: hovi-server-test
-    command: npm run test:gitlabCI
+    command: npm run test
     volumes:
       - ../hovi-server:/usr/src/app
       - /usr/src/app/node_modules
