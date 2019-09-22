@@ -1,6 +1,5 @@
 export default {
     APP_NAME: process.env.APP_NAME,
-    API_PATH: process.env.API_PATH,
     ENV: process.env.NODE_ENV,
     PORT: parseInt(process.env.PORT, 10),
     HOST: process.env.HOST,

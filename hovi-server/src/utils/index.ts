@@ -1,6 +1,5 @@
 import {Router, Handler} from "express";
 import {validate} from 'class-validator';
-import config from '../../config';
 import Authentication from '../middleware/authentication';
 import {HTTP400Error} from './httpErrors';
 
@@ -25,7 +24,7 @@ type Route = {
 export const applyRoutes = (routes: Route[], router: Router) => {
     for (const route of routes) {
         const {method, path, handler, authentication} = route;
-        (router as any)[method](config.API_PATH + path, authentication ? [Authentication, handler] : handler);
+        (router as any)[method](path, authentication ? [Authentication, handler] : handler);
     }
 };
 
