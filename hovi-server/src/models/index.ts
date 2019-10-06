@@ -3,6 +3,7 @@ import config from '../../config';
 import {User} from './user';
 import {RoomType} from "./room_type";
 import {Service} from "./service";
+import {Amenities} from "./amenities";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -20,7 +21,8 @@ export class DatabaseManager {
             entities: [
                 User,
                 RoomType,
-                Service
+                Service,
+                Amenities
             ],
             maxQueryExecutionTime: 1000
         });
