@@ -1,3 +1,4 @@
 import UserRoutes from './user-route';
-
-export default [...UserRoutes];
+import RoomTypeRoutes from './roomType-route'
+import ServiceRoutes from './service-route'
+export default [...UserRoutes, ...RoomTypeRoutes, ...ServiceRoutes];

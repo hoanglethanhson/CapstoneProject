@@ -8,7 +8,7 @@ export default class UserFunction {
         const users = await User.repo.find();
 
         // console.log(users);
-        if (users.length != 0) res.status(200).send(users);
+        if (users.length != 0) res.status(200).send("users");
         else next(new HTTP400Error('0 record.'));
     };
 

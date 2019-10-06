@@ -1,6 +1,8 @@
 import {createConnection, Connection} from 'typeorm';
 import config from '../../config';
 import {User} from './user';
+import {RoomType} from "./room_type";
+import {Service} from "./service";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -16,7 +18,9 @@ export class DatabaseManager {
             password: config.MYSQL_PASSWORD,
             database: config.MYSQL_DATABASE,
             entities: [
-                User
+                User,
+                RoomType,
+                Service
             ],
             maxQueryExecutionTime: 1000
         });
