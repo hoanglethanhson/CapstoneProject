@@ -4,6 +4,7 @@ import {User} from './user';
 import {RoomType} from "./room_type";
 import {Service} from "./service";
 import {Amenities} from "./amenities";
+import {Building} from "./building";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -22,7 +23,8 @@ export class DatabaseManager {
                 User,
                 RoomType,
                 Service,
-                Amenities
+                Amenities,
+                Building
             ],
             maxQueryExecutionTime: 1000
         });

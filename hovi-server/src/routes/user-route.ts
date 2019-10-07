@@ -4,13 +4,13 @@ export default [
     {
         path: "/user/",
         method: "get",
-        authentication: true,
+        authentication: false,
         handler: UserFunction.getUsers
     },
     {
         path: "/user/:userId",
         method: "get",
-        authentication: true,
+        authentication: false,
         handler: UserFunction.getUser
     },
     {
@@ -22,13 +22,13 @@ export default [
     {
         path: "/user/:userId",
         method: "put",
-        authentication: true,
+        authentication: false,
         handler: UserFunction.updateUser
     },
     {
         path: "/user/:userId",
         method: "delete",
-        authentication: true,
+        authentication: false,
         handler: UserFunction.deleteUser
     },
 ];

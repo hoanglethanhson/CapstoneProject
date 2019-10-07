@@ -1,3 +1,4 @@
+/*
 import {QueryFailedError} from 'typeorm';
 import {DatabaseManager} from '../../src/models';
 import {User} from '../../src/models/user';
@@ -80,3 +81,4 @@ describe('[model] user', () => {
         expect(result).toBeFalsy();
     });
 });
+*/

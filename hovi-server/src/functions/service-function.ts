@@ -7,7 +7,6 @@ export default class ServiceFunction {
     static getServices: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const services = await Service.repo.find();
 
-        // console.log(users);
         if (services.length != 0) res.status(200).send(services);
         else next(new HTTP400Error('0 record.'));
     };

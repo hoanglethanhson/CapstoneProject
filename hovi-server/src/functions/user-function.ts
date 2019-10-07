@@ -8,7 +8,7 @@ export default class UserFunction {
         const users = await User.repo.find();
 
         // console.log(users);
-        if (users.length != 0) res.status(200).send("users");
+        if (users.length != 0) res.status(200).send(users);
         else next(new HTTP400Error('0 record.'));
     };
 
@@ -26,9 +26,9 @@ export default class UserFunction {
 
         if (error) next(error);
         else {
-            const checkUsername = await User.repo.findOne({userName: body['userName']});
+            const checkUsername = await User.repo.findOne({phone: body['phone']});
 
-            if (checkUsername) next(new HTTP400Error('Username already exists'));
+            if (checkUsername) next(new HTTP400Error('Phone number already exists'));
             else {
                 const newUser = await User.repo.save(body);
                 const successResponse = await User.repo.findOne({id: newUser.id});
