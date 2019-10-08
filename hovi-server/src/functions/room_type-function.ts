@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction, Handler} from "express";
 import {validateByModel} from '../utils';
 import {HTTP400Error} from '../utils/httpErrors';
-import {RoomType} from "../models/room_type";
+import {RoomType} from "../models/building_type";
 
 export default class RoomTypeFunction {
     static getRoomTypes: Handler = async (req: Request, res: Response, next: NextFunction) => {

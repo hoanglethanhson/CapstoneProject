@@ -5,7 +5,7 @@ import {
     Entity,
     EntityRepository, getCustomRepository,
     Repository,
-    PrimaryColumn, ManyToOne, JoinColumn
+    PrimaryColumn, ManyToOne, JoinColumn, OneToMany
 } from 'typeorm';
 import {MaxLength, IsEmail, Length} from 'class-validator';
 import {Building} from "./building";
@@ -16,11 +16,11 @@ export class User extends BaseEntity {
     static readonly tableName = 'user';
     static readonly schema = {
         id: 'user_id',
-        name: 'name',
+        firstName: 'first_name',
+        lastName: 'last_name',
         phone: 'phone',
         phoneToken: 'phone_token',
         gender: 'gender',
-        buildingId: 'building_id',
         facebookId: 'facebook_id',
         googleId: 'google_id',
         email: 'email',
@@ -43,12 +43,21 @@ export class User extends BaseEntity {
 
     @Column({
         type: "varchar",
-        length: 1000,
+        length: 255,
         unique: false,
-        name: User.schema.name,
+        name: User.schema.firstName,
     })
-    @Length(1, 1000)
-    name: string;
+    @Length(1, 255)
+    firstName: string;
+
+    @Column({
+        type: "varchar",
+        length: 255,
+        unique: false,
+        name: User.schema.lastName,
+    })
+    @Length(1, 255)
+    lastName: string;
 
     @Column({
         type: "varchar",
@@ -75,11 +84,6 @@ export class User extends BaseEntity {
     })
     gender: boolean;
 
-    @ManyToOne(type => Building, building => building.users)
-    @JoinColumn({name: User.schema.buildingId})
-    building: Building;
-    @Column({name: User.schema.buildingId})
-    buildingId: number;
 
     @Column({
         type: "varchar",
@@ -160,6 +164,9 @@ export class User extends BaseEntity {
     })
     update: Date;
 
+    @OneToMany(type => Building, building => building.host)
+    @JoinColumn({name: User.schema.id})
+    buildings: Building[];
 
     static get repo(): UserRepository {
         return getCustomRepository(UserRepository);
@@ -171,11 +178,11 @@ export class UserRepository extends Repository<User> {
     async updateById(userId: any, userUpdate: User) {
         let user = await this.findOne(userId);
         if (user) {
-            user.name = userUpdate.name ? userUpdate.name : user.name;
+            user.firstName = userUpdate.firstName ? userUpdate.firstName : user.firstName;
+            user.lastName = userUpdate.lastName ? userUpdate.lastName : user.lastName;
             user.phone = userUpdate.phone ? userUpdate.phone : user.phone;
             user.phoneToken = userUpdate.phoneToken ? userUpdate.phoneToken : user.phoneToken;
             user.gender = userUpdate.gender ? userUpdate.gender : user.gender;
-            user.buildingId = userUpdate.buildingId ? userUpdate.buildingId : user.buildingId;
             user.facebookId = userUpdate.facebookId ? userUpdate.facebookId : user.facebookId;
             user.googleId = userUpdate.googleId ? userUpdate.googleId : user.googleId;
             user.avatar = userUpdate.avatar ? userUpdate.avatar : user.avatar;

@@ -32,20 +32,17 @@ export class Service extends BaseEntity {
 
     @Column({
         type: "varchar",
-        length: 1000,
+        length: 255,
         unique: true,
         name: Service.schema.name
     })
-    @Length(0, 1000)
     name: string;
 
     @Column({
-        type: "varchar",
-        length: 1000,
+        type: "text",
         unique: true,
         name: Service.schema.description
     })
-    @Length(0, 1000)
     description: string;
 
     @Column({

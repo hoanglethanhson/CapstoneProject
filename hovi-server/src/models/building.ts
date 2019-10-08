@@ -6,7 +6,7 @@ import {
     Repository,
     PrimaryColumn, Index, ManyToOne, JoinColumn, OneToMany
 } from 'typeorm';
-import {RoomType} from "./room_type";
+import {RoomType} from "./building_type";
 import {User} from "./user";
 
 @Entity(Building.tableName)
@@ -14,8 +14,9 @@ export class Building extends BaseEntity {
     static readonly tableName = 'building';
     static readonly schema = {
         id: 'building_id',
-        typeId: 'room_type_id',
+        typeId: 'building_type_id',
         floor: 'floor_quantity',
+        hostId: 'host_id',
         bedroom: 'bedroom_quantity',
         bathroom: 'bathroom_quantity',
         wc: 'wc_quantity',
@@ -37,6 +38,12 @@ export class Building extends BaseEntity {
     roomType: RoomType;
     @Column({name: Building.schema.typeId})
     typeId: number;
+
+    @ManyToOne(type => User, user => user.buildings)
+    @JoinColumn({name: Building.schema.hostId})
+    host: User;
+    @Column({name: Building.schema.hostId})
+    hostId: number;
 
     @Column({
         type: "int",
@@ -90,10 +97,6 @@ export class Building extends BaseEntity {
         name: Building.schema.update
     })
     update: Date;
-
-    @OneToMany(type => User, user => user.building)
-    @JoinColumn({name: Building.schema.id})
-    users: User[];
 
     static get repo(): BuildingRepository {
         return getCustomRepository(BuildingRepository);

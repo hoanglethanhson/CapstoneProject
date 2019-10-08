@@ -34,29 +34,27 @@ export class Amenities extends BaseEntity {
 
     @Column({
         type: "varchar",
-        length: 1000,
+        length: 255,
         unique: true,
         name: Amenities.schema.usableName
     })
-    @Length(0, 1000)
+    @Length(0, 255)
     usableName: string;
 
     @Column({
         type: "varchar",
-        length: 1000,
+        length: 255,
         unique: true,
         name: Amenities.schema.unusableName
     })
-    @Length(0, 1000)
+    @Length(0, 255)
     unusableName: string;
 
     @Column({
-        type: "varchar",
-        length: 1000,
+        type: "text",
         unique: false,
         name: Amenities.schema.description
     })
-    @Length(0, 1000)
     description: string;
 
     @Column({

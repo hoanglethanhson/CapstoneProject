@@ -13,10 +13,10 @@ import {Building} from "./building";
 @Entity(RoomType.tableName)
 @Unique(["type"])
 export class RoomType extends BaseEntity {
-    static readonly tableName = 'room_type';
+    static readonly tableName = 'building_type';
     static readonly schema = {
         id: 'type_id',
-        type: 'room_type',
+        type: 'building_type',
         create: 'created_at',
         update: 'updated_at'
     };
