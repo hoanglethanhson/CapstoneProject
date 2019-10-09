@@ -1,32 +1,32 @@
-import roomTypeFunction from "../functions/room_type-function";
+import roomTypeFunction from "../functions/building_type-function";
 
 export default [
     {
-        path: "/roomType/",
+        path: "/buildingType/",
         method: "get",
         authentication: false,
         handler: roomTypeFunction.getRoomTypes
     },
     {
-        path: "/roomType/:roomTypeId",
+        path: "/buildingType/:buildingTypeId",
         method: "get",
         authentication: false,
         handler: roomTypeFunction.getRoomType
     },
     {
-        path: "/roomType/",
+        path: "/buildingType/",
         method: "post",
         authentication: false,
         handler: roomTypeFunction.createRoomType
     },
     {
-        path: "/roomType/:roomTypeId",
+        path: "/buildingType/:buildingTypeId",
         method: "put",
         authentication: false,
         handler: roomTypeFunction.updateRoomType
     },
     {
-        path: "/roomType/:roomTypeId",
+        path: "/buildingType/:buildingTypeId",
         method: "delete",
         authentication: false,
         handler: roomTypeFunction.deleteRoomType

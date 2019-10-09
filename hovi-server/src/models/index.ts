@@ -5,6 +5,7 @@ import {RoomType} from "./building_type";
 import {Service} from "./service";
 import {Amenities} from "./amenities";
 import {Building} from "./building";
+import {RoomGroup} from "./room_group";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -24,7 +25,8 @@ export class DatabaseManager {
                 RoomType,
                 Service,
                 Amenities,
-                Building
+                Building,
+                RoomGroup
             ],
             maxQueryExecutionTime: 1000
         });

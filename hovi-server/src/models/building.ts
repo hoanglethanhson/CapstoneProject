@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import {RoomType} from "./building_type";
 import {User} from "./user";
+import {RoomGroup} from "./room_group";
 
 @Entity(Building.tableName)
 export class Building extends BaseEntity {
@@ -97,6 +98,11 @@ export class Building extends BaseEntity {
         name: Building.schema.update
     })
     update: Date;
+
+    @OneToMany(type => RoomGroup, roomGroup => roomGroup.building)
+    @JoinColumn({name: Building.schema.id})
+    roomGroups: RoomGroup[];
+
 
     static get repo(): BuildingRepository {
         return getCustomRepository(BuildingRepository);
