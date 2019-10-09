@@ -15,7 +15,12 @@ export class Building extends BaseEntity {
     static readonly tableName = 'building';
     static readonly schema = {
         id: 'building_id',
+        buildingName: 'building_name',
         typeId: 'building_type_id',
+        isMixGender: 'is_mix_gender',
+        generalAddress: 'general_address',
+        detailedAddress: 'detailed_address',
+        location: 'location',
         floor: 'floor_quantity',
         hostId: 'host_id',
         bedroom: 'bedroom_quantity',
@@ -34,6 +39,14 @@ export class Building extends BaseEntity {
     })
     id: number;
 
+    @Column({
+        type: "varchar",
+        length: 255,
+        unique: false,
+        name: Building.schema.buildingName
+    })
+    buildingName: string;
+
     @ManyToOne(type => RoomType, roomType => roomType.buildings)
     @JoinColumn({name: Building.schema.typeId})
     roomType: RoomType;
@@ -45,6 +58,34 @@ export class Building extends BaseEntity {
     host: User;
     @Column({name: Building.schema.hostId})
     hostId: number;
+
+    @Column({
+        type: "bit",
+        unique: false,
+        name: Building.schema.isMixGender
+    })
+    isMixGender: boolean;
+
+    @Column({
+        type: "text",
+        unique: false,
+        name: Building.schema.generalAddress
+    })
+    generalAddress: string;
+
+    @Column({
+        type: "text",
+        unique: false,
+        name: Building.schema.detailedAddress
+    })
+    detailedAddress: string;
+
+    @Column({
+        type: "text",
+        unique: false,
+        name: Building.schema.location
+    })
+    location: string;
 
     @Column({
         type: "int",
@@ -115,10 +156,17 @@ export class BuildingRepository extends Repository<Building> {
         let building = await this.findOne(buildingId);
         if (building) {
             building.typeId = buildingUpdate.typeId ? buildingUpdate.typeId : building.typeId;
+            building.buildingName = buildingUpdate.buildingName ? buildingUpdate.buildingName : building.buildingName;
+            building.isMixGender = buildingUpdate.isMixGender ? buildingUpdate.isMixGender : building.isMixGender;
+            building.hostId = buildingUpdate.hostId ? buildingUpdate.hostId : building.hostId;
+            building.generalAddress = buildingUpdate.generalAddress ? buildingUpdate.generalAddress : building.generalAddress;
+            building.detailedAddress = buildingUpdate.detailedAddress ? buildingUpdate.detailedAddress : building.detailedAddress;
+            building.location = buildingUpdate.location ? buildingUpdate.location : building.location;
             building.floor = buildingUpdate.floor ? buildingUpdate.floor : building.floor;
             building.bedroom = buildingUpdate.bedroom ? buildingUpdate.bedroom : building.bedroom;
             building.bathroom = buildingUpdate.bathroom ? buildingUpdate.bathroom : building.bathroom;
             building.wc = buildingUpdate.wc ? buildingUpdate.wc : building.wc;
+            building.isVerified = buildingUpdate.isVerified ? buildingUpdate.isVerified : building.isVerified;
             building.create = buildingUpdate.create ? buildingUpdate.create : building.create;
             building.update = buildingUpdate.update ? buildingUpdate.update : building.update;
             await this.save(building);

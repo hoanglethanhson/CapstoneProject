@@ -7,7 +7,7 @@ import {
     PrimaryColumn, ManyToOne, JoinColumn, OneToMany
 } from 'typeorm';
 import {Building} from "./building";
-console.log(Building)
+import {Room} from "./room";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -135,7 +135,7 @@ export class RoomGroup extends BaseEntity {
         precision: 6,
         default: () => "CURRENT_TIMESTAMP(6)",
         onUpdate: "CURRENT_TIMESTAMP(6)",
-        name: Building.schema.create
+        name: RoomGroup.schema.create
     })
     create: Date;
 
@@ -144,16 +144,20 @@ export class RoomGroup extends BaseEntity {
         precision: 6,
         default: () => "CURRENT_TIMESTAMP(6)",
         onUpdate: "CURRENT_TIMESTAMP(6)",
-        name: Building.schema.update
+        name: RoomGroup.schema.update
     })
     update: Date;
+
+    @OneToMany(type => Room, room => room.roomGroup)
+    @JoinColumn({name: RoomGroup.schema.id})
+    rooms: Room[];
 
     static get repo(): RoomGroupRepository {
         return getCustomRepository(RoomGroupRepository);
     }
 }
 
-@EntityRepository(Building)
+@EntityRepository(RoomGroup)
 export class RoomGroupRepository extends Repository<RoomGroup> {
     async updateById(roomGroupId: any, roomGroupUpdate: RoomGroup) {
         let roomGroup = await this.findOne(roomGroupId);
