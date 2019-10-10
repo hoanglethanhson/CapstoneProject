@@ -9,6 +9,7 @@ import {
 import {RoomType} from "./building_type";
 import {User} from "./user";
 import {RoomGroup} from "./room_group";
+import {BuildingService} from "./building_service";
 
 @Entity(Building.tableName)
 export class Building extends BaseEntity {
@@ -144,6 +145,9 @@ export class Building extends BaseEntity {
     @JoinColumn({name: Building.schema.id})
     roomGroups: RoomGroup[];
 
+    @OneToMany(type => BuildingService, buildingService => buildingService.building)
+    @JoinColumn({name: Building.schema.id})
+    buildingServices: BuildingService[];
 
     static get repo(): BuildingRepository {
         return getCustomRepository(BuildingRepository);

@@ -5,9 +5,9 @@ import {
     Entity,
     EntityRepository, getCustomRepository,
     Repository,
-    PrimaryColumn, Index
+    PrimaryColumn, Index, OneToMany, JoinColumn
 } from 'typeorm';
-import {MaxLength, IsEmail, IsPhoneNumber, Length} from 'class-validator';
+import {BuildingService} from "./building_service";
 
 @Entity(Service.tableName)
 @Unique(["name"])
@@ -70,6 +70,9 @@ export class Service extends BaseEntity {
     })
     update: Date;
 
+    @OneToMany(type => BuildingService, buildingService => buildingService.service)
+    @JoinColumn({name: Service.schema.id})
+    buildingServices: BuildingService[];
 
     static get repo(): ServiceRepository {
         return getCustomRepository(ServiceRepository);
