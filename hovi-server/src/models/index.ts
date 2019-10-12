@@ -9,6 +9,7 @@ import {RoomGroup} from "./room_group";
 import {Room} from "./room";
 import {RoomImage} from "./room_image";
 import {BuildingService} from "./building_service";
+import {RoomAmenities} from "./room_amenities";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -32,7 +33,8 @@ export class DatabaseManager {
                 RoomGroup,
                 Room,
                 RoomImage,
-                BuildingService
+                BuildingService,
+                RoomAmenities
             ],
             maxQueryExecutionTime: 1000
         });

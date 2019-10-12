@@ -7,5 +7,6 @@ import RoomGroupRoutes from './room_group-route'
 import RoomRoutes from './room-route'
 import RoomImageRoutes from './room_image-route'
 import BuildingServiceRoutes from './building_service-route'
+import RoomAmenitiesRoutes from './room_amenities-route'
 export default [...UserRoutes, ...BuildingTypeRoutes, ...ServiceRoutes, ...AmenitiesRoutes, ...BuildingRoutes, ...RoomGroupRoutes, ...RoomRoutes
-                , ...RoomImageRoutes, ...BuildingServiceRoutes];
+                , ...RoomImageRoutes, ...BuildingServiceRoutes, ...RoomAmenitiesRoutes];

@@ -8,6 +8,8 @@ import {
 } from 'typeorm';
 import {Building} from "./building";
 import {Room} from "./room";
+import {RoomAmenities} from "./room_amenities";
+import {BuildingService} from "./building_service";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -151,6 +153,10 @@ export class RoomGroup extends BaseEntity {
     @OneToMany(type => Room, room => room.roomGroup)
     @JoinColumn({name: RoomGroup.schema.id})
     rooms: Room[];
+
+    @OneToMany(type => RoomAmenities, roomAmenities => roomAmenities.roomGroup)
+    @JoinColumn({name: RoomGroup.schema.id})
+    roomAmenities: RoomAmenities[];
 
     static get repo(): RoomGroupRepository {
         return getCustomRepository(RoomGroupRepository);

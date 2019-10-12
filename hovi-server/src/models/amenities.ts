@@ -5,9 +5,10 @@ import {
     Entity,
     EntityRepository, getCustomRepository,
     Repository,
-    PrimaryColumn, Index
+    PrimaryColumn, Index, OneToMany, JoinColumn
 } from 'typeorm';
 import {MaxLength, Length} from 'class-validator';
+import {RoomAmenities} from "./room_amenities";
 
 @Entity(Amenities.tableName)
 @Unique(["usableName"])
@@ -82,6 +83,9 @@ export class Amenities extends BaseEntity {
     })
     update: Date;
 
+    @OneToMany(type => RoomAmenities, roomAmenities => roomAmenities.amenities)
+    @JoinColumn({name: Amenities.schema.id})
+    roomAmenities: RoomAmenities[];
 
     static get repo(): AmenitiesRepository {
         return getCustomRepository(AmenitiesRepository);
