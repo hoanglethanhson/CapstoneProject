@@ -20,7 +20,6 @@ export class Amenities extends BaseEntity {
         usableName: 'usable_name',
         unusableName: 'unsuable_name',
         description: 'description',
-        url: 'icon_url',
         create: 'created_at',
         update: 'updated_at'
     };
@@ -58,12 +57,6 @@ export class Amenities extends BaseEntity {
     })
     description: string;
 
-    @Column({
-        type: "text",
-        unique: true,
-        name: Amenities.schema.url
-    })
-    url: string;
 
     @Column({
         type: "timestamp",
@@ -100,7 +93,6 @@ export class AmenitiesRepository extends Repository<Amenities> {
             amenities.usableName = amenitiesUpdate.usableName ? amenitiesUpdate.usableName : amenities.usableName;
             amenities.unusableName = amenitiesUpdate.unusableName ? amenitiesUpdate.unusableName : amenities.unusableName;
             amenities.description = amenitiesUpdate.description ? amenitiesUpdate.description : amenities.description;
-            amenities.url = amenitiesUpdate.url ? amenitiesUpdate.url : amenities.url;
             amenities.create = amenitiesUpdate.create ? amenitiesUpdate.create : amenities.create;
             amenities.update = amenitiesUpdate.update ? amenitiesUpdate.update : amenities.update;
             await this.save(amenities);

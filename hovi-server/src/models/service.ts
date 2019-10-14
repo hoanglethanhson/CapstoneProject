@@ -17,7 +17,6 @@ export class Service extends BaseEntity {
         id: 'service_id',
         name: 'service_name',
         description: 'description',
-        url: 'icon_url',
         create: 'created_at',
         update: 'updated_at'
     };
@@ -40,17 +39,11 @@ export class Service extends BaseEntity {
 
     @Column({
         type: "text",
-        unique: true,
+        unique: false,
         name: Service.schema.description
     })
     description: string;
 
-    @Column({
-        type: "text",
-        unique: true,
-        name: Service.schema.url
-    })
-    url: string;
 
     @Column({
         type: "timestamp",
@@ -86,7 +79,6 @@ export class ServiceRepository extends Repository<Service> {
         if (service) {
             service.name = serviceUpdate.name ? serviceUpdate.name : service.name;
             service.description = serviceUpdate.description ? serviceUpdate.description : service.description;
-            service.url = serviceUpdate.url ? serviceUpdate.url : service.url;
             service.create = serviceUpdate.create ? serviceUpdate.create : service.create;
             service.update = serviceUpdate.update ? serviceUpdate.update : service.update;
             await this.save(service);

@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import {Building} from "./building";
 import {Service} from "./service";
+import {HTTP400Error} from "../utils/httpErrors";
 
 @Entity(BuildingService.tableName)
 export class BuildingService extends BaseEntity {
@@ -16,6 +17,7 @@ export class BuildingService extends BaseEntity {
         buildingId: 'building_id',
         serviceId: 'service_id',
         servicePrice: 'service_price',
+        note: 'note',
         createAt: 'created_at',
         updateAt: 'updated_at'
     };
@@ -39,6 +41,13 @@ export class BuildingService extends BaseEntity {
         name: BuildingService.schema.servicePrice
     })
     servicePrice: number;
+
+    @Column({
+        type: "text",
+        unique: false,
+        name: BuildingService.schema.note
+    })
+    note: string;
 
     @Column({
         type: "timestamp",
@@ -71,6 +80,7 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
         if (buildingService) {
             buildingService.buildingId = buildingServiceUpdate.buildingId ? buildingServiceUpdate.buildingId : buildingService.buildingId;
             buildingService.serviceId = buildingServiceUpdate.serviceId ? buildingServiceUpdate.serviceId : buildingService.serviceId;
+            buildingService.note = buildingServiceUpdate.note ? buildingServiceUpdate.note : buildingService.note;
             buildingService.createAt = buildingServiceUpdate.createAt ? buildingServiceUpdate.createAt : buildingService.createAt;
             buildingService.updateAt = buildingServiceUpdate.updateAt ? buildingServiceUpdate.updateAt : buildingService.updateAt;
             await this.save(buildingService);
@@ -105,5 +115,27 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
             .andWhere("serviceId = :serviceId", {serviceId: serviceId})
             .execute();
         return record;
+    }
+
+    async saveBuildingService(buildingId: number, serviceId: any) {
+        const checkBuildingService = await BuildingService.repo.getOneRecord(buildingId, serviceId);
+        let record;
+        if (checkBuildingService) {
+            record = new HTTP400Error('This building-service pair already exists');
+        }
+        record = await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(BuildingService)
+            .values({ buildingId: buildingId, serviceId: serviceId })
+            .execute();
+
+        return record;
+    }
+
+    async saveMultiBuildingServices(buildingId: number, services: any) {
+        for (let i = 0; i < services.length; i++) {
+            await this.saveBuildingService(buildingId, services[i].serviceId);
+        }
     }
 }

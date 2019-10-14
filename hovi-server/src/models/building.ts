@@ -32,6 +32,7 @@ export class Building extends BaseEntity {
         bathroom: 'bathroom_quantity',
         wc: 'wc_quantity',
         isVerified: 'is_verified',
+        isCompleted: 'is_completed',
         create: 'created_at',
         update: 'updated_at'
     };
@@ -48,6 +49,7 @@ export class Building extends BaseEntity {
         type: "varchar",
         length: 255,
         unique: false,
+        default: 'default value',
         name: Building.schema.buildingName
     })
     buildingName: string;
@@ -77,13 +79,14 @@ export class Building extends BaseEntity {
         unique: false,
         name: Building.schema.province
     })
-    @Length(0, 255)
+    //@Length(0, 255)
     province: string;
 
     @Column({
         type: "varchar",
         length: 255,
         unique: false,
+        default: 'default value',
         name: Building.schema.district
     })
     @Length(0, 255)
@@ -93,23 +96,26 @@ export class Building extends BaseEntity {
         type: "varchar",
         length: 255,
         unique: false,
+        default: 'default value',
         name: Building.schema.ward
     })
-    @Length(0, 255)
+    //@Length(0, 255)
     ward: string;
 
     @Column({
         type: "varchar",
         length: 255,
         unique: false,
+        default: 'default value',
         name: Building.schema.street
     })
-    @Length(0, 255)
+    //@Length(0, 255)
     street: string;
 
     @Column({
         type: "text",
         unique: false,
+        default: 'default value',
         name: Building.schema.detailedAddress
     })
     detailedAddress: string;
@@ -117,6 +123,7 @@ export class Building extends BaseEntity {
     @Column({
         type: "text",
         unique: false,
+        default: 'default value',
         name: Building.schema.location
     })
     location: string;
@@ -128,14 +135,19 @@ export class Building extends BaseEntity {
     })
     floor: number;
 
-
-
     @Column({
         type: "bit",
         unique: false,
         name: Building.schema.isVerified
     })
     isVerified: boolean;
+
+    @Column({
+        type: "int",
+        unique: false,
+        name: Building.schema.isCompleted
+    })
+    isCompleted: number;
     
     @Column({
         type: "timestamp",
@@ -190,4 +202,15 @@ export class BuildingRepository extends Repository<Building> {
         }
         return building;
     }
+
+    async updateStatus(buildingId: number, isComplete: number) {
+        //update isComplete by buildingId
+        const building = await Building.repo.findOne(buildingId);
+        //set isComplete and save
+        building.isCompleted = isComplete;
+        await this.save(building)
+        return  building;
+    }
+
+
 }

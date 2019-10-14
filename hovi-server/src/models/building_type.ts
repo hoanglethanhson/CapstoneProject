@@ -32,12 +32,12 @@ export class RoomType extends BaseEntity {
 
     @Column({
         type: "varchar",
-        length: 1000,
+        length: 255,
         unique: true,
         name: RoomType.schema.type
     })
     @Index({ unique: true })
-    @Length(0, 1000)
+    @Length(0, 255)
     type: string;
 
     @Column({

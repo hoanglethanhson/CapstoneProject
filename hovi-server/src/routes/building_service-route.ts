@@ -1,4 +1,5 @@
 import buildingServiceFunction from "../functions/building_service-function";
+import multiBuildingServiceFunction from "../functions/building_service-multiple_function"
 
 export default [
     {
@@ -18,6 +19,12 @@ export default [
         method: "post",
         authentication: false,
         handler: buildingServiceFunction.createBuildingService
+    },
+    {
+        path: "/multiBuildingService/",
+        method: "post",
+        authentication: false,
+        handler: multiBuildingServiceFunction.createBuildingServices
     },
     {
         path: "/buildingService/:buildingId/:serviceId",

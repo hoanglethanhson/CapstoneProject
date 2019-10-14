@@ -77,16 +77,16 @@ export class User extends BaseEntity {
     length: 255,
     name: User.schema.password,
   })
-  @Length(4, 100)
+  @Length(4, 255)
   password: string;
 
   @Column({
     type: 'varchar',
-    length: 1000,
+    length: 255,
     unique: true,
     name: User.schema.phoneToken,
   })
-  @MaxLength(1000)
+  @MaxLength(255)
   phoneToken: string;
 
   @Column({
@@ -99,27 +99,27 @@ export class User extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 1000,
+    length: 255,
     name: User.schema.facebookId,
   })
-  @MaxLength(1000)
+  @MaxLength(255)
   facebookId: string;
 
   @Column({
     type: 'varchar',
-    length: 1000,
+    length: 255,
     name: User.schema.googleId,
   })
-  @MaxLength(1000)
+  @MaxLength(255)
   googleId: string;
 
   @Column({
     type: 'varchar',
-    length: 1000,
+    length: 255,
     unique: true,
     name: User.schema.email,
   })
-  @MaxLength(1000)
+  @MaxLength(255)
   @IsEmail()
   email: string;
 
@@ -131,10 +131,10 @@ export class User extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 1000,
+    length: 255,
     name: User.schema.address,
   })
-  @MaxLength(1000)
+  @MaxLength(255)
   address: string;
 
   @Column({
@@ -184,6 +184,8 @@ export class User extends BaseEntity {
   @JoinColumn({ name: User.schema.id })
   transactions: Transaction[];
 
+  @OneToMany(type => Feedback, transaction => transaction.user)
+  @JoinColumn({ name: User.schema.id })
   feedbacks: Feedback[];
 
   checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
