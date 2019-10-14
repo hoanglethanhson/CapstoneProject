@@ -1,0 +1,10 @@
+const admin = require('firebase-admin');
+import * as serviceAccount from "./serviceAccountKey.json";
+
+const FirebaseApp = !admin.apps.length ?
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://test-2-71ffb.firebaseio.com',
+  }) : admin.app();
+
+export default FirebaseApp;

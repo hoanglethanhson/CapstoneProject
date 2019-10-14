@@ -1,7 +1,8 @@
-import {Request, Response, NextFunction, Handler} from "express";
-import {validateByModel} from '../utils';
-import {HTTP400Error} from '../utils/httpErrors';
-import {User} from "../models/user";
+import { Request, Response, NextFunction, Handler } from 'express';
+import * as bcrypt from 'bcryptjs';
+import { validateByModel } from '../utils';
+import { HTTP400Error } from '../utils/httpErrors';
+import { User } from '../models/user';
 
 export default class UserFunction {
     static getUsers: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -20,22 +21,28 @@ export default class UserFunction {
         else next(new HTTP400Error('userId not found.'));
     };
 
-    static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const body = req.body || {};
-        const error = await validateByModel(User, body);
+  static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const body = req.body || {};
 
-        if (error) next(error);
-        else {
-            const checkPhone = await User.repo.findOne({phone: body['phone']});
+    if (!body['email']) body['email'] = 'example@homehouse.vn';
 
-            if (checkPhone) next(new HTTP400Error('Phone number already exists'));
-            else {
-                const newUser = await User.repo.save(body);
-                const successResponse = await User.repo.findOne({id: newUser.id});
-                res.status(200).send(successResponse);
-            }
-        }
-    };
+    const error = await validateByModel(User, body);
+    if (error) next(error);
+    else {
+      const checkUsername = await User.repo.findOne({ phone: body['phone'] });
+      if (checkUsername) next(new HTTP400Error({
+        phone: 'Phone number already exists',
+      }));
+
+      else {
+        body['password'] = bcrypt.hashSync(body['password'], 8);
+        const newUser = await User.repo.save(body);
+        const successResponse = await User.repo.findOne({ id: newUser.id });
+        successResponse['password'] = '';
+        res.status(200).send(successResponse);
+      }
+    }
+  };
 
     static updateUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
