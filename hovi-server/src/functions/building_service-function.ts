@@ -38,8 +38,9 @@ export default class BuildingServiceFunction {
 
     static updateBuildingService: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
-        const buildingServiceId = req.params['buildingServiceId'];
-        const successResponse = await BuildingService.repo.updateById(buildingServiceId, body);
+        const buildingId = req.params['buildingId'];
+        const serviceId = req.params['serviceId'];
+        const successResponse = await BuildingService.repo.updateById(buildingId, serviceId, body);
 
         if (successResponse) res.status(200).send(successResponse);
         else next(new HTTP400Error('BuildingServiceId not found'));

@@ -66,12 +66,11 @@ export class BuildingService extends BaseEntity {
 
 @EntityRepository(BuildingService)
 export class BuildingServiceRepository extends Repository<BuildingService> {
-    async updateById(buildingServiceId: any, buildingServiceUpdate: BuildingService) {
-        let buildingService = await this.findOne(buildingServiceId);
+    async updateById(buildingId: any, serviceId: any, buildingServiceUpdate: BuildingService) {
+        let buildingService = await this.getOneRecord(buildingId, serviceId);
         if (buildingService) {
             buildingService.buildingId = buildingServiceUpdate.buildingId ? buildingServiceUpdate.buildingId : buildingService.buildingId;
             buildingService.serviceId = buildingServiceUpdate.serviceId ? buildingServiceUpdate.serviceId : buildingService.serviceId;
-            buildingService.servicePrice = buildingServiceUpdate.servicePrice ? buildingServiceUpdate.servicePrice : buildingService.servicePrice;
             buildingService.createAt = buildingServiceUpdate.createAt ? buildingServiceUpdate.createAt : buildingService.createAt;
             buildingService.updateAt = buildingServiceUpdate.updateAt ? buildingServiceUpdate.updateAt : buildingService.updateAt;
             await this.save(buildingService);

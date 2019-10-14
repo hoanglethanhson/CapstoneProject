@@ -9,7 +9,7 @@ import {
 import {Building} from "./building";
 import {Room} from "./room";
 import {RoomAmenities} from "./room_amenities";
-import {BuildingService} from "./building_service";
+import {Length} from "class-validator";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -20,6 +20,10 @@ export class RoomGroup extends BaseEntity {
         gender: 'gender',
         rentPrice: 'rent_price',
         area: 'aera',
+        bedroom: 'bedroom_quantity',
+        bathroom: 'bathroom_quantity',
+        wc: 'wc_quantity',
+        direction: 'direction',
         isAvailable: 'is_available',
         isVerified: 'is_verified',
         depositPrice: 'deposit_price',
@@ -67,6 +71,36 @@ export class RoomGroup extends BaseEntity {
         name: RoomGroup.schema.area
     })
     area: number;
+
+    @Column({
+        type: "int",
+        unique: false,
+        name: RoomGroup.schema.bedroom
+    })
+    bedroom: number;
+
+    @Column({
+        type: "int",
+        unique: false,
+        name: RoomGroup.schema.bathroom
+    })
+    bathroom: number;
+
+    @Column({
+        type: "int",
+        unique: false,
+        name: RoomGroup.schema.wc
+    })
+    wc: number;
+
+    @Column({
+        type: "varchar",
+        length: 255,
+        unique: false,
+        name: RoomGroup.schema.direction
+    })
+    @Length(0, 255)
+    direction: string;
 
     @Column({
         type: "bit",
@@ -172,6 +206,10 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             roomGroup.gender = roomGroupUpdate.gender ? roomGroupUpdate.gender : roomGroup.gender;
             roomGroup.rentPrice = roomGroupUpdate.rentPrice ? roomGroupUpdate.rentPrice : roomGroup.rentPrice;
             roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
+            roomGroup.bedroom = roomGroupUpdate.bedroom ? roomGroupUpdate.bedroom : roomGroup.bedroom;
+            roomGroup.bathroom = roomGroupUpdate.bathroom ? roomGroupUpdate.bathroom : roomGroup.bathroom;
+            roomGroup.wc = roomGroupUpdate.wc ? roomGroupUpdate.wc : roomGroup.wc;
+            roomGroup.direction = roomGroupUpdate.direction ? roomGroupUpdate.direction : roomGroup.direction;
             roomGroup.isAvailable = roomGroupUpdate.isAvailable ? roomGroupUpdate.isAvailable : roomGroup.isAvailable;
             roomGroup.isVerified = roomGroupUpdate.isVerified ? roomGroupUpdate.isVerified : roomGroup.isVerified;
             roomGroup.depositPrice = roomGroupUpdate.depositPrice ? roomGroupUpdate.depositPrice : roomGroup.depositPrice;

@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import {MaxLength, IsEmail, Length} from 'class-validator';
 import {Building} from "./building";
+import {Transaction} from "./transaction";
 
 @Entity(User.tableName)
 @Unique(["phone"])
@@ -167,6 +168,10 @@ export class User extends BaseEntity {
     @OneToMany(type => Building, building => building.host)
     @JoinColumn({name: User.schema.id})
     buildings: Building[];
+
+    @OneToMany(type => Transaction, transaction => transaction.user)
+    @JoinColumn({name: User.schema.id})
+    transactions: Transaction[];
 
     static get repo(): UserRepository {
         return getCustomRepository(UserRepository);

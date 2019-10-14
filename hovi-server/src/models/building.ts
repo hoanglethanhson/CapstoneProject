@@ -10,6 +10,7 @@ import {RoomType} from "./building_type";
 import {User} from "./user";
 import {RoomGroup} from "./room_group";
 import {BuildingService} from "./building_service";
+import {Length} from "class-validator";
 
 @Entity(Building.tableName)
 export class Building extends BaseEntity {
@@ -19,7 +20,10 @@ export class Building extends BaseEntity {
         buildingName: 'building_name',
         typeId: 'building_type_id',
         isMixGender: 'is_mix_gender',
-        generalAddress: 'general_address',
+        province: 'province',
+        district: 'district',
+        ward: 'ward',
+        street: 'street',
         detailedAddress: 'detailed_address',
         location: 'location',
         floor: 'floor_quantity',
@@ -68,11 +72,40 @@ export class Building extends BaseEntity {
     isMixGender: boolean;
 
     @Column({
-        type: "text",
+        type: "varchar",
+        length: 255,
         unique: false,
-        name: Building.schema.generalAddress
+        name: Building.schema.province
     })
-    generalAddress: string;
+    @Length(0, 255)
+    province: string;
+
+    @Column({
+        type: "varchar",
+        length: 255,
+        unique: false,
+        name: Building.schema.district
+    })
+    @Length(0, 255)
+    district: string;
+
+    @Column({
+        type: "varchar",
+        length: 255,
+        unique: false,
+        name: Building.schema.ward
+    })
+    @Length(0, 255)
+    ward: string;
+
+    @Column({
+        type: "varchar",
+        length: 255,
+        unique: false,
+        name: Building.schema.street
+    })
+    @Length(0, 255)
+    street: string;
 
     @Column({
         type: "text",
@@ -95,26 +128,7 @@ export class Building extends BaseEntity {
     })
     floor: number;
 
-    @Column({
-        type: "int",
-        unique: false,
-        name: Building.schema.bedroom
-    })
-    bedroom: number;
 
-    @Column({
-        type: "int",
-        unique: false,
-        name: Building.schema.bathroom
-    })
-    bathroom: number;
-
-    @Column({
-        type: "int",
-        unique: false,
-        name: Building.schema.wc
-    })
-    wc: number;
 
     @Column({
         type: "bit",
@@ -162,14 +176,13 @@ export class BuildingRepository extends Repository<Building> {
             building.typeId = buildingUpdate.typeId ? buildingUpdate.typeId : building.typeId;
             building.buildingName = buildingUpdate.buildingName ? buildingUpdate.buildingName : building.buildingName;
             building.isMixGender = buildingUpdate.isMixGender ? buildingUpdate.isMixGender : building.isMixGender;
-            building.hostId = buildingUpdate.hostId ? buildingUpdate.hostId : building.hostId;
-            building.generalAddress = buildingUpdate.generalAddress ? buildingUpdate.generalAddress : building.generalAddress;
+            building.province = buildingUpdate.province ? buildingUpdate.province : building.province;
+            building.district = buildingUpdate.district ? buildingUpdate.district : building.district;
+            building.ward = buildingUpdate.ward ? buildingUpdate.ward : building.ward;
+            building.street = buildingUpdate.street ? buildingUpdate.street : building.street;
             building.detailedAddress = buildingUpdate.detailedAddress ? buildingUpdate.detailedAddress : building.detailedAddress;
             building.location = buildingUpdate.location ? buildingUpdate.location : building.location;
             building.floor = buildingUpdate.floor ? buildingUpdate.floor : building.floor;
-            building.bedroom = buildingUpdate.bedroom ? buildingUpdate.bedroom : building.bedroom;
-            building.bathroom = buildingUpdate.bathroom ? buildingUpdate.bathroom : building.bathroom;
-            building.wc = buildingUpdate.wc ? buildingUpdate.wc : building.wc;
             building.isVerified = buildingUpdate.isVerified ? buildingUpdate.isVerified : building.isVerified;
             building.create = buildingUpdate.create ? buildingUpdate.create : building.create;
             building.update = buildingUpdate.update ? buildingUpdate.update : building.update;

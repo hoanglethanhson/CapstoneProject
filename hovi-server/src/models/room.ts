@@ -9,6 +9,7 @@ import {
 import {Length} from "class-validator";
 import {RoomGroup} from "./room_group";
 import {RoomImage} from "./room_image";
+import {Transaction} from "./transaction";
 
 @Entity(Room.tableName)
 export class Room extends BaseEntity {
@@ -17,7 +18,6 @@ export class Room extends BaseEntity {
         id: 'room_id',
         roomGroupId: 'room_group_id',
         roomName: 'room_name',
-        direction: 'direction',
         freeSlot: 'free_slot',
         createAt: 'created_at',
         updateAt: 'updated_at'
@@ -44,15 +44,6 @@ export class Room extends BaseEntity {
         name: Room.schema.roomName
     })
     roomName: string;
-
-    @Column({
-        type: "varchar",
-        length: 255,
-        unique: false,
-        name: Room.schema.direction
-    })
-    @Length(0, 255)
-    direction: string;
 
     @Column({
         type: "int",
@@ -84,6 +75,10 @@ export class Room extends BaseEntity {
     @JoinColumn({name: Room.schema.id})
     roomImages: RoomImage[];
 
+    @OneToMany(type => Transaction, transaction => transaction.room)
+    @JoinColumn({name: Room.schema.id})
+    transactions: Transaction[];
+
     static get repo(): RoomRepository {
         return getCustomRepository(RoomRepository);
     }
@@ -96,7 +91,6 @@ export class RoomRepository extends Repository<Room> {
         if (room) {
             room.roomGroupId = roomUpdate.roomGroupId ? roomUpdate.roomGroupId : room.roomGroupId;
             room.roomName = roomUpdate.roomName ? roomUpdate.roomName : room.roomName;
-            room.direction = roomUpdate.direction ? roomUpdate.direction : room.direction;
             room.freeSlot = roomUpdate.freeSlot ? roomUpdate.freeSlot : room.freeSlot;
             room.createAt = roomUpdate.createAt ? roomUpdate.createAt : room.createAt;
             room.updateAt = roomUpdate.updateAt ? roomUpdate.updateAt : room.updateAt;

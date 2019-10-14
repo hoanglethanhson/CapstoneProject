@@ -20,7 +20,7 @@ export default [
         handler: buildingServiceFunction.createBuildingService
     },
     {
-        path: "/buildingService/:buildingServiceId",
+        path: "/buildingService/:buildingId/:serviceId",
         method: "put",
         authentication: false,
         handler: buildingServiceFunction.updateBuildingService
