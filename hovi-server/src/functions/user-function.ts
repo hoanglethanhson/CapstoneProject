@@ -26,9 +26,9 @@ export default class UserFunction {
 
         if (error) next(error);
         else {
-            const checkUsername = await User.repo.findOne({userName: body['userName']});
+            const checkPhone = await User.repo.findOne({phone: body['phone']});
 
-            if (checkUsername) next(new HTTP400Error('Username already exists'));
+            if (checkPhone) next(new HTTP400Error('Phone number already exists'));
             else {
                 const newUser = await User.repo.save(body);
                 const successResponse = await User.repo.findOne({id: newUser.id});

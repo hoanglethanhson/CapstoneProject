@@ -13,7 +13,7 @@
     "Hoang Le Thanh Son <SonHLTSE05415@fpt.edu.vn> (https://www.facebook.com/son.hoanglethanh)"
   ],
   "scripts": {
-    "dev": "NODE_ENV=development tsc-watch --onSuccess \"node ./build/src/server.js\"",
+    "dev": "tsc-watch --onSuccess \"node ./build/src/server.js\"",
     "start": "tsc && node ./build/src/server.js",
     "build": "tsc",
     "test": "tsc && jest --coverage --verbose",

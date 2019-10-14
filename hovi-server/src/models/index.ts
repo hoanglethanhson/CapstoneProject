@@ -1,6 +1,17 @@
 import {createConnection, Connection} from 'typeorm';
 import config from '../../config';
 import {User} from './user';
+import {RoomType} from "./building_type";
+import {Service} from "./service";
+import {Amenities} from "./amenities";
+import {Building} from "./building";
+import {RoomGroup} from "./room_group";
+import {Room} from "./room";
+import {RoomImage} from "./room_image";
+import {BuildingService} from "./building_service";
+import {RoomAmenities} from "./room_amenities";
+import {Transaction} from "./transaction";
+import {Feedback} from "./feedback";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -16,7 +27,18 @@ export class DatabaseManager {
             password: config.MYSQL_PASSWORD,
             database: config.MYSQL_DATABASE,
             entities: [
-                User
+                User,
+                RoomType,
+                Service,
+                Amenities,
+                Building,
+                RoomGroup,
+                Room,
+                RoomImage,
+                BuildingService,
+                RoomAmenities,
+                Transaction,
+                Feedback
             ],
             maxQueryExecutionTime: 1000
         });
