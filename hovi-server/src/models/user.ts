@@ -10,6 +10,7 @@ import {
 import {MaxLength, IsEmail, Length} from 'class-validator';
 import {Building} from "./building";
 import {Transaction} from "./transaction";
+import {Feedback} from "./feedback";
 
 @Entity(User.tableName)
 @Unique(["phone"])
@@ -172,6 +173,8 @@ export class User extends BaseEntity {
     @OneToMany(type => Transaction, transaction => transaction.user)
     @JoinColumn({name: User.schema.id})
     transactions: Transaction[];
+
+    feedbacks: Feedback[];
 
     static get repo(): UserRepository {
         return getCustomRepository(UserRepository);

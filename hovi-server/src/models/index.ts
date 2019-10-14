@@ -11,6 +11,7 @@ import {RoomImage} from "./room_image";
 import {BuildingService} from "./building_service";
 import {RoomAmenities} from "./room_amenities";
 import {Transaction} from "./transaction";
+import {Feedback} from "./feedback";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -36,7 +37,8 @@ export class DatabaseManager {
                 RoomImage,
                 BuildingService,
                 RoomAmenities,
-                Transaction
+                Transaction,
+                Feedback
             ],
             maxQueryExecutionTime: 1000
         });
