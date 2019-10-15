@@ -77,6 +77,7 @@ export class Building extends BaseEntity {
         type: "varchar",
         length: 255,
         unique: false,
+        default: 'default value',
         name: Building.schema.province
     })
     //@Length(0, 255)
@@ -89,7 +90,7 @@ export class Building extends BaseEntity {
         default: 'default value',
         name: Building.schema.district
     })
-    @Length(0, 255)
+    // @Length(0, 255)
     district: string;
 
     @Column({
@@ -148,7 +149,7 @@ export class Building extends BaseEntity {
         name: Building.schema.isCompleted
     })
     isCompleted: number;
-    
+
     @Column({
         type: "timestamp",
         precision: 6,

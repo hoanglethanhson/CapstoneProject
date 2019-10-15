@@ -5,11 +5,8 @@ import { HTTP401Error } from '../utils/httpErrors';
 const Authentication = (request: Request, response: Response, next: NextFunction) => {
     let accessTokenFromClient = request.headers.authorization;
     if (accessTokenFromClient) {
-
-        console.debug(accessTokenFromClient);
         FirebaseAdmin.auth().verifyIdToken(accessTokenFromClient)
           .then(function(decodedToken) {
-              console.debug(decodedToken);
               request['currentUserId'] = decodedToken.uid;
               next();
           }).catch(function(error) {

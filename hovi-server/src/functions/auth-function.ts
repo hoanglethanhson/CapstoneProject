@@ -12,6 +12,7 @@ export default class AuthFunction {
     console.debug(phone, password);
 
     const existUser = await User.repo.findOne({ phone });
+
     if (!existUser) next(new HTTP400Error({ error: 'Invalid phone number or password!' }));
     else if (!existUser.checkIfUnencryptedPasswordIsValid(password))
       next(new HTTP400Error({ error: 'Invalid phone number or password!' }));
@@ -42,7 +43,10 @@ export default class AuthFunction {
   static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
 
-    if (!body['email']) body['email'] = 'example@homehouse.vn';
+    body['email'] = 'example@homehouse.vn';
+    body['address'] = 'not yet';
+    body['facebookId'] = 'example-facebook-id';
+    body['googleId'] = 'example-google-id';
 
     const error = await validateByModel(User, body);
     console.log(body);
@@ -58,6 +62,7 @@ export default class AuthFunction {
         const newUser = await User.repo.save(body);
         const successResponse = await User.repo.findOne({ id: newUser.id });
         successResponse['password'] = '';
+        console.log(successResponse);
         res.status(200).send(successResponse);
       }
     }

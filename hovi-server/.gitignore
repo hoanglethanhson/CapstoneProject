@@ -9,3 +9,6 @@ coverage/
 test-report/
 public/
 build/
+
+#private file key
+
