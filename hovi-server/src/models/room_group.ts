@@ -10,6 +10,7 @@ import {Building} from "./building";
 import {Room} from "./room";
 import {RoomAmenities} from "./room_amenities";
 import {Length} from "class-validator";
+import {RoomImage} from "./room_image";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -192,6 +193,11 @@ export class RoomGroup extends BaseEntity {
     @JoinColumn({name: RoomGroup.schema.id})
     roomAmenities: RoomAmenities[];
 
+    @OneToMany(type => RoomImage, roomImage => roomImage.roomGroup)
+    @JoinColumn({name: RoomGroup.schema.id})
+    roomImages: RoomImage[];
+
+
     static get repo(): RoomGroupRepository {
         return getCustomRepository(RoomGroupRepository);
     }
@@ -225,5 +231,26 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             await this.save(roomGroup);
         }
         return roomGroup;
+    }
+
+    async getRoomGroupDetail(roomGroupId: number) {
+        const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        const amenities = await RoomAmenities.repo.getAmenitiesInRoomGroup(roomGroupId);
+
+
+        const result = {
+            title: building.buildingName + " " + building.province + " " + building.street,
+            generalAddress: {
+                province: building.province,
+                district: building.district,
+                ward: building.ward
+            },
+            status: (roomGroup.quantity > 0)? "Còn phòng" : "Không còn phòng",
+            area: roomGroup.area,
+            capacity: roomGroup.capacity,
+            gender: (roomGroup.gender == true)? "Nam" : "Nữ",
+
+        };
     }
 }

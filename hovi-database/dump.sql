@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 14/10/2019 21:35:31
+ Date: 15/10/2019 22:10:38
 */
 
 SET NAMES utf8mb4;
@@ -23,9 +23,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `amenities`;
 CREATE TABLE `amenities`  (
   `amenities_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of amenities',
-  `usable_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Name of amenities when usable',
-  `unsuable_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Name of amenities when unusable',
-  `description` text CHARACTER SET utf8mb4 COMMENT 'Description for amenities',
+  `usable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when usable',
+  `unsuable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when unusable',
+  `description` text CHARACTER SET utf8mb4  NULL COMMENT 'Description for amenities',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`amenities_id`) USING BTREE
@@ -45,16 +45,16 @@ INSERT INTO `amenities` VALUES (4, 'balcony', 'no balcony', 'balcony', NULL, NUL
 DROP TABLE IF EXISTS `building`;
 CREATE TABLE `building`  (
   `building_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of building',
-  `building_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'name of the building',
-  `building_type_id` int(2) DEFAULT NULL COMMENT 'ID of building type',
+  `building_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'name of the building',
+  `building_type_id` int(2) NULL DEFAULT NULL COMMENT 'ID of building type',
   `is_mix_gender` bit(1) NULL DEFAULT NULL COMMENT 'Male and female can stays in the same room or not',
   `host_id` int(11) NULL DEFAULT NULL COMMENT 'ID of host of building',
-  `province` varchar(255) CHARACTER SET utf8mb4 DEFAULT 'default value' COMMENT 'Province of the building',
-  `district` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'District of the building',
-  `ward` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Ward of the building',
-  `street` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Street of the building',
-  `detailed_address` text CHARACTER SET utf8mb4 COMMENT 'Detailed address of the building',
-  `location` text CHARACTER SET utf8mb4 COMMENT 'Location of the building',
+  `province` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT 'default value' COMMENT 'Province of the building',
+  `district` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'District of the building',
+  `ward` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Ward of the building',
+  `street` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Street of the building',
+  `detailed_address` text CHARACTER SET utf8mb4  NULL COMMENT 'Detailed address of the building',
+  `location` text CHARACTER SET utf8mb4  NULL COMMENT 'Location of the building',
   `floor_quantity` int(2) NULL DEFAULT NULL COMMENT 'Number of floors in the building',
   `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'Building is verified or not',
   `is_completed` int(1) NULL DEFAULT NULL COMMENT 'Number of completed steps in posting a room',
@@ -70,7 +70,7 @@ CREATE TABLE `building`  (
 -- ----------------------------
 -- Records of building
 -- ----------------------------
-INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, 'Hanoi', 'Thanh Xuan', 'Nhan Chinh', 'Tran Duy Hung', 'Detailed Hanoi', 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:32.548677', '2019-10-14 07:21:32.548677');
+INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, 'Hanoi', 'Thanh Xuan', 'Nhan Chinh', 'Tran Duy Hung', 'Detailed Hanoi', 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:32.548000', '2019-10-14 07:21:32.548000');
 INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Trung Liet', 'Nguyen Luong Bang', 'Detailed Hanoi', 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:53.649250', '2019-10-14 07:21:53.649250');
 INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Hao Nam', 'Lang Ha', 'Detailed Hanoi', 'Hanoi location', 3, b'1', 0, '2019-10-14 07:22:13.185435', '2019-10-14 07:22:13.185435');
 
@@ -82,7 +82,7 @@ CREATE TABLE `building_service`  (
   `building_id` int(5) NOT NULL COMMENT 'ID of the building',
   `service_id` int(5) NOT NULL COMMENT 'ID of the service in the building',
   `service_price` double(10, 0) NULL DEFAULT NULL COMMENT 'Price of service',
-  `note` text CHARACTER SET utf8mb4 COMMENT 'Note for building service',
+  `note` text CHARACTER SET utf8mb4  NULL COMMENT 'Note for building service',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`building_id`, `service_id`) USING BTREE,
@@ -94,8 +94,6 @@ CREATE TABLE `building_service`  (
 -- ----------------------------
 -- Records of building_service
 -- ----------------------------
-INSERT INTO `building_service` VALUES (1, 1, 150000, 'alo', '2019-10-14 13:55:46.189840', '2019-10-14 13:55:46.189840');
-INSERT INTO `building_service` VALUES (1, 2, 120000, 'cyka', '2019-10-14 13:55:49.733079', '2019-10-14 13:55:49.733079');
 INSERT INTO `building_service` VALUES (2, 2, 150000, NULL, '2019-10-10 08:40:30.762407', '2019-10-10 08:40:30.762407');
 
 -- ----------------------------
@@ -104,7 +102,7 @@ INSERT INTO `building_service` VALUES (2, 2, 150000, NULL, '2019-10-10 08:40:30.
 DROP TABLE IF EXISTS `building_type`;
 CREATE TABLE `building_type`  (
   `type_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the room type',
-  `building_type` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Name of the type',
+  `building_type` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of the type',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time ',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`type_id`) USING BTREE
@@ -122,7 +120,7 @@ DROP TABLE IF EXISTS `feedback`;
 CREATE TABLE `feedback`  (
   `feedback_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the feedback',
   `user_id` int(5) NULL DEFAULT NULL COMMENT 'ID of user who sends the feedback',
-  `email` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Email of the user who sends feedback',
+  `email` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Email of the user who sends feedback',
   `content` text CHARACTER SET utf8mb4  NOT NULL COMMENT 'Content of the feedback',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
@@ -144,7 +142,7 @@ CREATE TABLE `host_review`  (
   `review_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the review',
   `host_id` int(5) NULL DEFAULT NULL COMMENT 'ID of the host who sends the review',
   `tenant_id` int(5) NULL DEFAULT NULL COMMENT 'ID of targeted tenant of the review',
-  `comment` text CHARACTER SET utf8mb4 COMMENT 'Content of the comment',
+  `comment` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the comment',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`review_id`) USING BTREE,
@@ -166,7 +164,7 @@ DROP TABLE IF EXISTS `reported_room`;
 CREATE TABLE `reported_room`  (
   `user_id` int(5) NOT NULL COMMENT 'ID of user who sends the report',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of reported room group',
-  `report_content` text CHARACTER SET utf8mb4 COMMENT 'Content of the report',
+  `report_content` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the report',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`user_id`, `room_group_id`) USING BTREE,
@@ -187,7 +185,7 @@ DROP TABLE IF EXISTS `room`;
 CREATE TABLE `room`  (
   `room_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the room',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of group that room belongs to',
-  `room_name` text CHARACTER SET utf8mb4 COMMENT 'name of the room',
+  `room_name` text CHARACTER SET utf8mb4  NULL COMMENT 'name of the room',
   `free_slot` int(5) NULL DEFAULT NULL COMMENT 'Number of free slots in the room',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
@@ -239,7 +237,7 @@ CREATE TABLE `room_group`  (
   `bedroom_quantity` int(5) NULL DEFAULT NULL COMMENT 'Number of  bedrooms in the building',
   `bathroom_quantity` int(5) NULL DEFAULT NULL COMMENT 'Number of bathrooms in the building',
   `wc_quantity` int(5) NULL DEFAULT NULL COMMENT 'Number of WCs in the building',
-  `direction` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'direction of the room',
+  `direction` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'direction of the room',
   `is_available` bit(1) NULL DEFAULT NULL COMMENT 'The group is available or not',
   `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'Room group is verified or not',
   `deposit_price` double(10, 0) NULL DEFAULT NULL COMMENT 'Deposit price of the room group',
@@ -270,21 +268,21 @@ INSERT INTO `room_group` VALUES (7, 2, b'1', 2500000, 100, 1, 1, 1, 'south', b'1
 DROP TABLE IF EXISTS `room_image`;
 CREATE TABLE `room_image`  (
   `image_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the image',
-  `room_id` int(11) NULL DEFAULT NULL COMMENT 'ID of the room that the image belongs to',
-  `image_url` text CHARACTER SET utf8mb4 COMMENT 'URL of the image',
+  `image_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL of the image',
+  `room_group_id` int(2) NULL DEFAULT NULL COMMENT 'ID of room group of image',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`image_id`) USING BTREE,
-  INDEX `FK_room_image`(`room_id`) USING BTREE,
-  CONSTRAINT `FK_room_image` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  INDEX `FK_roomGroup_image`(`room_group_id`) USING BTREE,
+  CONSTRAINT `FK_roomGroup_image` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_image
 -- ----------------------------
-INSERT INTO `room_image` VALUES (2, 2, 'update link', '2019-10-08 20:23:40.626000', '2019-10-08 20:23:40.626000');
-INSERT INTO `room_image` VALUES (3, 3, 'new image', '2019-10-08 20:23:40.626000', '2019-10-08 20:23:40.626000');
-INSERT INTO `room_image` VALUES (5, 2, 'new image new', '2019-10-08 20:23:40.626000', '2019-10-08 20:23:40.626000');
+INSERT INTO `room_image` VALUES (2, 'update link', 2, '2019-10-15 15:09:31.140908', '2019-10-15 15:09:31.140908');
+INSERT INTO `room_image` VALUES (3, 'new image', 5, '2019-10-15 15:09:32.783061', '2019-10-15 15:09:32.783061');
+INSERT INTO `room_image` VALUES (5, 'new image new', 5, '2019-10-15 15:09:34.044811', '2019-10-15 15:09:34.044811');
 
 -- ----------------------------
 -- Table structure for saved_room
@@ -312,8 +310,8 @@ INSERT INTO `saved_room` VALUES (1, 2, NULL, NULL);
 DROP TABLE IF EXISTS `service`;
 CREATE TABLE `service`  (
   `service_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the service',
-  `service_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Name of the service',
-  `description` text CHARACTER SET utf8mb4 COMMENT 'Description of the service',
+  `service_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of the service',
+  `description` text CHARACTER SET utf8mb4  NULL COMMENT 'Description of the service',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`service_id`) USING BTREE
@@ -335,7 +333,7 @@ CREATE TABLE `tenant_review`  (
   `review_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the review',
   `user_id` int(5) NOT NULL COMMENT 'ID of user who sends the review',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of reviewed room group',
-  `comment` text CHARACTER SET utf8mb4 COMMENT 'Content of the review',
+  `comment` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the review',
   `accuracy_star` int(2) NULL DEFAULT NULL COMMENT 'Rating stars for accuracy',
   `host_star` int(2) NULL DEFAULT NULL COMMENT 'Rating stars for hosting',
   `security_star` int(2) NULL DEFAULT NULL COMMENT 'Rating stars for security',
@@ -382,17 +380,17 @@ INSERT INTO `transaction` VALUES (1, 1, 1, b'1', '2019-10-08 21:14:41.938875', '
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
   `user_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the user',
-  `first_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'First name of the user',
-  `last_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Last name of the user',
+  `first_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'First name of the user',
+  `last_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Last name of the user',
   `phone` varchar(20) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Phone number of the user',
-  `password` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Password of user',
-  `phone_token` text CHARACTER SET utf8mb4 COMMENT 'Phone token of the user',
+  `password` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Password of user',
+  `phone_token` text CHARACTER SET utf8mb4  NULL COMMENT 'Phone token of the user',
   `gender` bit(1) NULL DEFAULT NULL COMMENT 'Gender of the user',
-  `facebook_id` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Facebook ID of the user',
-  `google_id` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Google ID of the user',
-  `email` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'Email of the user',
-  `avatar` text CHARACTER SET utf8mb4 COMMENT 'Avatar URL of the user',
-  `address` text CHARACTER SET utf8mb4 COMMENT 'Address of the user',
+  `facebook_id` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Facebook ID of the user',
+  `google_id` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Google ID of the user',
+  `email` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Email of the user',
+  `avatar` text CHARACTER SET utf8mb4  NULL COMMENT 'Avatar URL of the user',
+  `address` text CHARACTER SET utf8mb4  NULL COMMENT 'Address of the user',
   `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'User is verified or not',
   `is_host` bit(1) NULL DEFAULT NULL COMMENT 'User is host or not',
   `is_active` bit(1) NULL DEFAULT NULL COMMENT 'User is active or not',
@@ -414,9 +412,9 @@ DROP TABLE IF EXISTS `user_verification_image`;
 CREATE TABLE `user_verification_image`  (
   `card_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the user card',
   `user_id` int(5) NOT NULL COMMENT 'ID of the user',
-  `id_card_front_url` text CHARACTER SET utf8mb4 COMMENT 'URL to the front side of the ID Lisence Card image',
-  `id_card_back_url` text CHARACTER SET utf8mb4 COMMENT 'URL to the back side of the ID Lisence Card image',
-  `selfie_url` text CHARACTER SET utf8mb4 COMMENT 'URL to the selfie image of the user',
+  `id_card_front_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL to the front side of the ID Lisence Card image',
+  `id_card_back_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL to the back side of the ID Lisence Card image',
+  `selfie_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL to the selfie image of the user',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`card_id`) USING BTREE,

@@ -18,6 +18,14 @@ export default class RoomGroupFunction {
         else next(new HTTP400Error('roomGroupId not found.'));
     };
 
+    static getRoomGroupDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const roomGroupId = req.params['roomGroupId'];
+        const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+
+        if (roomGroup) res.status(200).send(roomGroup);
+        else next(new HTTP400Error('roomGroupId not found.'));
+    };
+
     static createRoomGroup: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
         const error = await validateByModel(RoomGroup, body);
