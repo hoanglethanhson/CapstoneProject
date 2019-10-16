@@ -202,7 +202,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     async updateById(roomGroupId: any, roomGroupUpdate: RoomGroup) {
         let roomGroup = await this.findOne(roomGroupId);
         if (roomGroup) {
-            roomGroup.buildingId = roomGroupUpdate.buildingId ? roomGroupUpdate.buildingId : roomGroup.buildingId;
             roomGroup.gender = roomGroupUpdate.gender ? roomGroupUpdate.gender : roomGroup.gender;
             roomGroup.rentPrice = roomGroupUpdate.rentPrice ? roomGroupUpdate.rentPrice : roomGroup.rentPrice;
             roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
@@ -213,15 +212,12 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             roomGroup.isAvailable = roomGroupUpdate.isAvailable ? roomGroupUpdate.isAvailable : roomGroup.isAvailable;
             roomGroup.isVerified = roomGroupUpdate.isVerified ? roomGroupUpdate.isVerified : roomGroup.isVerified;
             roomGroup.depositPrice = roomGroupUpdate.depositPrice ? roomGroupUpdate.depositPrice : roomGroup.depositPrice;
-            roomGroup.depositPrice = roomGroupUpdate.depositPrice ? roomGroupUpdate.depositPrice : roomGroup.depositPrice;
             roomGroup.description = roomGroupUpdate.description ? roomGroupUpdate.description : roomGroup.description;
             roomGroup.capacity = roomGroupUpdate.capacity ? roomGroupUpdate.capacity : roomGroup.capacity;
             roomGroup.quantity = roomGroupUpdate.quantity ? roomGroupUpdate.quantity : roomGroup.quantity;
             roomGroup.viewAmount = roomGroupUpdate.viewAmount ? roomGroupUpdate.viewAmount : roomGroup.viewAmount;
             roomGroup.phoneViewAmount = roomGroupUpdate.phoneViewAmount ? roomGroupUpdate.phoneViewAmount : roomGroup.phoneViewAmount;
             roomGroup.isSponsored = roomGroupUpdate.isSponsored ? roomGroupUpdate.isSponsored : roomGroup.isSponsored;
-            roomGroup.create = roomGroupUpdate.create ? roomGroupUpdate.create : roomGroup.create;
-            roomGroup.update = roomGroupUpdate.update ? roomGroupUpdate.update : roomGroup.update;
             await this.save(roomGroup);
         }
         return roomGroup;

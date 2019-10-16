@@ -41,7 +41,7 @@ export const applyRoutes = (routes: Route[], router: Router) => {
       imageMiddleware = isMultiple ? upload.array(type, maxQuantity) : upload.single(type);
     }
 
-    (router as any)[method](path, authentication ? Authentication : [], imageMiddleware, handler);
+    (router as any)[method](path, !authentication ? Authentication : [], imageMiddleware, handler);
   }
 };
 
