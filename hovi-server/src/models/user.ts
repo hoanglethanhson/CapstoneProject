@@ -230,4 +230,9 @@ export class UserRepository extends Repository<User> {
     }
     return user;
   }
+
+  async getHostPhone(userId: number) {
+    let user = await this.findOne({id: userId});
+    return user.phone;
+  }
 }

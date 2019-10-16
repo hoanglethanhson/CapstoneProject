@@ -4,7 +4,7 @@ import {
     Entity,
     EntityRepository, getCustomRepository,
     Repository,
-    PrimaryColumn, Index, ManyToOne, JoinColumn, createQueryBuilder, getRepository, getConnection
+    PrimaryColumn, Index, ManyToOne, JoinColumn, createQueryBuilder, getRepository, getConnection, getManager
 } from 'typeorm';
 import {RoomGroup} from "./room_group";
 import {Amenities} from "./amenities";
@@ -99,6 +99,19 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
             .andWhere("amenitiesId = :amenitiesId", {amenitiesId: amenitiesId})
             .execute();
         return record;
+    }
+
+    async getAmenitiesDetailRoomGroup(roomGroupId: any) {
+        const amenities = await getManager()
+            .createQueryBuilder(RoomAmenities, "room_amenities")
+            .select(["room_amenities.amenities_id", "amenities.usable_name"])
+            //.addSelect("room_amenities.amenities_id", "id")
+            //.addSelect("amenities.usable_name", "name")
+            .innerJoin(RoomGroup, "room_group", "room_group.room_group_id = room_amenities.room_group_id")
+            .innerJoin(Amenities, "amenities", "room_amenities.amenities_id = amenities.amenities_id")
+            .where("room_amenities.room_group_id = :room_group_id", {room_group_id: roomGroupId})
+            .getRawMany();
+        return amenities;
     }
 }
 

@@ -14,6 +14,12 @@ export default [
         handler: roomGroupFunction.getRoomGroup
     },
     {
+        path: "/roomGroupDetail/:roomGroupId",
+        method: "get",
+        authentication: false,
+        handler: roomGroupFunction.getRoomGroupDetail
+    },
+    {
         path: "/roomGroup/",
         method: "post",
         authentication: false,

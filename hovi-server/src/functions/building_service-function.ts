@@ -13,10 +13,11 @@ export default class BuildingServiceFunction {
 
     static getBuildingService: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const buildingId = req.params['buildingId'];
-        const buildingService = await BuildingService.repo.getServicesInBuilding(buildingId);
+        const buildingService = await BuildingService.repo.getServiceDetailBuilding(buildingId);
 
         if (buildingService) res.status(200).send(buildingService);
         else next(new HTTP400Error('buildingId not found.'));
+        console.log(buildingService);
     };
 
     static createBuildingService: Handler = async (req: Request, res: Response, next: NextFunction) => {

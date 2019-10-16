@@ -4,7 +4,7 @@ import {
     Entity,
     EntityRepository, getCustomRepository,
     Repository,
-    PrimaryColumn, Index, ManyToOne, JoinColumn, createQueryBuilder, getRepository, getConnection
+    PrimaryColumn, Index, ManyToOne, JoinColumn, createQueryBuilder, getRepository, getConnection, getManager
 } from 'typeorm';
 import {Building} from "./building";
 import {Service} from "./service";
@@ -131,6 +131,17 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
             .execute();
 
         return record;
+    }
+
+    async getServiceDetailBuilding(buildingId: any) {
+        const services = await getManager()
+            .createQueryBuilder(BuildingService, "building_service")
+            .select(["service.service_name", "building_service.service_price"])
+            .innerJoin(Building, "building", "building.building_id = building_service.building_id")
+            .innerJoin(Service, "service", "service.service_id = building_service.service_id")
+            .where("building_service.building_id = :building_id", {building_id: buildingId})
+            .getRawMany();
+        return services;
     }
 
     async saveMultiBuildingServices(buildingId: number, services: any) {

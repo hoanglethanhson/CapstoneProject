@@ -13,7 +13,8 @@ export default class RoomAmenitiesFunction {
 
     static getRoomAmenities: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const roomGroupId = req.params['roomGroupId'];
-        const roomAmenities = await RoomAmenities.repo.getAmenitiesInRoomGroup(roomGroupId);
+        const roomAmenities = await RoomAmenities.repo.getAmenitiesDetailRoomGroup(roomGroupId);
+        console.log(roomAmenities);
 
         if (roomAmenities) res.status(200).send(roomAmenities);
         else next(new HTTP400Error('roomGroupId not found.'));
