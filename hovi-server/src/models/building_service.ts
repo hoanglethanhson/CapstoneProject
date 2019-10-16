@@ -5,6 +5,7 @@ import {
   EntityRepository,
   getConnection,
   getCustomRepository,
+  getManager,
   getRepository,
   JoinColumn,
   ManyToOne,
@@ -91,19 +92,24 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
   }
 
   async getServicesInBuilding(buildingId: any) {
-    const services = await getRepository(Building)
+    return await getRepository(Building)
       .createQueryBuilder('building')
       .innerJoinAndSelect('building.buildingServices', 'buildingService')
       .where('buildingService.buildingId = :bId', { bId: buildingId })
       .getMany();
-    return services;
+  }
+
+  async saveMultiBuildingServices(buildingId: number, services: any) {
+    for (let i = 0; i < services.length; i++) {
+      await this.saveBuildingService(buildingId, services[i].serviceId);
+    }
   }
 
   async getOneRecord(buildingId: any, serviceId: any) {
     return await getRepository(BuildingService)
       .createQueryBuilder('buildingService')
-      .where('building_id = :buildingId', { buildingId: buildingId })
-      .andWhere('service_id = :serviceId', { serviceId: serviceId })
+      .where('buildingId = :buildingId', { buildingId: buildingId })
+      .andWhere('serviceId = :serviceId', { serviceId: serviceId })
       .getOne();
   }
 
@@ -133,9 +139,14 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
     return record;
   }
 
-  async saveMultiBuildingServices(buildingId: number, services: any) {
-    for (let i = 0; i < services.length; i++) {
-      await this.saveBuildingService(buildingId, services[i].serviceId);
-    }
+  async getServiceDetailBuilding(buildingId: any) {
+    return await getManager()
+      .createQueryBuilder(BuildingService, 'building_service')
+      .select(['service.service_name', 'building_service.service_price'])
+      .innerJoin(Building, 'building', 'building.building_id = building_service.building_id')
+      .innerJoin(Service, 'service', 'service.service_id = building_service.service_id')
+      .where('building_service.building_id = :building_id', { building_id: buildingId })
+      .getRawMany();
   }
+
 }

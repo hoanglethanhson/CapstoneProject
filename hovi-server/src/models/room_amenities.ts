@@ -4,7 +4,7 @@ import {
   Entity,
   EntityRepository, getCustomRepository,
   Repository,
-  PrimaryColumn, Index, ManyToOne, JoinColumn, createQueryBuilder, getRepository, getConnection,
+  PrimaryColumn, Index, ManyToOne, JoinColumn, createQueryBuilder, getRepository, getConnection, getManager,
 } from 'typeorm';
 import { RoomGroup } from './room_group';
 import { Amenities } from './amenities';
@@ -77,8 +77,9 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
   async getAmenitiesInRoomGroup(roomGroupId: any) {
     const amenities = await getRepository(RoomGroup)
       .createQueryBuilder('roomGroup')
-      .innerJoinAndSelect('roomGroup.roomAmenities', 'roomAmenities')
+      .select(['roomGroup.id', 'roomAmenities.amenitiesId', 'roomAmenities.roomGroupId'])
       .where('roomAmenities.roomGroupId = :roomGroupId', { roomGroupId: roomGroupId })
+      .innerJoin('roomGroup.roomAmenities', 'roomAmenities')
       .getMany();
     return amenities;
   }
@@ -86,7 +87,7 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
   async getOneRecord(roomGroupId: any, amenitiesId: any) {
     const record = await getRepository(RoomAmenities)
       .createQueryBuilder('roomAmenities')
-      .where('roomAmenities.roomGroupId = :roomGroupId', { roomGroupId: roomGroupId })
+      .where('room_group_id = :roomGroupId', { roomGroupId: roomGroupId })
       .andWhere('roomAmenities.amenitiesId = :amenitiesId', { amenitiesId: amenitiesId })
       .getOne();
     return record;
@@ -102,4 +103,25 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
       .execute();
     return record;
   }
+
+  async getAmenitiesDetailRoomGroup(roomGroupId: any) {
+    const amenities = await getManager()
+      .createQueryBuilder(RoomAmenities, 'room_amenities')
+      .select(['room_amenities.amenities_id', 'amenities.usable_name'])
+      //.addSelect("room_amenities.amenities_id", "id")
+      //.addSelect("amenities.usable_name", "name")
+      .innerJoin(RoomGroup, 'room_group', 'room_group.room_group_id = room_amenities.room_group_id')
+      .innerJoin(Amenities, 'amenities', 'room_amenities.amenities_id = amenities.amenities_id')
+      .where('room_amenities.room_group_id = :room_group_id', { room_group_id: roomGroupId })
+      .getRawMany();
+    return amenities;
+  }
 }
+
+/*
+const record = await getRepository(RoomAmenities)
+    .createQueryBuilder("roomAmenities")
+    .where("roomAmenities.roomGroupId = :roomGroupId", {roomGroupId: roomGroupId})
+    .andWhere("roomAmenities.amenitiesId = :amenitiesId", {amenitiesId: amenitiesId})
+    .getOne();
+return record;*/

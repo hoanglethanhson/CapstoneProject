@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { Length } from 'class-validator';
 import { RoomGroup } from './room_group';
-import { RoomImage } from './room_image';
 import { Transaction } from './transaction';
 
 @Entity(Room.tableName)
@@ -71,9 +70,6 @@ export class Room extends BaseEntity {
   })
   updateAt: Date;
 
-  @OneToMany(type => RoomImage, roomImage => roomImage.room)
-  @JoinColumn({ name: Room.schema.id })
-  roomImages: RoomImage[];
 
   @OneToMany(type => Transaction, transaction => transaction.room)
   @JoinColumn({ name: Room.schema.id })

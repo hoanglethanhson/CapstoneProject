@@ -84,4 +84,5 @@ export default class BuildingServiceFunction {
     if (successResponse.affected != 0) res.status(200).send('Delete buildingService successfully !');
     else next(new HTTP400Error('BuildingService not found'));
   };
+
 }

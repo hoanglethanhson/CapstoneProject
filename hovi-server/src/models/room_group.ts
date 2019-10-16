@@ -4,12 +4,15 @@ import {
     Entity,
     EntityRepository, getCustomRepository,
     Repository,
-    PrimaryColumn, ManyToOne, JoinColumn, OneToMany
+    PrimaryColumn, ManyToOne, JoinColumn, OneToMany, getManager
 } from 'typeorm';
 import {Building} from "./building";
 import {Room} from "./room";
 import {RoomAmenities} from "./room_amenities";
 import {Length} from "class-validator";
+import {RoomImage} from "./room_image";
+import {BuildingService} from "./building_service";
+import {User} from "./user";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -192,6 +195,11 @@ export class RoomGroup extends BaseEntity {
     @JoinColumn({name: RoomGroup.schema.id})
     roomAmenities: RoomAmenities[];
 
+    @OneToMany(type => RoomImage, roomImage => roomImage.roomGroup)
+    @JoinColumn({name: RoomGroup.schema.id})
+    roomImages: RoomImage[];
+
+
     static get repo(): RoomGroupRepository {
         return getCustomRepository(RoomGroupRepository);
     }
@@ -222,4 +230,47 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         }
         return roomGroup;
     }
+
+    async getImages(roomGroupId: any) {
+        const images = await getManager()
+            .createQueryBuilder(RoomImage, "room_image")
+            .select(["room_image.image_id",  "room_image.image_url"])
+            .innerJoin(RoomGroup, "room_group", "room_image.room_group_id = room_group.room_group_id")
+            .where("room_image.room_group_id = :room_group_id", {room_group_id: roomGroupId})
+            .getRawMany();
+        return images;
+    }
+
+    async getRoomGroupDetail(roomGroupId: any) {
+        const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        const amenities = await RoomAmenities.repo.getAmenitiesDetailRoomGroup(roomGroupId);
+        const services = await  BuildingService.repo.getServiceDetailBuilding(roomGroup.buildingId);
+        const phone = await User.repo.getHostPhone(building.hostId);
+        const images = await this.getImages(roomGroupId);
+        const result = {
+            images: images,
+            title: building.buildingName + " " + building.province + " " + building.street,
+            generalAddress: {
+                province: building.province,
+                district: building.district,
+                ward: building.ward
+            },
+            status: (roomGroup.quantity > 0)? "Còn phòng" : "Không còn phòng",
+            area: roomGroup.area,
+            capacity: roomGroup.capacity,
+            gender: (roomGroup.gender == true)? "Nam" : "Nữ",
+            amenities: amenities,
+            description: roomGroup.description,
+            roomCost: {
+                price: roomGroup.rentPrice,
+                deposit: roomGroup.depositPrice
+            },
+            serviceCost: services,
+            phone: phone
+        };
+        return result;
+    }
+
+
 }

@@ -7,7 +7,7 @@ import {
     Repository,
     PrimaryColumn, Index, ManyToOne, JoinColumn
 } from 'typeorm';
-import {Room} from "./room";
+import {RoomGroup} from "./room_group";
 
 
 @Entity(RoomImage.tableName)
@@ -16,7 +16,7 @@ export class RoomImage extends BaseEntity {
     static readonly tableName = 'room_image';
     static readonly schema = {
         id: 'image_id',
-        roomId: 'room_id',
+        roomGroupId: 'room_group_id',
         imageUrl: 'image_url',
         createAt: 'created_at',
         updateAt: 'updated_at'
@@ -30,11 +30,11 @@ export class RoomImage extends BaseEntity {
     })
     id: number;
 
-    @ManyToOne(type => Room, room => room.roomImages)
-    @JoinColumn({name: RoomImage.schema.roomId})
-    room: Room;
-    @Column({name: RoomImage.schema.roomId})
-    roomId: number;
+    @ManyToOne(type => RoomGroup, roomGroup => roomGroup.roomImages)
+    @JoinColumn({name: RoomImage.schema.roomGroupId})
+    roomGroup: RoomGroup;
+    @Column({name: RoomImage.schema.roomGroupId})
+    roomGroupId: number;
 
     @Column({
         type: "text",
@@ -73,7 +73,7 @@ export class RoomImageRepository extends Repository<RoomImage> {
     async updateById(roomImageId: any, roomImageUpdate: RoomImage) {
         let roomImage = await this.findOne(roomImageId);
         if (roomImage) {
-            roomImage.roomId = roomImageUpdate.roomId ? roomImageUpdate.roomId : roomImage.roomId;
+            roomImage.roomGroupId = roomImageUpdate.roomGroupId ? roomImageUpdate.roomGroupId : roomImage.roomGroupId;
             roomImage.imageUrl = roomImageUpdate.imageUrl ? roomImageUpdate.imageUrl : roomImage.imageUrl;
             roomImage.createAt = roomImageUpdate.createAt ? roomImageUpdate.createAt : roomImage.createAt;
             roomImage.updateAt = roomImageUpdate.updateAt ? roomImageUpdate.updateAt : roomImage.updateAt;
