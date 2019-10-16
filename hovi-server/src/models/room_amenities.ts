@@ -107,21 +107,19 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
   async getAmenitiesDetailRoomGroup(roomGroupId: any) {
     const amenities = await getManager()
       .createQueryBuilder(RoomAmenities, 'room_amenities')
-      .select(['room_amenities.amenities_id', 'amenities.usable_name'])
-      //.addSelect("room_amenities.amenities_id", "id")
-      //.addSelect("amenities.usable_name", "name")
+      .select(['room_amenities.amenities_id', 'amenities.usable_name as amenities_name'])
       .innerJoin(RoomGroup, 'room_group', 'room_group.room_group_id = room_amenities.room_group_id')
       .innerJoin(Amenities, 'amenities', 'room_amenities.amenities_id = amenities.amenities_id')
       .where('room_amenities.room_group_id = :room_group_id', { room_group_id: roomGroupId })
       .getRawMany();
     return amenities;
   }
+
+  async getAmenitiesDetailNotInRoomGroup(roomGroupId: any) {
+    const amenitiesNot = await this.manager.query("SELECT amenities.amenities_id, amenities.unusable_name as \'amenities_name\' FROM amenities where amenities.amenities_id\n" +
+        "NOT IN (select room_amenities.amenities_id from room_amenities INNER JOIN room_group on room_amenities.room_group_id = room_group.room_group_id WHERE room_group.room_group_id = ?)",
+        [roomGroupId]);
+    return amenitiesNot;
+  }
 }
 
-/*
-const record = await getRepository(RoomAmenities)
-    .createQueryBuilder("roomAmenities")
-    .where("roomAmenities.roomGroupId = :roomGroupId", {roomGroupId: roomGroupId})
-    .andWhere("roomAmenities.amenitiesId = :amenitiesId", {amenitiesId: amenitiesId})
-    .getOne();
-return record;*/

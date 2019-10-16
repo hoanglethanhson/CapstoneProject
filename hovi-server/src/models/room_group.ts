@@ -234,7 +234,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     async getImages(roomGroupId: any) {
         const images = await getManager()
             .createQueryBuilder(RoomImage, "room_image")
-            .select(["room_image.image_id",  "room_image.image_url"])
+            .select(["room_image.image_url"])
             .innerJoin(RoomGroup, "room_group", "room_image.room_group_id = room_group.room_group_id")
             .where("room_image.room_group_id = :room_group_id", {room_group_id: roomGroupId})
             .getRawMany();
@@ -245,11 +245,25 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
         const building = await Building.repo.findOne(roomGroup.buildingId);
         const amenities = await RoomAmenities.repo.getAmenitiesDetailRoomGroup(roomGroupId);
+        const amenitiesNot = await RoomAmenities.repo.getAmenitiesDetailNotInRoomGroup(roomGroupId);
+        let amenitiesConcat = [];
+        for (let i = 0; i < amenitiesNot.length; i++) {
+            if ((amenitiesNot[i].amenities_name != null) && (amenitiesNot[i].amenities_name.length > 0)) {
+                let temp = [amenitiesNot[i]];
+                amenitiesConcat = amenitiesConcat.concat(temp);
+            }
+        }
+        const totalAmenities = amenities.concat(amenitiesConcat);
         const services = await  BuildingService.repo.getServiceDetailBuilding(roomGroup.buildingId);
         const phone = await User.repo.getHostPhone(building.hostId);
         const images = await this.getImages(roomGroupId);
+        let imageLinks = [];
+        images.forEach(function (element) {
+            let temp = [element.image_url];
+            imageLinks = imageLinks.concat(temp);
+        })
         const result = {
-            images: images,
+            images: imageLinks,
             title: building.buildingName + " " + building.province + " " + building.street,
             generalAddress: {
                 province: building.province,
@@ -260,13 +274,13 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             area: roomGroup.area,
             capacity: roomGroup.capacity,
             gender: (roomGroup.gender == true)? "Nam" : "Nữ",
-            amenities: amenities,
+            amenities: totalAmenities,
             description: roomGroup.description,
             roomCost: {
                 price: roomGroup.rentPrice,
                 deposit: roomGroup.depositPrice
             },
-            serviceCost: services,
+            services: services,
             phone: phone
         };
         return result;

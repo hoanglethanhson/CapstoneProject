@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 16/10/2019 20:57:16
+ Date: 17/10/2019 00:00:33
 */
 
 SET NAMES utf8mb4;
@@ -24,20 +24,21 @@ DROP TABLE IF EXISTS `amenities`;
 CREATE TABLE `amenities`  (
   `amenities_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of amenities',
   `usable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when usable',
-  `unsuable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when unusable',
+  `unusable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when unusable',
   `description` text CHARACTER SET utf8mb4  NULL COMMENT 'Description for amenities',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`amenities_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of amenities
 -- ----------------------------
-INSERT INTO `amenities` VALUES (1, 'kitchen', 'no kitchen', 'kitchen', NULL, NULL);
-INSERT INTO `amenities` VALUES (2, 'window', 'no window', 'window', NULL, NULL);
-INSERT INTO `amenities` VALUES (3, 'door', 'no door', 'door', NULL, NULL);
-INSERT INTO `amenities` VALUES (4, 'balcony', 'no balcony', 'balcony', NULL, NULL);
+INSERT INTO `amenities` VALUES (1, 'Nấu ăn', '', 'Tiện ích nấu ăn', '2019-10-16 16:11:32.729677', '2019-10-16 16:11:32.729677');
+INSERT INTO `amenities` VALUES (2, 'Cửa sổ', 'Không có cửa sổ', 'Cửa sổ phòng', '2019-10-16 16:11:49.101672', '2019-10-16 16:11:49.101672');
+INSERT INTO `amenities` VALUES (3, 'Ban công', 'Không có ban công', 'Ban công phòng', '2019-10-16 16:12:01.739221', '2019-10-16 16:12:01.739221');
+INSERT INTO `amenities` VALUES (4, 'Không chung chủ', 'Chung chủ', 'Không ở chung với chủ nhà', '2019-10-16 16:12:22.633572', '2019-10-16 16:12:22.633572');
+INSERT INTO `amenities` VALUES (5, 'Tủ lạnh', NULL, 'Tủ lạnh chứa thức ăn', '2019-10-16 16:15:20.214038', '2019-10-16 16:15:20.214038');
 
 -- ----------------------------
 -- Table structure for building
@@ -94,9 +95,9 @@ CREATE TABLE `building_service`  (
 -- ----------------------------
 -- Records of building_service
 -- ----------------------------
-INSERT INTO `building_service` VALUES (1, 2, 100, NULL, NULL, NULL);
-INSERT INTO `building_service` VALUES (1, 3, 200, NULL, NULL, NULL);
-INSERT INTO `building_service` VALUES (1, 4, 200, NULL, NULL, NULL);
+INSERT INTO `building_service` VALUES (1, 1, 50000, NULL, NULL, NULL);
+INSERT INTO `building_service` VALUES (1, 3, 20000, NULL, '2019-10-16 15:59:50.363769', '2019-10-16 15:59:50.363769');
+INSERT INTO `building_service` VALUES (1, 5, 30000, NULL, NULL, NULL);
 INSERT INTO `building_service` VALUES (2, 1, 100000, NULL, NULL, NULL);
 INSERT INTO `building_service` VALUES (2, 2, 150000, NULL, '2019-10-16 09:11:41.312164', '2019-10-16 09:11:41.312164');
 
@@ -115,11 +116,7 @@ CREATE TABLE `building_type`  (
 -- ----------------------------
 -- Records of building_type
 -- ----------------------------
-BEGIN;
-INSERT INTO `building_type` VALUES (1, 'Căn hộ chung cư', '2019-10-15 11:48:14.672668', '2019-10-15 11:48:14.672668');
-INSERT INTO `building_type` VALUES (2, 'Nhà nguyên căn', NULL, NULL);
-INSERT INTO `building_type` VALUES (3, 'Khu nhà trọ', '2019-10-15 11:48:09.937463', '2019-10-15 11:48:09.937463');
-COMMIT;
+INSERT INTO `building_type` VALUES (1, 'Entire', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for feedback
@@ -227,19 +224,10 @@ CREATE TABLE `room_amenities`  (
 -- ----------------------------
 -- Records of room_amenities
 -- ----------------------------
-BEGIN;
-INSERT INTO `amenities` VALUES (1, 'Không chung chủ', 'Chung chủ', 'tự do khu nhà ở', '2019-10-16 14:02:56.889850', '2019-10-16 14:02:56.889850');
-INSERT INTO `amenities` VALUES (2, 'Khép kín', 'Chung phòng tắm', 'Khu vực ở có khép kín hay k?', '2019-10-16 14:04:41.373331', '2019-10-16 14:04:41.373331');
-INSERT INTO `amenities` VALUES (3, 'Ban công', '', '', '2019-10-16 14:04:27.846783', '2019-10-16 14:04:27.846783');
-INSERT INTO `amenities` VALUES (4, 'Thang máy', '', '', '2019-10-16 14:04:25.399593', '2019-10-16 14:04:25.399593');
-INSERT INTO `amenities` VALUES (5, 'Nuôi thú cưng', '', NULL, '2019-10-16 14:04:11.776370', '2019-10-16 14:04:11.776370');
-INSERT INTO `amenities` VALUES (6, 'Nấu ăn', '', NULL, '2019-10-16 14:04:14.868071', '2019-10-16 14:04:14.868071');
-INSERT INTO `amenities` VALUES (7, 'Điều hòa', '', NULL, '2019-10-16 14:04:16.611273', '2019-10-16 14:04:16.611273');
-INSERT INTO `amenities` VALUES (8, 'Bình nóng lạnh', '', NULL, '2019-10-16 14:04:18.283788', '2019-10-16 14:04:18.283788');
-INSERT INTO `amenities` VALUES (9, 'Giường', '', NULL, '2019-10-16 14:04:19.678413', '2019-10-16 14:04:19.678413');
-INSERT INTO `amenities` VALUES (10, 'Tủ', '', NULL, '2019-10-16 14:04:21.396454', '2019-10-16 14:04:21.396454');
-INSERT INTO `amenities` VALUES (11, 'Bàn ghế', '', NULL, '2019-10-16 14:04:22.829494', '2019-10-16 14:04:22.829494');
-COMMIT;
+INSERT INTO `room_amenities` VALUES (2, 1, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (2, 2, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (5, 1, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (5, 3, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for room_group
@@ -335,18 +323,16 @@ CREATE TABLE `service`  (
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`service_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of service
 -- ----------------------------
-BEGIN;
 INSERT INTO `service` VALUES (1, 'Wifi', 'Internet access', NULL, NULL);
-INSERT INTO `service` VALUES (2, 'Trông xe', 'Trông xe tại nhà', '2019-10-16 14:02:05.425921', '2019-10-16 14:02:05.425921');
-INSERT INTO `service` VALUES (3, 'Bảo vệ', 'Bảo vệ vật tư', '2019-10-16 14:02:10.213394', '2019-10-16 14:02:10.213394');
-INSERT INTO `service` VALUES (4, 'Dọn vệ sinh', 'Dịch vụ dọn vệ sinh tận phòng', '2019-10-16 14:02:17.224897', '2019-10-16 14:02:17.224897');
-INSERT INTO `service` VALUES (5, 'Giặt đồ', 'Giặt quần áo', '2019-10-16 14:02:25.399526', '2019-10-16 14:02:25.399526');
-COMMIT;
+INSERT INTO `service` VALUES (2, 'Quạt', 'Fan for life', '2019-10-16 15:56:04.974382', '2019-10-16 15:56:04.974382');
+INSERT INTO `service` VALUES (3, 'Nước', 'Water for life', '2019-10-16 15:55:59.226481', '2019-10-16 15:55:59.226481');
+INSERT INTO `service` VALUES (4, 'Thực phẩm', 'Food for life', '2019-10-16 15:55:56.939143', '2019-10-16 15:55:56.939143');
+INSERT INTO `service` VALUES (5, 'Điện', 'Electricity for life', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tenant_review
@@ -420,13 +406,14 @@ CREATE TABLE `user`  (
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', b'1', 'bb', 'gg', 'email@gmail.com', 'image', 'Hoa Lac', b'1', b'1', b'1', '2019-10-14 14:35:10.245687', '2019-10-14 14:35:10.245687');
 INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'image', 'Hanoi', b'1', b'1', b'1', '2019-10-14 14:35:12.166768', '2019-10-14 14:35:12.166768');
+INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', NULL, NULL, NULL, '2019-10-16 14:59:24.194228', '2019-10-16 14:59:24.194228');
 
 -- ----------------------------
 -- Table structure for user_verification_image

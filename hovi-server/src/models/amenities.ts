@@ -18,7 +18,7 @@ export class Amenities extends BaseEntity {
     static readonly schema = {
         id: 'amenities_id',
         usableName: 'usable_name',
-        unusableName: 'unsuable_name',
+        unusableName: 'unusable_name',
         description: 'description',
         create: 'created_at',
         update: 'updated_at'
