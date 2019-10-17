@@ -34,10 +34,6 @@ CREATE TABLE `amenities`  (
 -- ----------------------------
 -- Records of amenities
 -- ----------------------------
-INSERT INTO `amenities` VALUES (1, 'kitchen', 'no kitchen', 'kitchen', NULL, NULL);
-INSERT INTO `amenities` VALUES (2, 'window', 'no window', 'window', NULL, NULL);
-INSERT INTO `amenities` VALUES (3, 'door', 'no door', 'door', NULL, NULL);
-INSERT INTO `amenities` VALUES (4, 'balcony', 'no balcony', 'balcony', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for building
@@ -115,11 +111,6 @@ CREATE TABLE `building_type`  (
 -- ----------------------------
 -- Records of building_type
 -- ----------------------------
-BEGIN;
-INSERT INTO `building_type` VALUES (1, 'Căn hộ chung cư', '2019-10-15 11:48:14.672668', '2019-10-15 11:48:14.672668');
-INSERT INTO `building_type` VALUES (2, 'Nhà nguyên căn', NULL, NULL);
-INSERT INTO `building_type` VALUES (3, 'Khu nhà trọ', '2019-10-15 11:48:09.937463', '2019-10-15 11:48:09.937463');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for feedback
@@ -227,19 +218,6 @@ CREATE TABLE `room_amenities`  (
 -- ----------------------------
 -- Records of room_amenities
 -- ----------------------------
-BEGIN;
-INSERT INTO `amenities` VALUES (1, 'Không chung chủ', 'Chung chủ', 'tự do khu nhà ở', '2019-10-16 14:02:56.889850', '2019-10-16 14:02:56.889850');
-INSERT INTO `amenities` VALUES (2, 'Khép kín', 'Chung phòng tắm', 'Khu vực ở có khép kín hay k?', '2019-10-16 14:04:41.373331', '2019-10-16 14:04:41.373331');
-INSERT INTO `amenities` VALUES (3, 'Ban công', '', '', '2019-10-16 14:04:27.846783', '2019-10-16 14:04:27.846783');
-INSERT INTO `amenities` VALUES (4, 'Thang máy', '', '', '2019-10-16 14:04:25.399593', '2019-10-16 14:04:25.399593');
-INSERT INTO `amenities` VALUES (5, 'Nuôi thú cưng', '', NULL, '2019-10-16 14:04:11.776370', '2019-10-16 14:04:11.776370');
-INSERT INTO `amenities` VALUES (6, 'Nấu ăn', '', NULL, '2019-10-16 14:04:14.868071', '2019-10-16 14:04:14.868071');
-INSERT INTO `amenities` VALUES (7, 'Điều hòa', '', NULL, '2019-10-16 14:04:16.611273', '2019-10-16 14:04:16.611273');
-INSERT INTO `amenities` VALUES (8, 'Bình nóng lạnh', '', NULL, '2019-10-16 14:04:18.283788', '2019-10-16 14:04:18.283788');
-INSERT INTO `amenities` VALUES (9, 'Giường', '', NULL, '2019-10-16 14:04:19.678413', '2019-10-16 14:04:19.678413');
-INSERT INTO `amenities` VALUES (10, 'Tủ', '', NULL, '2019-10-16 14:04:21.396454', '2019-10-16 14:04:21.396454');
-INSERT INTO `amenities` VALUES (11, 'Bàn ghế', '', NULL, '2019-10-16 14:04:22.829494', '2019-10-16 14:04:22.829494');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for room_group
@@ -340,13 +318,6 @@ CREATE TABLE `service`  (
 -- ----------------------------
 -- Records of service
 -- ----------------------------
-BEGIN;
-INSERT INTO `service` VALUES (1, 'Wifi', 'Internet access', NULL, NULL);
-INSERT INTO `service` VALUES (2, 'Trông xe', 'Trông xe tại nhà', '2019-10-16 14:02:05.425921', '2019-10-16 14:02:05.425921');
-INSERT INTO `service` VALUES (3, 'Bảo vệ', 'Bảo vệ vật tư', '2019-10-16 14:02:10.213394', '2019-10-16 14:02:10.213394');
-INSERT INTO `service` VALUES (4, 'Dọn vệ sinh', 'Dịch vụ dọn vệ sinh tận phòng', '2019-10-16 14:02:17.224897', '2019-10-16 14:02:17.224897');
-INSERT INTO `service` VALUES (5, 'Giặt đồ', 'Giặt quần áo', '2019-10-16 14:02:25.399526', '2019-10-16 14:02:25.399526');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for tenant_review
