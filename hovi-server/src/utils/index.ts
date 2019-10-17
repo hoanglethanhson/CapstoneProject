@@ -45,7 +45,7 @@ export const applyRoutes = (routes: Route[], router: Router) => {
   }
 };
 
-const unCamelCase = (str) => {
+export const unCamelCase = (str) => {
   return str
   // insert a space before all caps
     .replace(/([A-Z])/g, ' $1')
