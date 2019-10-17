@@ -29,7 +29,6 @@ export default class RoomGroupFunction {
 
     let roomGroupData: RoomGroup, roomData = ['Thuê cả nhà'];
     if (data.roomNames && Array.isArray(data.roomNames) && data.roomNames.length > 0) roomData = data.roomNames;
-    else next(new HTTP400Error('Room name not found'));
 
     roomGroupData = { ...data, quantity: roomData.length };
 
@@ -61,10 +60,13 @@ export default class RoomGroupFunction {
 
   static getRoomGroupDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const roomGroupId = req.params['roomGroupId'];
-    const roomGroupDetail = await RoomGroup.repo.getRoomGroupDetail(roomGroupId);
+    const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+
+    if (!roomGroup) next(new HTTP400Error('roomGroupId not found.'));
+    const roomGroupDetail = await RoomGroup.repo.getRoomGroupDetail(roomGroupId, roomGroup);
 
     if (roomGroupDetail) res.status(200).send(roomGroupDetail);
-    else next(new HTTP400Error('roomGroupId not found.'));
+    else next(new HTTP400Error('error get details.'));
   };
 
   static updateRoomGroup: Handler = async (req: Request, res: Response, next: NextFunction) => {

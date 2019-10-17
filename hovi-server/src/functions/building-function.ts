@@ -23,6 +23,8 @@ export default class BuildingFunction {
     const error = await validateByModel(Building, body);
 
     body['hostId'] = req['currentUserId'];
+    body['hostId'] = body['hostId'] ? body['hostId'] : 3;
+    console.log(body);
 
     if (error) next(error);
     else {
