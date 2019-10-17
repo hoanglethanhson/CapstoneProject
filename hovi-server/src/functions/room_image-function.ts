@@ -22,39 +22,43 @@ export default class RoomImageFunction {
     else next(new HTTP400Error('roomImageId not found.'));
   };
 
-  static createRoomImage: Handler = async (req: Request, res: Response, next: NextFunction) => {
-    const { roomId } = req.body;
+  static uploadImage: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    let { roomGroupId } = req.body;
     const files = req['files'];
+    console.log(req);
+    console.log(req.body);
 
     if (!files) next(new HTTP400Error('List images not found.'));
-    else if (!roomId) next(new HTTP400Error('Room id not found.'));
+    else if (!roomGroupId) next(new HTTP400Error('Room group id not found.'));
 
     let promises = [];
-    files.forEach(file => promises.push(googleStorage.uploadFileToGoogleStoragePromise(file, roomId)));
+    files.forEach(file => promises.push(googleStorage.uploadFileToGoogleStoragePromise(file, roomGroupId)));
     Promise.all(promises)
       .then(result => {
-        console.log(result);
-
-        res.status(200).send(result);
+        console.debug(result);
+        res.status(200).send({
+          status: 200,
+          urls: result,
+        });
       })
       .catch(error => {
         console.log(error);
         res.status(404).send(error);
       });
+  };
 
-    // const error = await validateByModel(RoomImage, body);
-    //
-    // if (error) next(error);
-    // else {
-    //   const checkRoomImage = await RoomImage.repo.findOne({ imageUrl: body['imageUrl'] });
-    //
-    //   if (checkRoomImage) next(new HTTP400Error('Image URL already exists'));
-    //   else {
-    //     const newRoomImage = await RoomImage.repo.save(body);
-    //     const successResponse = await RoomImage.repo.findOne({ id: newRoomImage.id });
-    //     res.status(200).send(successResponse);
-    //   }
-    // }
+  static createRoomImage: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const { roomGroupId, urls } = req.body;
+    let createRoomGroupImagePromise = [];
+    for (let i = 0; i < urls.length; i++)
+      createRoomGroupImagePromise.push(RoomImage.repo.save({
+        roomGroupId,
+        imageUrl: urls[i],
+      }));
+
+    Promise.all(createRoomGroupImagePromise).then(response => {
+      res.status(200).send(response);
+    });
   };
 
   static updateRoomImage: Handler = async (req: Request, res: Response, next: NextFunction) => {

@@ -14,7 +14,7 @@ export default [
     handler: roomImageFunction.getRoomImage,
   },
   {
-    path: '/roomImage/',
+    path: '/room-group/upload',
     method: 'post',
     authentication: false,
     uploadOptions: {
@@ -23,6 +23,12 @@ export default [
       isMultiple: true,
       maxQuantity: 8,
     },
+    handler: roomImageFunction.uploadImage,
+  },
+  {
+    path: '/roomImage',
+    method: 'post',
+    authentication: false,
     handler: roomImageFunction.createRoomImage,
   },
   {

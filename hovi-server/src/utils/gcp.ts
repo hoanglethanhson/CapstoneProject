@@ -1,6 +1,6 @@
 import * as serviceAccount from './private_key/gcp-service-account.json'; // WARNING: DON'T REMOVE THIS
 import config from '../../config';
-import {getCurrentDate} from './index';
+import { getCurrentDate } from './index';
 import path from 'path';
 
 const { Storage } = require('@google-cloud/storage');
@@ -23,11 +23,12 @@ export default class {
     return `https://storage.googleapis.com/${this.bucketName}/${fileName}`;
   }
 
-  uploadFileToGoogleStoragePromise(file: any, roomId: number) {
+  uploadFileToGoogleStoragePromise(file: any, roomGroupId: number) {
     return new Promise((resolve, reject) => {
       const { originalname, buffer, mimetype } = file;
+      console.log(file);
 
-      const gcsFileName = `${getCurrentDate()}-${roomId}-${originalname}`;
+      const gcsFileName = `${getCurrentDate()}-${roomGroupId}-${originalname}`;
       const bucketFile = this.bucket.file(gcsFileName);
 
       bucketFile.createWriteStream('')

@@ -2,9 +2,15 @@ import {
   BaseEntity,
   Column,
   Entity,
-  EntityRepository, getCustomRepository,
+  EntityRepository,
+  getConnection,
+  getCustomRepository,
+  getManager,
+  getRepository,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
   Repository,
-  PrimaryColumn, Index, ManyToOne, JoinColumn, createQueryBuilder, getRepository, getConnection, getManager,
 } from 'typeorm';
 import { RoomGroup } from './room_group';
 import { Amenities } from './amenities';
@@ -105,7 +111,7 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
   }
 
   async getAmenitiesDetailRoomGroup(roomGroupId: any) {
-    const amenities = await getManager()
+    return await getManager()
       .createQueryBuilder(RoomAmenities, 'room_amenities')
       .select(['room_amenities.amenities_id', 'amenities.usable_name'])
       //.addSelect("room_amenities.amenities_id", "id")
@@ -114,7 +120,6 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
       .innerJoin(Amenities, 'amenities', 'room_amenities.amenities_id = amenities.amenities_id')
       .where('room_amenities.room_group_id = :room_group_id', { room_group_id: roomGroupId })
       .getRawMany();
-    return amenities;
   }
 }
 

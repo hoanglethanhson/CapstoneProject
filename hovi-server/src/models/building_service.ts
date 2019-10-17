@@ -108,8 +108,8 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
   async getOneRecord(buildingId: any, serviceId: any) {
     return await getRepository(BuildingService)
       .createQueryBuilder('buildingService')
-      .where('buildingId = :buildingId', { buildingId: buildingId })
-      .andWhere('serviceId = :serviceId', { serviceId: serviceId })
+      .where('building_id = :buildingId', { buildingId: buildingId })
+      .andWhere('service_id = :serviceId', { serviceId: serviceId })
       .getOne();
   }
 
