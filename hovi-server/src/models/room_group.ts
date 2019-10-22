@@ -241,7 +241,9 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     return images;
   }
 
-  async getRoomGroupDetail(roomGroupId: any, roomGroup: any) {
+  async getRoomGroupDetail(roomGroupId: any) {
+    //roomGroupId = null;
+    const roomGroup = await this.findOne(roomGroupId);
     const building = await Building.repo.findOne(roomGroup.buildingId);
     const amenities = await RoomAmenities.repo.getAmenitiesDetailRoomGroup(roomGroupId);
     const amenitiesNot = await RoomAmenities.repo.getAmenitiesDetailNotInRoomGroup(roomGroupId);
@@ -282,6 +284,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       services: services,
       phone: phone,
     };
+    console.log(result);
     return result;
   }
 
