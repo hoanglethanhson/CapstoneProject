@@ -13,6 +13,7 @@ import { Length } from 'class-validator';
 import { RoomImage } from './room_image';
 import { BuildingService } from './building_service';
 import { User } from './user';
+import {RoomType} from "./building_type";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -241,10 +242,13 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     return images;
   }
 
-  async getRoomGroupDetail(roomGroupId: any) {
-    //roomGroupId = null;
-    const roomGroup = await this.findOne(roomGroupId);
+  async getRoomGroupDetail(roomGroupId: any, roomGroup: RoomGroup) {
+    if (Number.isInteger(roomGroupId)) {
+      return null;
+    }
     const building = await Building.repo.findOne(roomGroup.buildingId);
+    const buildingTypeArray = await RoomType.repo.getBuildingType(building.typeId);
+    const buildingType = buildingTypeArray[0].building_type;
     const amenities = await RoomAmenities.repo.getAmenitiesDetailRoomGroup(roomGroupId);
     const amenitiesNot = await RoomAmenities.repo.getAmenitiesDetailNotInRoomGroup(roomGroupId);
     let amenitiesConcat = [];
@@ -271,6 +275,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         district: building.district,
         ward: building.ward,
       },
+      buildingType: buildingType,
       status: (roomGroup.quantity > 0) ? 'Còn phòng' : 'Không còn phòng',
       area: roomGroup.area,
       capacity: roomGroup.capacity,
@@ -284,7 +289,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       services: services,
       phone: phone,
     };
-    console.log(result);
+    //console.log(result);
     return result;
   }
 

@@ -4,7 +4,7 @@ import {
     Entity,
     EntityRepository, getCustomRepository,
     Repository,
-    PrimaryColumn, Index, ManyToOne, JoinColumn, OneToMany
+    PrimaryColumn, Index, ManyToOne, JoinColumn, OneToMany, getManager
 } from 'typeorm';
 import {RoomType} from "./building_type";
 import {User} from "./user";
@@ -212,6 +212,7 @@ export class BuildingRepository extends Repository<Building> {
         await this.save(building)
         return  building;
     }
+
 
 
 }
