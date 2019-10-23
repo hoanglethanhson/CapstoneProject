@@ -11,7 +11,7 @@ export default class AuthFunction {
     const { phone, password } = req.body;
     console.debug(phone, password);
 
-    const existUser = await User.repo.findOne({ phone });
+    const existUser = await User.repo.findOne({ phoneNumber: phone });
 
     if (!existUser) next(new HTTP400Error({ error: 'Invalid phone number or password!' }));
     else if (!existUser.checkIfUnencryptedPasswordIsValid(password))
@@ -22,13 +22,14 @@ export default class AuthFunction {
           verifyId: existUser.phoneToken,
         });
       } else {
-        FirebaseApp.auth().createCustomToken(String(existUser.id), {})
+        let claims = existUser.phoneNumber === '+84123456789' ? { admin: true } : {};
+        FirebaseApp.auth().createCustomToken(String(existUser.id), claims)
           .then(function(customToken) {
             // Send token back to client
             res.status(200).send({
               firstName: existUser.firstName,
               lastName: existUser.lastName,
-              phoneNumber: existUser.phone,
+              phoneNumber: existUser.phoneNumber,
               accessToken: customToken,
             });
           })
@@ -43,7 +44,7 @@ export default class AuthFunction {
   static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
 
-    body['email'] = 'example@homehouse.vn';
+    body['email'] = 'example@homohouse.vn';
     body['address'] = 'not yet';
     body['facebookId'] = 'example-facebook-id';
     body['googleId'] = 'example-google-id';
@@ -52,7 +53,7 @@ export default class AuthFunction {
     console.log(body);
     if (error) next(error);
     else {
-      const checkPhoneNumber = await User.repo.findOne({ phone: body['phone'] });
+      const checkPhoneNumber = await User.repo.findOne({ phoneNumber: body['phone'] });
       if (checkPhoneNumber) next(new HTTP400Error({
         phone: 'Phone number already exists',
       }));

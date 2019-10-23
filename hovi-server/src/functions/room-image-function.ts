@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, Handler } from 'express';
 import GoogleStorage from '../utils/gcp';
 import config from '../../config';
 import { HTTP400Error } from '../utils/httpErrors';
-import { RoomImage } from '../models/room_image';
+import { RoomImage } from '../models/room-image';
 
 const googleStorage = new GoogleStorage(config.BUCKET_NAME);
 
