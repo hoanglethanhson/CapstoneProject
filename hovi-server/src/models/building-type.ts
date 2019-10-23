@@ -5,7 +5,7 @@ import {
     Entity,
     EntityRepository, getCustomRepository,
     Repository,
-    PrimaryColumn, Index, OneToMany, JoinColumn
+    PrimaryColumn, Index, OneToMany, JoinColumn, getRepository, getManager
 } from 'typeorm';
 import {Length} from 'class-validator';
 import {Building} from "./building";
@@ -78,5 +78,15 @@ export class RoomTypeRepository extends Repository<RoomType> {
             await this.save(roomType);
         }
         return roomType;
+    }
+
+    async getBuildingType(typeId: number) {
+        const result = await getRepository(RoomType)
+            .createQueryBuilder("building_type")
+            .select(["building_type.building_type"])
+            .where("building_type.type_id = :typeId", {typeId: typeId})
+            .getOne();
+        const al = await this.manager.query("SELECT building_type from building_type WHERE type_id = ?", [typeId]);
+        return al;
     }
 }

@@ -4,12 +4,13 @@ import {
     Entity,
     EntityRepository, getCustomRepository,
     Repository,
-    PrimaryColumn, ManyToOne, JoinColumn, OneToMany
+    PrimaryColumn, Index, ManyToOne, JoinColumn, OneToMany, getManager
 } from 'typeorm';
-import {RoomType} from "./building-type";
+import {RoomType} from "./building_type";
 import {User} from "./user";
-import {RoomGroup} from "./room-group";
-import {BuildingService} from "./building-service";
+import {RoomGroup} from "./room_group";
+import {BuildingService} from "./building_service";
+import {Length} from "class-validator";
 
 @Entity(Building.tableName)
 export class Building extends BaseEntity {
@@ -211,6 +212,7 @@ export class BuildingRepository extends Repository<Building> {
         await this.save(building)
         return  building;
     }
+
 
 
 }
