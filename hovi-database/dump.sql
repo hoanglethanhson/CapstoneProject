@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 23/10/2019 19:19:50
+ Date: 23/10/2019 21:49:28
 */
 
 SET NAMES utf8mb4;
@@ -63,7 +63,8 @@ CREATE TABLE `building` (
   `district` varchar(255) DEFAULT NULL COMMENT 'District of the building',
   `ward` varchar(255) DEFAULT NULL COMMENT 'Ward of the building',
   `street` varchar(255) DEFAULT NULL COMMENT 'Street of the building',
-  `detailed_address` text COMMENT 'Detailed address of the building',
+  `detailed_address` varchar(255) DEFAULT NULL COMMENT 'Detailed address of the building',
+  `address_description` varchar(255) DEFAULT NULL,
   `location` text COMMENT 'Location of the building',
   `floor_quantity` int(2) DEFAULT NULL COMMENT 'Number of floors in the building',
   `is_verified` bit(1) DEFAULT NULL COMMENT 'Building is verified or not',
@@ -81,12 +82,12 @@ CREATE TABLE `building` (
 -- Records of building
 -- ----------------------------
 BEGIN;
-INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, 'Hanoi', 'Thanh Xuan', 'Nhan Chinh', 'Tran Duy Hung', 'Detailed Hanoi', 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:32.548000', '2019-10-14 07:21:32.548000');
-INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Trung Liet', 'Nguyen Luong Bang', 'Detailed Hanoi', 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:53.649250', '2019-10-14 07:21:53.649250');
-INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Hao Nam', 'Lang Ha', 'Detailed Hanoi', 'Hanoi location', 3, b'1', 0, '2019-10-14 07:22:13.185435', '2019-10-14 07:22:13.185435');
-INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, NULL, NULL, 'Hà Nội', 'Hoàng Mai', 'Định Công', 'Định Công Hạ', '96A Định Công', '20.98470977059105,105.83861725767213', 4, NULL, 1, '2019-10-17 04:32:01.263736', '2019-10-17 04:32:01.263736');
-INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, NULL, 4, 'Hà Nội', 'Hai Bà Trưng', 'Minh Khai', NULL, '12 giai phong', '20.9714041,105.8409441', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, NULL, 4, 'Hà Nội', 'Hà Đông', 'Dương Nội', NULL, '12 quang trung ha dong', '20.9462691,105.7438515', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, 'Hanoi', 'Thanh Xuan', 'Nhan Chinh', 'Tran Duy Hung', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:32.548000', '2019-10-14 07:21:32.548000');
+INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Trung Liet', 'Nguyen Luong Bang', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:53.649250', '2019-10-14 07:21:53.649250');
+INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Hao Nam', 'Lang Ha', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:22:13.185435', '2019-10-14 07:22:13.185435');
+INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, NULL, NULL, 'Hà Nội', 'Hoàng Mai', 'Định Công', 'Định Công Hạ', '96A Định Công', NULL, '20.98470977059105,105.83861725767213', 4, NULL, 1, '2019-10-17 04:32:01.263736', '2019-10-17 04:32:01.263736');
+INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, NULL, 4, 'Hà Nội', 'Hai Bà Trưng', 'Minh Khai', NULL, '12 giai phong', NULL, '20.9714041,105.8409441', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, NULL, 4, 'Hà Nội', 'Hà Đông', 'Dương Nội', NULL, '12 quang trung ha dong', NULL, '20.9462691,105.7438515', NULL, NULL, NULL, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
