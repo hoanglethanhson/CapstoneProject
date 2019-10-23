@@ -96,7 +96,7 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
       .createQueryBuilder('building')
       .innerJoinAndSelect('building.buildingServices', 'buildingService')
       .where('buildingService.buildingId = :bId', { bId: buildingId })
-      .getMany();
+      .getOne();
   }
 
   async saveMultiBuildingServices(buildingId: number, services: any) {
@@ -142,7 +142,7 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
   async getServiceDetailBuilding(buildingId: any) {
     return await getManager()
       .createQueryBuilder(BuildingService, 'building_service')
-      .select(['service.service_id','service.service_name', 'building_service.service_price'])
+      .select(['service.service_id', 'service.service_name', 'building_service.service_price'])
       .innerJoin(Building, 'building', 'building.building_id = building_service.building_id')
       .innerJoin(Service, 'service', 'service.service_id = building_service.service_id')
       .where('building_service.building_id = :building_id', { building_id: buildingId })

@@ -1,4 +1,4 @@
-import buildingServiceFunction from '../functions/building_service-function';
+import buildingServiceFunction from '../functions/building-service-function';
 
 export default [
   {

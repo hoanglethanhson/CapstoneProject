@@ -7,7 +7,7 @@ import {
     Repository,
     PrimaryColumn, Index, ManyToOne, JoinColumn
 } from 'typeorm';
-import {RoomGroup} from "./room_group";
+import {RoomGroup} from "./room-group";
 
 
 @Entity(RoomImage.tableName)

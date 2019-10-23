@@ -12,7 +12,7 @@ import {
   PrimaryColumn,
   Repository,
 } from 'typeorm';
-import { RoomGroup } from './room_group';
+import { RoomGroup } from './room-group';
 import { Amenities } from './amenities';
 
 @Entity(RoomAmenities.tableName)

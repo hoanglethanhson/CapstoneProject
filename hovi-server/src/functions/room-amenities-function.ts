@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction, Handler } from 'express';
 import { validateByModel } from '../utils';
 import { HTTP400Error } from '../utils/httpErrors';
-import { RoomAmenities } from '../models/room_amenities';
-import { BuildingService } from '../models/building_service';
+import { RoomAmenities } from '../models/room-amenities';
 
 export default class RoomAmenitiesFunction {
   static getRoomAmenitiesM: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +25,6 @@ export default class RoomAmenitiesFunction {
     if (!body.data || !Array.isArray(body.data)) next(new HTTP400Error('Data is not valid'));
     if (!body.roomGroupId) next(new HTTP400Error('Room group id is not valid'));
 
-    console.debug(body);
     let errors = {};
     for (let i = 0; i < body.data.length; i++)
       errors[i] = await validateByModel(RoomAmenities, body.data[i]);

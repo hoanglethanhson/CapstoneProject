@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Handler } from 'express';
 import { validateByModel } from '../utils';
 import { HTTP400Error } from '../utils/httpErrors';
-import { BuildingService } from '../models/building_service';
+import { BuildingService } from '../models/building-service';
 
 export default class BuildingServiceFunction {
   static getBuildingServices: Handler = async (req: Request, res: Response, next: NextFunction) => {

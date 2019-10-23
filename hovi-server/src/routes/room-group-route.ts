@@ -1,4 +1,4 @@
-import roomGroupFunction from "../functions/room_group-function";
+import roomGroupFunction from "../functions/room-group-function";
 
 export default [
     {
@@ -7,11 +7,16 @@ export default [
         authentication: false,
         handler: roomGroupFunction.getRoomGroups
     },
+    // {
+    //     path: "/roomGroup/:roomGroupId",
+    //     method: "get",
+    //     authentication: false,
+    //     handler: roomGroupFunction.getRoomGroup
+    // },
     {
-        path: "/roomGroup/:roomGroupId",
+        path: "/roomGroup/:buildingId",
         method: "get",
-        authentication: false,
-        handler: roomGroupFunction.getRoomGroup
+        handler: roomGroupFunction.getRoomGroupByBuildingId
     },
     {
         path: "/roomGroupDetail/:roomGroupId",

@@ -1,4 +1,4 @@
-import roomAmenitiesFunction from "../functions/room_amenities-function";
+import roomAmenitiesFunction from "../functions/room-amenities-function";
 
 export default [
     {

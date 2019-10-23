@@ -1,4 +1,4 @@
-import roomImageFunction from '../functions/room_image-function';
+import roomImageFunction from '../functions/room-image-function';
 
 export default [
   {

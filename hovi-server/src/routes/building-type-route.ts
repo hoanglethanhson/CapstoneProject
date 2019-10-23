@@ -1,4 +1,4 @@
-import roomTypeFunction from "../functions/building_type-function";
+import roomTypeFunction from "../functions/building-type-function";
 
 export default [
     {
