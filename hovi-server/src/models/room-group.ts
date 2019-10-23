@@ -24,7 +24,6 @@ export class RoomGroup extends BaseEntity {
   static readonly tableName = 'room_group';
   static readonly schema = {
     id: 'room_group_id',
-    roomGroupName: 'room_group_name',
     buildingId: 'building_id',
     gender: 'gender',
     rentPrice: 'rent_price',
@@ -53,14 +52,6 @@ export class RoomGroup extends BaseEntity {
     name: RoomGroup.schema.id,
   })
   id: number;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    name: RoomGroup.schema.roomGroupName,
-  })
-  @Length(0, 255)
-  roomGroupName: string;
 
   @ManyToOne(type => Building, building => building.roomGroups)
   @JoinColumn({ name: RoomGroup.schema.buildingId })

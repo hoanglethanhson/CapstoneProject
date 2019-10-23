@@ -22,9 +22,10 @@ export default class AuthFunction {
           verifyId: existUser.phoneToken,
         });
       } else {
-        let claims = existUser.phoneNumber === '+84123456789' ? { admin: true } : {};
+        let claims = existUser.roleAdmin === 'admin' ? { admin: true } : {};
         FirebaseApp.auth().createCustomToken(String(existUser.id), claims)
           .then(function(customToken) {
+            console.log(customToken);
             // Send token back to client
             res.status(200).send({
               firstName: existUser.firstName,

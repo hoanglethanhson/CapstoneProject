@@ -5,18 +5,21 @@ import { HTTP401Error } from '../utils/httpErrors';
 const Authentication = (request: Request, response: Response, next: NextFunction) => {
   let accessTokenFromClient = request.headers.authorization;
   if (accessTokenFromClient) {
+    console.debug(accessTokenFromClient);
     FirebaseAdmin.auth().verifyIdToken(accessTokenFromClient)
       .then(function(decodedToken) {
+        console.debug(decodedToken);
         request['currentUserId'] = decodedToken.uid;
         next();
       }).catch(function(error) {
+      console.debug(error);
       if (error.code == 'auth/id-token-revoked') {
         // Token has been revoked. Inform the user to reauthenticate or signOut() the user.
         next(new HTTP401Error(error));
       } else {
         // Token is invalid.
+        next(new HTTP401Error(error));
       }
-      console.debug(error);
     });
   } else {
     //Fail if token not present in header.
