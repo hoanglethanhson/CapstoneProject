@@ -8,12 +8,12 @@ import {
 } from 'typeorm';
 import { Building } from './building';
 import { Room } from './room';
-import { RoomAmenities } from './room_amenities';
+import { RoomAmenities } from './room-amenities';
 import { Length } from 'class-validator';
-import { RoomImage } from './room_image';
-import { BuildingService } from './building_service';
+import { RoomImage } from './room-image';
+import { BuildingService } from './building-service';
 import { User } from './user';
-import {RoomType} from "./building_type";
+import {RoomType} from "./building-type";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -23,7 +23,7 @@ export class RoomGroup extends BaseEntity {
     buildingId: 'building_id',
     gender: 'gender',
     rentPrice: 'rent_price',
-    area: 'aera',
+    area: 'area',
     bedroom: 'bedroom_quantity',
     bathroom: 'bathroom_quantity',
     wc: 'wc_quantity',
@@ -142,12 +142,6 @@ export class RoomGroup extends BaseEntity {
   })
   capacity: number;
 
-  @Column({
-    type: 'int',
-    unique: false,
-    name: RoomGroup.schema.quantity,
-  })
-  quantity: number;
 
   @Column({
     type: 'int',
@@ -223,7 +217,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       roomGroup.depositPrice = roomGroupUpdate.depositPrice ? roomGroupUpdate.depositPrice : roomGroup.depositPrice;
       roomGroup.description = roomGroupUpdate.description ? roomGroupUpdate.description : roomGroup.description;
       roomGroup.capacity = roomGroupUpdate.capacity ? roomGroupUpdate.capacity : roomGroup.capacity;
-      roomGroup.quantity = roomGroupUpdate.quantity ? roomGroupUpdate.quantity : roomGroup.quantity;
       roomGroup.viewAmount = roomGroupUpdate.viewAmount ? roomGroupUpdate.viewAmount : roomGroup.viewAmount;
       roomGroup.phoneViewAmount = roomGroupUpdate.phoneViewAmount ? roomGroupUpdate.phoneViewAmount : roomGroup.phoneViewAmount;
       roomGroup.isSponsored = roomGroupUpdate.isSponsored ? roomGroupUpdate.isSponsored : roomGroup.isSponsored;
@@ -249,6 +242,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     const building = await Building.repo.findOne(roomGroup.buildingId);
     const buildingTypeArray = await RoomType.repo.getBuildingType(building.typeId);
     const buildingType = buildingTypeArray[0].building_type;
+    const availableRooms = await Room.repo.getAvailableRoomsInGroup(roomGroupId);
     const amenities = await RoomAmenities.repo.getAmenitiesDetailRoomGroup(roomGroupId);
     const amenitiesNot = await RoomAmenities.repo.getAmenitiesDetailNotInRoomGroup(roomGroupId);
     let amenitiesConcat = [];
@@ -276,7 +270,8 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         ward: building.ward,
       },
       buildingType: buildingType,
-      status: (roomGroup.quantity > 0) ? 'Còn phòng' : 'Không còn phòng',
+      status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
+      availableRooms: availableRooms,
       area: roomGroup.area,
       capacity: roomGroup.capacity,
       gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',

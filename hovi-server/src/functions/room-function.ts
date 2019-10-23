@@ -26,7 +26,7 @@ export default class RoomFunction {
         if (error) next(error);
         else {
             const newRoom = await Room.repo.save(body);
-            const successResponse = await Room.repo.findOne({id: newRoom.id});
+            const successResponse = await Room.repo.findOne({roomId: newRoom.roomId});
             res.status(200).send(successResponse);
         }
     };

@@ -4,7 +4,7 @@ import {
   Entity,
   EntityRepository, getCustomRepository,
   Repository,
-  PrimaryColumn, ManyToOne, JoinColumn, OneToMany,
+  PrimaryColumn, ManyToOne, JoinColumn, OneToMany, getManager, getRepository, getConnection,
 } from 'typeorm';
 import { RoomGroup } from './room-group';
 import { Transaction } from './transaction';
@@ -13,9 +13,10 @@ import { Transaction } from './transaction';
 export class Room extends BaseEntity {
   static readonly tableName = 'room';
   static readonly schema = {
-    id: 'room_id',
+    roomId: 'room_id',
     roomGroupId: 'room_group_id',
     roomName: 'room_name',
+    roomStatus: 'room_status',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   };
@@ -24,9 +25,9 @@ export class Room extends BaseEntity {
     type: 'int',
     generated: true,
     unsigned: true,
-    name: Room.schema.id,
+    name: Room.schema.roomId,
   })
-  id: number;
+  roomId: number;
 
   @ManyToOne(type => RoomGroup, roomGroup => roomGroup.rooms)
   @JoinColumn({ name: Room.schema.roomGroupId })
@@ -41,6 +42,13 @@ export class Room extends BaseEntity {
     name: Room.schema.roomName,
   })
   roomName: string;
+
+  @Column({
+    type: 'tinyint',
+    unique: false,
+    name: Room.schema.roomStatus,
+  })
+  roomStatus: number;
 
   @Column({
     type: 'timestamp',
@@ -62,7 +70,7 @@ export class Room extends BaseEntity {
 
 
   @OneToMany(type => Transaction, transaction => transaction.room)
-  @JoinColumn({ name: Room.schema.id })
+  @JoinColumn({ name: Room.schema.roomId })
   transactions: Transaction[];
 
   static get repo(): RoomRepository {
@@ -88,5 +96,15 @@ export class RoomRepository extends Repository<Room> {
       .into(Room)
       .values(values)
       .execute();
+  }
+
+  async getAvailableRoomsInGroup(roomGroupId: any) {
+    return await getConnection()
+        .createQueryBuilder()
+        .select(["room.roomId", "room.roomName"])
+        .from(Room, "room")
+        .where("room.room_group_id = :roomGroupId", {roomGroupId: roomGroupId})
+        .andWhere("room.room_status <> :notAvailable", {notAvailable: 0})
+        .getMany();
   }
 }
