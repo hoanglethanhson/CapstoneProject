@@ -14,6 +14,7 @@ import { RoomImage } from './room-image';
 import { BuildingService } from './building-service';
 import { User } from './user';
 import {RoomType} from "./building-type";
+import {TenantReview} from "./tenant-review";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -193,6 +194,10 @@ export class RoomGroup extends BaseEntity {
   @OneToMany(type => RoomImage, roomImage => roomImage.roomGroup)
   @JoinColumn({ name: RoomGroup.schema.id })
   roomImages: RoomImage[];
+
+  @OneToMany(type => TenantReview, tenantReview => tenantReview.roomGroup)
+  @JoinColumn({ name: RoomGroup.schema.id })
+  tenantReviews: TenantReview[];
 
 
   static get repo(): RoomGroupRepository {

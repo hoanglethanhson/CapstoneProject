@@ -12,6 +12,7 @@ import { MaxLength, IsEmail, Length } from 'class-validator';
 import { Building } from './building';
 import { Transaction } from './transaction';
 import { Feedback } from './feedback';
+import {TenantReview} from "./tenant-review";
 
 @Entity(User.tableName)
 @Unique(['phoneNumber'])
@@ -190,6 +191,10 @@ export class User extends BaseEntity {
   @OneToMany(type => Feedback, transaction => transaction.user)
   @JoinColumn({ name: User.schema.id })
   feedbacks: Feedback[];
+
+  @OneToMany(type => TenantReview, tenantReview => tenantReview.user)
+  @JoinColumn({ name: User.schema.id })
+  tenantReviews: TenantReview[];
 
   checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
     return bcrypt.compareSync(unencryptedPassword, this.password);

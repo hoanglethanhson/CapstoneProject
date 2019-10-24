@@ -11,6 +11,7 @@ import BuildingServiceRoutes from './building-service-route';
 import RoomAmenitiesRoutes from './room-amenities-route';
 import TransactionRoutes from './transaction-route';
 import FeedBackRoutes from './feedback-route';
+import TenantReviewRoutes from "./tenant-review-route";
 
 export default [
   ...AuthRoutes,
@@ -26,4 +27,5 @@ export default [
   ...RoomAmenitiesRoutes,
   ...TransactionRoutes,
   ...FeedBackRoutes,
+  ...TenantReviewRoutes
 ];
