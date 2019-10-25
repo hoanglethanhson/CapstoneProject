@@ -96,7 +96,7 @@ export class User extends BaseEntity {
   roleAdmin: string;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     name: User.schema.gender,
   })
   gender: boolean;
@@ -142,21 +142,21 @@ export class User extends BaseEntity {
   address: string;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: User.schema.isVerified,
   })
   isVerified: boolean;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: User.schema.isHost,
   })
   isHost: boolean;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: User.schema.isActive,
   })

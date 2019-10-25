@@ -9,7 +9,7 @@ import {
     ManyToOne,
     JoinColumn,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn, getManager
 } from 'typeorm';
 import {User} from "./user";
 import {RoomGroup} from "./room-group";
@@ -120,4 +120,9 @@ export class TenantReviewRepository extends Repository<TenantReview> {
         return tenantReview;
     }
 
+    async getRatingResult(roomGroupId: any) {
+        return await this.manager.query("SELECT AVG(accuracy_star) as \'accuracy_rate\', AVG(host_star) as \'host_rate'\, " +
+            "AVG(security_star) as \'security_rate\' FROM `tenant_review` WHERE room_group_id = ?",
+            [roomGroupId]);
+    }
 }

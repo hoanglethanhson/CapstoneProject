@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 23/10/2019 23:14:27
+ Date: 25/10/2019 11:04:55
 */
 
 SET NAMES utf8mb4;
@@ -220,7 +220,7 @@ CREATE TABLE `room`  (
   PRIMARY KEY (`room_id`) USING BTREE,
   INDEX `FK_room_group`(`room_group_id`) USING BTREE,
   CONSTRAINT `FK_room_group` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room
@@ -233,6 +233,9 @@ INSERT INTO `room` VALUES (5, 8, '202', 1, '2019-10-23 15:14:28.681470', '2019-1
 INSERT INTO `room` VALUES (6, 8, '301', 1, '2019-10-23 15:14:29.302333', '2019-10-23 15:14:29.302333');
 INSERT INTO `room` VALUES (7, 8, '302', 0, '2019-10-23 15:14:30.679915', '2019-10-23 15:14:30.679915');
 INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, '2019-10-23 15:14:31.828924', '2019-10-23 15:14:31.828924');
+INSERT INTO `room` VALUES (9, 2, '101', 1, NULL, NULL);
+INSERT INTO `room` VALUES (10, 2, '204', 1, NULL, NULL);
+INSERT INTO `room` VALUES (11, 2, '102', 0, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for room_amenities
@@ -407,12 +410,14 @@ CREATE TABLE `tenant_review`  (
   INDEX `FK_room_group_review`(`room_group_id`) USING BTREE,
   CONSTRAINT `FK_room_group_review` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_tenant_review` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tenant_review
 -- ----------------------------
 INSERT INTO `tenant_review` VALUES (1, 1, 2, 'good ', 3, 4, 5, NULL, NULL);
+INSERT INTO `tenant_review` VALUES (2, 2, 2, 'nice', 4, 5, 3, NULL, NULL);
+INSERT INTO `tenant_review` VALUES (3, 2, 5, 'clean', 3, 3, 3, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for transaction

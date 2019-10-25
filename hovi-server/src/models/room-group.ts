@@ -57,7 +57,7 @@ export class RoomGroup extends BaseEntity {
   buildingId: number;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: RoomGroup.schema.gender,
   })
@@ -108,14 +108,14 @@ export class RoomGroup extends BaseEntity {
   direction: string;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: RoomGroup.schema.isAvailable,
   })
   isAvailable: boolean;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: RoomGroup.schema.isVerified,
   })
@@ -159,7 +159,7 @@ export class RoomGroup extends BaseEntity {
   phoneViewAmount: number;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: RoomGroup.schema.isSponsored,
   })
@@ -266,7 +266,10 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       let temp = [element.image_url];
       imageLinks = imageLinks.concat(temp);
     });
+    const rating = await TenantReview.repo.getRatingResult(roomGroupId);
     const result = {
+      buildingTypeId: building.typeId,
+      availableRooms: availableRooms,
       images: imageLinks,
       title: building.buildingName + ' ' + building.province + ' ' + `${building.street ? building.street : ''}`,
       generalAddress: {
@@ -274,9 +277,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         district: building.district,
         ward: building.ward,
       },
-      buildingType: buildingType,
       status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
-      availableRooms: availableRooms,
       area: roomGroup.area,
       capacity: roomGroup.capacity,
       gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
@@ -288,6 +289,11 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       },
       services: services,
       phone: phone,
+      rating: {
+        accuracy_rate: rating[0].accuracy_rate,
+        host_rate: rating[0].host_rate,
+        security_rate: rating[0].security_rate
+      }
     };
     //console.log(result);
     return result;

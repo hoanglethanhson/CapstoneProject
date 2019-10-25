@@ -66,7 +66,7 @@ export class Building extends BaseEntity {
     hostId: number;
 
     @Column({
-        type: "bit",
+        type: "boolean",
         unique: false,
         name: Building.schema.isMixGender
     })
@@ -136,7 +136,7 @@ export class Building extends BaseEntity {
     floor: number;
 
     @Column({
-        type: "bit",
+        type: "boolean",
         unique: false,
         name: Building.schema.isVerified
     })
