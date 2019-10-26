@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 25/10/2019 11:04:55
+ Date: 26/10/2019 00:05:29
 */
 
 SET NAMES utf8mb4;
@@ -220,7 +220,7 @@ CREATE TABLE `room`  (
   PRIMARY KEY (`room_id`) USING BTREE,
   INDEX `FK_room_group`(`room_group_id`) USING BTREE,
   CONSTRAINT `FK_room_group` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room
@@ -236,6 +236,10 @@ INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, '2019-10-23 15:14:31.8289
 INSERT INTO `room` VALUES (9, 2, '101', 1, NULL, NULL);
 INSERT INTO `room` VALUES (10, 2, '204', 1, NULL, NULL);
 INSERT INTO `room` VALUES (11, 2, '102', 0, NULL, NULL);
+INSERT INTO `room` VALUES (12, 10, '111', 1, NULL, NULL);
+INSERT INTO `room` VALUES (13, 10, '102', 0, NULL, NULL);
+INSERT INTO `room` VALUES (14, 10, '203', 1, NULL, NULL);
+INSERT INTO `room` VALUES (15, 10, '204', 1, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for room_amenities
@@ -302,7 +306,7 @@ CREATE TABLE `room_group`  (
   PRIMARY KEY (`room_group_id`) USING BTREE,
   INDEX `FK_room_group_building`(`building_id`) USING BTREE,
   CONSTRAINT `FK_room_group_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_group
@@ -312,7 +316,8 @@ INSERT INTO `room_group` VALUES (5, 1, b'1', 2500000, 100, 1, 1, 1, 'east', b'1'
 INSERT INTO `room_group` VALUES (6, 2, b'1', 2500000, 100, 1, 1, 1, 'north', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-15 15:26:19.469810', '2019-10-15 15:26:19.469810');
 INSERT INTO `room_group` VALUES (7, 2, b'1', 2500000, 100, 1, 1, 1, 'south', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-15 15:26:22.861635', '2019-10-15 15:26:22.861635');
 INSERT INTO `room_group` VALUES (8, 4, NULL, 1200000, 60, 1, 1, NULL, '- Điều hòa, sàn gỗ, giường tủ\n- Gần chợ, ĐH văn hóa, ĐH Mỹ thuật công nghiệp...\n- An ninh tốt, khu dân trí cao', NULL, NULL, 1000000, '', 3, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `room_group` VALUES (9, 6, NULL, NULL, 200, 2, 2, NULL, '', NULL, NULL, NULL, 'Phòng view đẹp ', 4, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `room_group` VALUES (9, 6, NULL, 2000000, 200, 2, 2, NULL, '', NULL, NULL, NULL, 'Phòng view đẹp ', 4, NULL, NULL, NULL, '2019-10-25 08:25:05.108507', '2019-10-25 08:25:05.108507');
+INSERT INTO `room_group` VALUES (10, 4, NULL, 1500000, 25, 3, 3, 3, 'east', b'1', b'1', 2000000, 'Phòng mới', 3, NULL, NULL, b'0', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for room_image
@@ -471,7 +476,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'image', 'Hoa Lac', b'1', b'1', b'1', '2019-10-14 14:35:10.245687', '2019-10-14 14:35:10.245687');
+INSERT INTO `user` VALUES (1, 'Son update new', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'image', 'Hoa Lac', b'1', b'1', b'1', '2019-10-14 14:35:10.245687', '2019-10-14 14:35:10.245687');
 INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'image', 'Hanoi', b'1', b'1', b'1', '2019-10-14 14:35:12.166768', '2019-10-14 14:35:12.166768');
 INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', NULL, NULL, NULL, '2019-10-16 14:59:24.194228', '2019-10-16 14:59:24.194228');
 INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', NULL, NULL, NULL, '2019-10-15 11:46:56.066184', '2019-10-15 11:46:56.066184');

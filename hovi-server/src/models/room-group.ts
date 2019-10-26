@@ -143,6 +143,12 @@ export class RoomGroup extends BaseEntity {
   })
   capacity: number;
 
+  @Column({
+    type: 'int',
+    unique: false,
+    name: RoomGroup.schema.quantity,
+  })
+  quantity: number;
 
   @Column({
     type: 'int',
