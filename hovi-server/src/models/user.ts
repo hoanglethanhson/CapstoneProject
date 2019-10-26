@@ -84,7 +84,6 @@ export class User extends BaseEntity {
     length: 255,
     name: User.schema.phoneToken,
   })
-  @MaxLength(255)
   phoneToken: string;
 
   @Column({

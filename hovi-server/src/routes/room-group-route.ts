@@ -4,15 +4,8 @@ export default [
     {
         path: "/roomGroup/",
         method: "get",
-        authentication: false,
         handler: roomGroupFunction.getRoomGroups
     },
-    // {
-    //     path: "/roomGroup/:roomGroupId",
-    //     method: "get",
-    //     authentication: false,
-    //     handler: roomGroupFunction.getRoomGroup
-    // },
     {
         path: "/roomGroup/:buildingId",
         method: "get",
@@ -21,25 +14,24 @@ export default [
     {
         path: "/roomGroupDetail/:roomGroupId",
         method: "get",
-        authentication: false,
         handler: roomGroupFunction.getRoomGroupDetail
     },
     {
         path: "/roomGroup/",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: roomGroupFunction.createRoomGroup
     },
     {
         path: "/roomGroup/:roomGroupId",
         method: "put",
-        authentication: false,
+        authentication: true,
         handler: roomGroupFunction.updateRoomGroup
     },
     {
         path: "/roomGroup/:roomGroupId",
         method: "delete",
-        authentication: false,
+        authentication: true,
         handler: roomGroupFunction.deleteRoomGroup
     },
 ];

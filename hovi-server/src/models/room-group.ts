@@ -60,7 +60,7 @@ export class RoomGroup extends BaseEntity {
   buildingId: number;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     name: RoomGroup.schema.gender,
   })
   gender: boolean;
@@ -104,13 +104,13 @@ export class RoomGroup extends BaseEntity {
   direction: string;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     name: RoomGroup.schema.isAvailable,
   })
   isAvailable: boolean;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     name: RoomGroup.schema.isVerified,
   })
   isVerified: boolean;
