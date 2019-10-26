@@ -136,6 +136,12 @@ export class RoomGroup extends BaseEntity {
 
   @Column({
     type: 'int',
+    name: RoomGroup.schema.quantity,
+  })
+  quantity: number;
+
+  @Column({
+    type: 'int',
     unique: false,
     name: RoomGroup.schema.viewAmount,
   })

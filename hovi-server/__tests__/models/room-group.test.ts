@@ -61,13 +61,13 @@ describe('[model] roomGroup', () => {
 
         roomGroup1 = await RoomGroup.repo.save(RoomGroup.repo.create({
             id: 1,
-            buildingId: 1,
+            buildingId: building1.id,
             gender: true,
             rentPrice: 1200,
             area: 12,
-            bedroom: 1,
-            bathroom: 1,
-            wc: 1,
+            bedroomQuantity: 1,
+            bathroomQuantity: 1,
+            wcQuantity: 1,
             direction: 'direction',
             isAvailable: true,
             isVerified: true,
@@ -79,6 +79,8 @@ describe('[model] roomGroup', () => {
             phoneViewAmount: 10,
             isSponsored: false
         }));
+
+
     });
 
 

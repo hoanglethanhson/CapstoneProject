@@ -1,13 +1,12 @@
 import {QueryFailedError} from 'typeorm';
 import {DatabaseManager} from '../../src/models';
-import {Transaction} from '../../src/models/transaction';
+import {Room} from '../../src/models/room';
 import {User} from "../../src/models/user";
-import {RoomGroup} from "../../src/models/room-group";
 import {RoomType} from "../../src/models/building-type";
 import {Building} from "../../src/models/building";
-import {Room} from "../../src/models/room";
+import {RoomGroup} from "../../src/models/room-group";
 
-describe('[model] transaction', () => {
+describe('[model] room', () => {
     beforeAll(async () => {
         await DatabaseManager.init();
     });
@@ -16,9 +15,10 @@ describe('[model] transaction', () => {
         await DatabaseManager.close();
     });
 
-    let transaction1: Transaction;
+    let room1: Room;
     beforeEach(async () => {
         await DatabaseManager.clearData();
+
         const user1 = await User.repo.save(User.repo.create({
             id: 1,
             firstName: 'first_name',
@@ -38,7 +38,6 @@ describe('[model] transaction', () => {
             isActive: true
         }));
 
-        //TODO : Declare variables for building, roomGroup and room
         const buildingType1 = await RoomType.repo.save(RoomType.repo.create({
             id: 1,
             type: 'building_type'
@@ -82,36 +81,40 @@ describe('[model] transaction', () => {
             isSponsored: false
         }));
 
-        const room1 = await Room.repo.save(Room.repo.create({
+        room1 = await Room.repo.save(Room.repo.create({
             roomId: 1,
             roomGroupId: roomGroup1.id,
             roomName: 'room_name',
             roomStatus: 1
         }));
-
-        transaction1 = await Transaction.repo.save(Transaction.repo.create({
-            transactionId: 1,
-            userId: user1.id,
-            roomId: room1.roomId,
-            isTransited: true
-        }));
     });
 
 
+    it('should not insert duplicated room name in same room group', async () => {
+        // expect.assertions(1);
+        try {
+            const duplicatedRoom = new Room();
+            duplicatedRoom.roomGroupId = room1.roomGroupId;
+            duplicatedRoom.roomName = room1.roomName;
+            await duplicatedRoom.save();
+        } catch (error) {
+            expect(error).toBeInstanceOf(QueryFailedError);
+        }
+    });
 
-    it('should return null if transaction is not found', async () => {
-        const result = await Transaction.repo.findOne(1000);
+
+    it('should return null if room is not found', async () => {
+        const result = await Room.repo.findOne(1000);
         expect(result).toBeUndefined();
     });
 
-
-    it('should return false if user id is not found', async () => {
-        const result = await Transaction.repo.findOne({userId: 1000});
-        expect(result).toBeFalsy();
+    it('should return true if room name is found', async () => {
+        const result = await Room.repo.find({roomName: room1.roomName});
+        expect(result).toBeTruthy();
     });
 
-    it('should return false if room id is not found', async () => {
-        const result = await Transaction.repo.findOne({roomId: 1000});
+    it('should return false if room name is not found', async () => {
+        const result = await Room.repo.findOne({roomName: "not a room name"});
         expect(result).toBeFalsy();
     });
 });
