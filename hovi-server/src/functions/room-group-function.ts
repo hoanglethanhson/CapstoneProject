@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Handler } from 'express';
 import { validateByModel } from '../utils';
 import { HTTP400Error } from '../utils/httpErrors';
-import { RoomGroup } from '../models/room_group';
+import { RoomGroup } from '../models/room-group';
 import { Room } from '../models/room';
 
 export default class RoomGroupFunction {
@@ -19,13 +19,19 @@ export default class RoomGroupFunction {
     else next(new HTTP400Error('roomGroupId not found.'));
   };
 
+  static getRoomGroupByBuildingId: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const buildingId = req.params['buildingId'];
+    const roomGroup = await RoomGroup.repo.find({ where: { buildingId } });
+
+    if (roomGroup) res.status(200).send(roomGroup);
+    else next(new HTTP400Error('buildingId not found.'));
+  };
+
   static createRoomGroup: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const { buildingId, roomGroupId, data } = req.body || {};
 
     const error = await validateByModel(RoomGroup, data);
     if (error) next(new HTTP400Error(error));
-
-    console.log(data);
 
     let roomGroupData: RoomGroup, roomData = ['Thuê cả nhà'];
     if (data.roomNames && Array.isArray(data.roomNames) && data.roomNames.length > 0) roomData = data.roomNames;

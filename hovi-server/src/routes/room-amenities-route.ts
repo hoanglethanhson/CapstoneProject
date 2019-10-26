@@ -1,34 +1,32 @@
-import roomAmenitiesFunction from "../functions/room_amenities-function";
+import roomAmenitiesFunction from "../functions/room-amenities-function";
 
 export default [
     {
         path: "/roomAmenities/",
         method: "get",
-        authentication: false,
         handler: roomAmenitiesFunction.getRoomAmenitiesM
     },
     {
         path: "/roomAmenities/:roomGroupId",
         method: "get",
-        authentication: false,
         handler: roomAmenitiesFunction.getRoomAmenities
     },
     {
         path: "/roomAmenities/",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: roomAmenitiesFunction.createRoomAmenities
     },
     {
         path: "/roomAmenities/:roomGroupId/:amenitiesId",
         method: "put",
-        authentication: false,
+        authentication: true,
         handler: roomAmenitiesFunction.updateRoomAmenities
     },
     {
         path: "/roomAmenities/:roomGroupId/:amenitiesId",
         method: "delete",
-        authentication: false,
+        authentication: true,
         handler: roomAmenitiesFunction.deleteRoomAmenities
     },
 ];

@@ -4,31 +4,29 @@ export default [
     {
         path: "/amenities/",
         method: "get",
-        authentication: false,
         handler: amenitiesFunction.getAmenities
     },
     {
         path: "/amenities/:amenitiesId",
         method: "get",
-        authentication: false,
         handler: amenitiesFunction.getAmenitiesOne
     },
     {
         path: "/amenities/",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: amenitiesFunction.createAmenities
     },
     {
         path: "/amenities/:amenitiesId",
         method: "put",
-        authentication: false,
+        authentication: true,
         handler: amenitiesFunction.updateAmenities
     },
     {
         path: "/amenities/:amenitiesId",
         method: "delete",
-        authentication: false,
+        authentication: true,
         handler: amenitiesFunction.deleteAmenities
     },
 ];

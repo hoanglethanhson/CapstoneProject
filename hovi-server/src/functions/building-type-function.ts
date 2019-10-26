@@ -1,13 +1,13 @@
 import {Request, Response, NextFunction, Handler} from "express";
 import {validateByModel} from '../utils';
 import {HTTP400Error} from '../utils/httpErrors';
-import {RoomType} from "../models/building_type";
+import {RoomType} from "../models/building-type";
 
 export default class RoomTypeFunction {
     static getRoomTypes: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const roomTypes = await RoomType.repo.find();
 
-        // console.log(users);
+        console.log(req);
         if (roomTypes.length != 0) res.status(200).send(roomTypes);
         else next(new HTTP400Error('0 record.'));
     };

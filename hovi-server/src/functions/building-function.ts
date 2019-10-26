@@ -24,14 +24,17 @@ export default class BuildingFunction {
 
     body['hostId'] = req['currentUserId'];
     body['hostId'] = body['hostId'] ? body['hostId'] : 3;
-    console.log(body);
 
     if (error) next(error);
     else {
-      const newBuilding = await Building.repo.save(body).catch(err => console.log(err));
-      console.debug(newBuilding);
-      const successResponse = await Building.repo.findOne({ id: newBuilding.id });
-      res.status(200).send(successResponse);
+      if (body['buildingId']) {
+        const successResponse = await Building.repo.updateById(body['buildingId'], body);
+        res.status(200).send(successResponse);
+      } else {
+        const newBuilding = await Building.repo.save(body).catch(err => console.log(err));
+        const successResponse = await Building.repo.findOne({ id: newBuilding.id });
+        res.status(200).send(successResponse);
+      }
     }
   };
 

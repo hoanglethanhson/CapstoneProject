@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction, Handler } from 'express';
 import { validateByModel } from '../utils';
 import { HTTP400Error } from '../utils/httpErrors';
-import { RoomAmenities } from '../models/room_amenities';
-import { BuildingService } from '../models/building_service';
+import { RoomAmenities } from '../models/room-amenities';
 
 export default class RoomAmenitiesFunction {
   static getRoomAmenitiesM: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -21,47 +20,67 @@ export default class RoomAmenitiesFunction {
     else next(new HTTP400Error('roomGroupId not found.'));
   };
 
+  /**
+   * Create or update multiple roomAmenities one time
+   * Request data from client: {data, roomGroupId}
+   * @param req
+   * @param res
+   * @param next
+   */
   static createRoomAmenities: Handler = async (req: Request, res: Response, next: NextFunction) => {
-    const body = req.body || {};
-    if (!body.data || !Array.isArray(body.data)) next(new HTTP400Error('Data is not valid'));
-    if (!body.roomGroupId) next(new HTTP400Error('Room group id is not valid'));
+    const { data, roomGroupId } = req.body || {};
+    if (!data || !Array.isArray(data)) next(new HTTP400Error('Data is not valid'));
+    if (!roomGroupId) next(new HTTP400Error('Room group id is not valid'));
 
-    console.debug(body);
-    let errors = {};
-    for (let i = 0; i < body.data.length; i++)
-      errors[i] = await validateByModel(RoomAmenities, body.data[i]);
-
+    /**
+     * Check validate data room amenities from client
+     */
+    let errors = [];
+    for (let i = 0; i < data.length; i++) errors[i] = await validateByModel(RoomAmenities, data[i]);
     console.debug(errors);
 
-    if (errors[0]) next(new HTTP400Error(errors));
+    /**
+     * Check multiple room amenities, do not insert if only one data error
+     */
+    if (errors.every(error => !!error)) next(new HTTP400Error(errors));
     else {
-      let promise = [], roomGroupId = body.roomGroupId;
-
-      console.debug(roomGroupId);
-      for (let i = 0; i < body.data.length; i++) {
-        const record = await RoomAmenities.repo.getOneRecord(roomGroupId, body.data[i]);
+      let promise = [];
+      /**
+       * Check record: Create new if not exists in DB
+       */
+      for (let i = 0; i < data.length; i++) {
+        const record = await RoomAmenities.repo.getOneRecord(roomGroupId, data[i]);
         if (!record) {
           let createData: RoomAmenities = new RoomAmenities();
-          createData.amenitiesId = body.data[i];
+          createData.amenitiesId = data[i];
           createData.roomGroupId = roomGroupId;
           promise.push(RoomAmenities.repo.save(createData));
         }
       }
 
+      /**
+       * Get all data room amenities by roomGroupId & format get only amenitiesId to array
+       */
       const roomAmenities = await RoomAmenities.repo.getAmenitiesDetailRoomGroup(roomGroupId);
-      const formatExistRoomAmenities = roomAmenities.map(val => {
-        console.log(val);
-        return val.amenities_id;
-      });
-      let deleteRoomAmenities = formatExistRoomAmenities.filter((obj) => {
-        return !body.data.includes(obj);
-      });
+      const formatExistRoomAmenities = roomAmenities.map(val => val.amenities_id);
+
+      /**
+       * Filter to get array amenities id will delete
+       */
+      const deleteRoomAmenities = formatExistRoomAmenities.filter((obj) => !data.includes(obj));
+
       console.debug(formatExistRoomAmenities);
       console.debug(deleteRoomAmenities);
 
+      /**
+       * Delete room amenities in DB
+       */
       for (let i = 0; i < deleteRoomAmenities.length; i++)
         promise.push(RoomAmenities.repo.deleteOneRecord(roomGroupId, deleteRoomAmenities[i]));
 
+      /**
+       * Run all command & send to client
+       */
       Promise.all(promise).then(data => {
         res.status(200).send(data);
       }).catch(error => {

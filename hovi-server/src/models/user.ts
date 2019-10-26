@@ -5,7 +5,7 @@ import {
   Entity,
   EntityRepository, getCustomRepository,
   Repository,
-  PrimaryColumn, ManyToOne, JoinColumn, OneToMany,
+  PrimaryColumn, JoinColumn, OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { MaxLength, IsEmail, Length } from 'class-validator';
@@ -14,16 +14,17 @@ import { Transaction } from './transaction';
 import { Feedback } from './feedback';
 
 @Entity(User.tableName)
-@Unique(['phone'])
+@Unique(['phoneNumber'])
 export class User extends BaseEntity {
   static readonly tableName = 'user';
   static readonly schema = {
     id: 'user_id',
     firstName: 'first_name',
     lastName: 'last_name',
-    phone: 'phone',
+    phoneNumber: 'phone_number',
     password: 'password',
     phoneToken: 'phone_token',
+    roleAdmin: 'role_admin',
     gender: 'gender',
     facebookId: 'facebook_id',
     googleId: 'google_id',
@@ -33,8 +34,8 @@ export class User extends BaseEntity {
     isVerified: 'is_verified',
     isHost: 'is_host',
     isActive: 'is_active',
-    create: 'created_at',
-    update: 'updated_at',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
   };
 
   @PrimaryColumn({
@@ -48,7 +49,6 @@ export class User extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    unique: false,
     name: User.schema.firstName,
   })
   @Length(1, 255)
@@ -57,7 +57,6 @@ export class User extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    unique: false,
     name: User.schema.lastName,
   })
   @Length(1, 255)
@@ -67,10 +66,10 @@ export class User extends BaseEntity {
     type: 'varchar',
     length: 20,
     unique: true,
-    name: User.schema.phone,
+    name: User.schema.phoneNumber,
   })
   @MaxLength(20)
-  phone: string;
+  phoneNumber: string;
 
   @Column({
     type: 'varchar',
@@ -83,19 +82,22 @@ export class User extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    unique: true,
     name: User.schema.phoneToken,
   })
-  @MaxLength(255)
   phoneToken: string;
 
   @Column({
+    type: 'varchar',
+    length: 50,
+    name: User.schema.roleAdmin,
+  })
+  roleAdmin: string;
+
+  @Column({
     type: 'bit',
-    unique: false,
     name: User.schema.gender,
   })
   gender: boolean;
-
 
   @Column({
     type: 'varchar',
@@ -163,18 +165,18 @@ export class User extends BaseEntity {
     precision: 6,
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
-    name: User.schema.create,
+    name: User.schema.createdAt,
   })
-  create: Date;
+  createdAt: Date;
 
   @Column({
     type: 'timestamp',
     precision: 6,
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
-    name: User.schema.update,
+    name: User.schema.updatedAt,
   })
-  update: Date;
+  updatedAt: Date;
 
   @OneToMany(type => Building, building => building.host)
   @JoinColumn({ name: User.schema.id })
@@ -204,7 +206,7 @@ export class UserRepository extends Repository<User> {
     if (user) {
       user.firstName = userUpdate.firstName ? userUpdate.firstName : user.firstName;
       user.lastName = userUpdate.lastName ? userUpdate.lastName : user.lastName;
-      user.phone = userUpdate.phone ? userUpdate.phone : user.phone;
+      user.phoneNumber = userUpdate.phoneNumber ? userUpdate.phoneNumber : user.phoneNumber;
       user.phoneToken = userUpdate.phoneToken ? userUpdate.phoneToken : user.phoneToken;
       user.gender = userUpdate.gender ? userUpdate.gender : user.gender;
       user.facebookId = userUpdate.facebookId ? userUpdate.facebookId : user.facebookId;
@@ -215,15 +217,13 @@ export class UserRepository extends Repository<User> {
       user.isVerified = userUpdate.isVerified ? userUpdate.isVerified : user.isVerified;
       user.isHost = userUpdate.isHost ? userUpdate.isHost : user.isHost;
       user.isActive = userUpdate.isActive ? userUpdate.isActive : user.isActive;
-      user.create = userUpdate.create ? userUpdate.create : user.create;
-      user.update = userUpdate.update ? userUpdate.update : user.update;
       await this.save(user);
     }
     return user;
   }
 
   async verifyPhoneNumber(phoneNumber: string, verifyId: string) {
-    let user = await this.findOne({ phone: phoneNumber });
+    let user = await this.findOne({ phoneNumber: phoneNumber });
     if (user.phoneToken === verifyId) {
       user.phoneToken = '';
       await this.save(user);
@@ -232,7 +232,7 @@ export class UserRepository extends Repository<User> {
   }
 
   async getHostPhone(userId: number) {
-    let user = await this.findOne({id: userId});
-    return user.phone;
+    let user = await this.findOne({ id: userId });
+    return user.phoneNumber;
   }
 }

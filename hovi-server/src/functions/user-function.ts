@@ -5,21 +5,21 @@ import { HTTP400Error } from '../utils/httpErrors';
 import { User } from '../models/user';
 
 export default class UserFunction {
-    static getUsers: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const users = await User.repo.find();
+  static getUsers: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const users = await User.repo.find();
 
-        // console.log(users);
-        if (users.length != 0) res.status(200).send(users);
-        else next(new HTTP400Error('0 record.'));
-    };
+    // console.log(users);
+    if (users.length != 0) res.status(200).send(users);
+    else next(new HTTP400Error('0 record.'));
+  };
 
-    static getUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const userId = req.params['userId'];
-        const user = await User.repo.findOne(userId);
+  static getUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params['userId'];
+    const user = await User.repo.findOne(userId);
 
-        if (user) res.status(200).send(user);
-        else next(new HTTP400Error('userId not found.'));
-    };
+    if (user) res.status(200).send(user);
+    else next(new HTTP400Error('userId not found.'));
+  };
 
   static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
@@ -27,9 +27,10 @@ export default class UserFunction {
     if (!body['email']) body['email'] = 'example@homehouse.vn';
 
     const error = await validateByModel(User, body);
+    console.log(error);
     if (error) next(error);
     else {
-      const checkUsername = await User.repo.findOne({ phone: body['phone'] });
+      const checkUsername = await User.repo.findOne({ phoneNumber: body['phone'] });
       if (checkUsername) next(new HTTP400Error({
         phone: 'Phone number already exists',
       }));
@@ -44,20 +45,20 @@ export default class UserFunction {
     }
   };
 
-    static updateUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const body = req.body || {};
-        const userId = req.params['userId'];
-        const successResponse = await User.repo.updateById(userId, body);
+  static updateUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const body = req.body || {};
+    const userId = req.params['userId'];
+    const successResponse = await User.repo.updateById(userId, body);
 
-        if (successResponse) res.status(200).send(successResponse);
-        else next(new HTTP400Error('userId not found'));
-    };
+    if (successResponse) res.status(200).send(successResponse);
+    else next(new HTTP400Error('userId not found'));
+  };
 
-    static deleteUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const userId = req.params['userId'];
-        const successResponse = await User.repo.delete(userId);
+  static deleteUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params['userId'];
+    const successResponse = await User.repo.delete(userId);
 
-        if (successResponse.affected != 0) res.status(200).send("Delete user successfully !");
-        else next(new HTTP400Error('userId not found'));
-    };
+    if (successResponse.affected != 0) res.status(200).send('Delete user successfully !');
+    else next(new HTTP400Error('userId not found'));
+  };
 }

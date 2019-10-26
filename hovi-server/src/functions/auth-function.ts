@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, Handler } from 'express';
 import * as bcrypt from 'bcryptjs';
 import { validateByModel } from '../utils';
 import FirebaseApp from '../utils/firebaseApp';
-import { HTTP400Error } from '../utils/httpErrors';
+import { HTTP400Error, HTTP409Error } from '../utils/httpErrors';
 import { User } from '../models/user';
 
 export default class AuthFunction {
@@ -11,7 +11,7 @@ export default class AuthFunction {
     const { phone, password } = req.body;
     console.debug(phone, password);
 
-    const existUser = await User.repo.findOne({ phone });
+    const existUser = await User.repo.findOne({ phoneNumber: phone });
 
     if (!existUser) next(new HTTP400Error({ error: 'Invalid phone number or password!' }));
     else if (!existUser.checkIfUnencryptedPasswordIsValid(password))
@@ -22,13 +22,15 @@ export default class AuthFunction {
           verifyId: existUser.phoneToken,
         });
       } else {
-        FirebaseApp.auth().createCustomToken(String(existUser.id), {})
+        let claims = existUser.roleAdmin === 'admin' ? { admin: true } : {};
+        FirebaseApp.auth().createCustomToken(String(existUser.id), claims)
           .then(function(customToken) {
+            console.log(customToken);
             // Send token back to client
             res.status(200).send({
               firstName: existUser.firstName,
               lastName: existUser.lastName,
-              phoneNumber: existUser.phone,
+              phoneNumber: existUser.phoneNumber,
               accessToken: customToken,
             });
           })
@@ -43,18 +45,18 @@ export default class AuthFunction {
   static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
 
-    body['email'] = 'example@homehouse.vn';
+    body['email'] = 'example@homohouse.vn';
     body['address'] = 'not yet';
     body['facebookId'] = 'example-facebook-id';
     body['googleId'] = 'example-google-id';
 
     const error = await validateByModel(User, body);
-    console.log(body);
+    console.log(error);
     if (error) next(error);
     else {
-      const checkPhoneNumber = await User.repo.findOne({ phone: body['phone'] });
-      if (checkPhoneNumber) next(new HTTP400Error({
-        phone: 'Phone number already exists',
+      const checkPhoneNumber = await User.repo.findOne({ phoneNumber: body['phoneNumber'] });
+      if (checkPhoneNumber) next(new HTTP409Error({
+        phoneNumber: 'Phone number already exists',
       }));
 
       else {

@@ -1,40 +1,37 @@
-import roomGroupFunction from "../functions/room_group-function";
+import roomGroupFunction from "../functions/room-group-function";
 
 export default [
     {
         path: "/roomGroup/",
         method: "get",
-        authentication: false,
         handler: roomGroupFunction.getRoomGroups
     },
     {
-        path: "/roomGroup/:roomGroupId",
+        path: "/roomGroup/:buildingId",
         method: "get",
-        authentication: false,
-        handler: roomGroupFunction.getRoomGroup
+        handler: roomGroupFunction.getRoomGroupByBuildingId
     },
     {
         path: "/roomGroupDetail/:roomGroupId",
         method: "get",
-        authentication: false,
         handler: roomGroupFunction.getRoomGroupDetail
     },
     {
         path: "/roomGroup/",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: roomGroupFunction.createRoomGroup
     },
     {
         path: "/roomGroup/:roomGroupId",
         method: "put",
-        authentication: false,
+        authentication: true,
         handler: roomGroupFunction.updateRoomGroup
     },
     {
         path: "/roomGroup/:roomGroupId",
         method: "delete",
-        authentication: false,
+        authentication: true,
         handler: roomGroupFunction.deleteRoomGroup
     },
 ];
