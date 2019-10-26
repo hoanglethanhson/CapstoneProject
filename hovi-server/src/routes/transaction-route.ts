@@ -4,31 +4,31 @@ export default [
     {
         path: "/transaction/",
         method: "get",
-        authentication: false,
+        authentication: true,
         handler: TransactionFunction.getTransactions
     },
     {
         path: "/transaction/:transactionId",
         method: "get",
-        authentication: false,
+        authentication: true,
         handler: TransactionFunction.getTransaction
     },
     {
         path: "/transaction/",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: TransactionFunction.createTransaction
     },
     {
         path: "/transaction/:transactionId",
         method: "put",
-        authentication: false,
+        authentication: true,
         handler: TransactionFunction.updateTransaction
     },
     {
         path: "/transaction/:transactionId",
         method: "delete",
-        authentication: false,
+        authentication: true,
         handler: TransactionFunction.deleteTransaction
     },
 ];
