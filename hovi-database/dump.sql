@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 27/10/2019 20:21:26
+ Date: 27/10/2019 20:26:20
 */
 
 SET NAMES utf8mb4;
@@ -407,12 +407,14 @@ CREATE TABLE `tenant_review`  (
   INDEX `FK_room_group_review`(`room_group_id`) USING BTREE,
   CONSTRAINT `FK_room_group_review` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_tenant_review` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tenant_review
 -- ----------------------------
 INSERT INTO `tenant_review` VALUES (1, 1, 2, 'good ', 3, 4, 5, NULL, NULL);
+INSERT INTO `tenant_review` VALUES (2, 1, 8, 'nice', 4, 5, 4, NULL, NULL);
+INSERT INTO `tenant_review` VALUES (3, 2, 8, NULL, 5, 3, 3, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for transaction
