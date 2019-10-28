@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 27/10/2019 20:26:20
+ Date: 28/10/2019 21:10:56
 */
 
 SET NAMES utf8mb4;
@@ -457,6 +457,9 @@ CREATE TABLE `user`  (
   `email` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Email of the user',
   `avatar` text CHARACTER SET utf8mb4  NULL COMMENT 'Avatar URL of the user',
   `address` text CHARACTER SET utf8mb4  NULL COMMENT 'Address of the user',
+  `is_phone_number_verified` bit(1) NULL DEFAULT NULL COMMENT 'User phone number is verified or not',
+  `is_selfie_verified` bit(1) NULL DEFAULT NULL COMMENT 'User selfie image is verified or not',
+  `is_government_id_verified` bit(1) NULL DEFAULT NULL COMMENT 'User government id card is verified or not',
   `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'User is verified or not',
   `is_host` bit(1) NULL DEFAULT NULL COMMENT 'User is host or not',
   `is_active` bit(1) NULL DEFAULT NULL COMMENT 'User is active or not',
@@ -468,11 +471,11 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'image', 'Hoa Lac', b'1', b'1', b'1', '2019-10-14 14:35:10.245687', '2019-10-14 14:35:10.245687');
-INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'image', 'Hanoi', b'1', b'1', b'1', '2019-10-14 14:35:12.166768', '2019-10-14 14:35:12.166768');
-INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', NULL, NULL, NULL, '2019-10-16 14:59:24.194228', '2019-10-16 14:59:24.194228');
-INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', NULL, NULL, NULL, '2019-10-15 11:46:56.066184', '2019-10-15 11:46:56.066184');
-INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, NULL, b'1', NULL, b'1', '2019-10-23 11:28:01.191345', '2019-10-23 11:28:01.191345');
+INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'image', 'Hoa Lac', b'1', b'1', b'1', b'1', b'1', b'1', '2019-10-28 10:02:32.047576', '2019-10-28 10:02:32.047576');
+INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'image', 'Hanoi', b'0', b'1', b'1', b'0', b'1', b'1', '2019-10-28 10:02:37.788540', '2019-10-28 10:02:37.788540');
+INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', b'1', b'1', b'0', b'0', NULL, NULL, '2019-10-28 10:02:42.486375', '2019-10-28 10:02:42.486375');
+INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', b'1', b'1', b'1', b'1', NULL, NULL, '2019-10-28 10:02:47.161290', '2019-10-28 10:02:47.161290');
+INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, NULL, NULL, NULL, NULL, b'1', NULL, b'1', '2019-10-23 11:28:01.191345', '2019-10-23 11:28:01.191345');
 
 -- ----------------------------
 -- Table structure for user_verification_image
