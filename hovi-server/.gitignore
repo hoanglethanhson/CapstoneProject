@@ -11,4 +11,4 @@ public/
 build/
 
 #private file key
-src/utils/private_key
+#src/utils/private_key
