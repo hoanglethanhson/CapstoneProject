@@ -1,5 +1,4 @@
 import config from '../../config';
-import path from 'path';
 
 const { Storage } = require('@google-cloud/storage');
 
@@ -11,7 +10,7 @@ export default class {
   constructor(bucketName) {
     this.storage = new Storage({
       projectId: config.GOOGLE_CLOUD_PROJECT_ID,
-      keyFilename: path.join(__dirname, './private-key/gcp-service-account.json'),
+      keyFilename: './config/private-key/gcp-service-account.json'
     });
     this.bucketName = bucketName;
     this.bucket = this.storage.bucket(bucketName);

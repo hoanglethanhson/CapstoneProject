@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-import * as serviceAccount from "./private-key/firebase-service-account.json";
+import * as serviceAccount from '../../config/private-key/firebase-service-account.json';
 
 const FirebaseApp = !admin.apps.length ?
   admin.initializeApp({
