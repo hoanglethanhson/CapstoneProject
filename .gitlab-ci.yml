@@ -59,18 +59,14 @@ deploy_live:
     - production
   when: manual
   script:
-    - sudo cp /etc/kubernetes/admin.conf $HOME/
-    - sudo chown $(id -u):$(id -g) $HOME/admin.conf
-    - export KUBECONFIG=$HOME/admin.conf
     - kubectl version
 #    - kubectl apply -f ./k8s/ingress
     - kubectl apply -f ./k8s/mysql
-    - |
-      if kubectl apply -f ./k8s/server/deployment.yaml | grep -q unchanged; then
-          echo "=> Patching server deployment to force image update."
-          kubectl patch -f ./k8s/server/deployment.yaml -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"ci-last-updated\":\"$(date +'%s')\"}}}}}"
-      else
-          echo "=> Server Deployment apply has changed the object, no need to force image update."
-      fi
-    - kubectl rollout status -f ./k8s/server/deployment.yaml
-    - kubectl get all,ing -l app=${CI_ENVIRONMENT_SLUG}
+#    - |
+#      if kubectl apply -f ./k8s/server/deployment.yaml | grep -q unchanged; then
+#          echo "=> Patching server deployment to force image update."
+#          kubectl patch -f ./k8s/server/deployment.yaml -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"ci-last-updated\":\"$(date +'%s')\"}}}}}"
+#      else
+#          echo "=> Server Deployment apply has changed the object, no need to force image update."
+#      fi
+#    - kubectl rollout status -f ./k8s/server/deployment.yaml
