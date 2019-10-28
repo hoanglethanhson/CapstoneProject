@@ -11,7 +11,7 @@ export default class {
   constructor(bucketName) {
     this.storage = new Storage({
       projectId: config.GOOGLE_CLOUD_PROJECT_ID,
-      keyFilename: path.join(__dirname, './private_key/gcp-service-account.json'),
+      keyFilename: path.join(__dirname, './private-key/gcp-service-account.json'),
     });
     this.bucketName = bucketName;
     this.bucket = this.storage.bucket(bucketName);
