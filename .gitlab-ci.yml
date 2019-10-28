@@ -60,7 +60,7 @@ deploy_live:
   when: manual
   script:
     - kubectl version
-    - kubectl apply -f ./k8s/ingress
+#    - kubectl apply -f ./k8s/ingress
     - kubectl apply -f ./k8s/mysql
     - |
       if kubectl apply -f ./k8s/server/deployment.yaml | grep -q unchanged; then
