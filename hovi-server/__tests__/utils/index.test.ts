@@ -1,3 +1,4 @@
+/*
 import { unCamelCase } from '../../src/utils';
 
 describe('Test helper functions', () => {
@@ -8,3 +9,4 @@ describe('Test helper functions', () => {
     expect(unCamelCase(input)).toBe(output);
   });
 });
+*/
