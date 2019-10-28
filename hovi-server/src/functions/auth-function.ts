@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, Handler } from 'express';
 import * as bcrypt from 'bcryptjs';
 import { validateByModel } from '../utils';
 import FirebaseApp from '../utils/firebaseApp';
-import { HTTP400Error } from '../utils/httpErrors';
+import { HTTP400Error, HTTP409Error } from '../utils/httpErrors';
 import { User } from '../models/user';
 
 export default class AuthFunction {
@@ -51,12 +51,12 @@ export default class AuthFunction {
     body['googleId'] = 'example-google-id';
 
     const error = await validateByModel(User, body);
-    console.log(body);
+    console.log(error);
     if (error) next(error);
     else {
-      const checkPhoneNumber = await User.repo.findOne({ phoneNumber: body['phone'] });
-      if (checkPhoneNumber) next(new HTTP400Error({
-        phone: 'Phone number already exists',
+      const checkPhoneNumber = await User.repo.findOne({ phoneNumber: body['phoneNumber'] });
+      if (checkPhoneNumber) next(new HTTP409Error({
+        phoneNumber: 'Phone number already exists',
       }));
 
       else {
