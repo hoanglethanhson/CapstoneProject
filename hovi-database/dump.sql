@@ -3,13 +3,14 @@
 
  Source Server         : CP_DB
  Source Server Type    : MySQL
- Source Server Version : 50728
+ Source Server Version : 50727
  Source Host           : localhost:3307
  Source Schema         : HoviDB
 
  Target Server Type    : MySQL
- Target Server Version : 50728
+ Target Server Version : 50727
  File Encoding         : 65001
+
 
  Date: 26/10/2019 00:05:29
 */
@@ -82,9 +83,9 @@ CREATE TABLE `building`  (
 INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, 'Hanoi', 'Thanh Xuan', 'Nhan Chinh', 'Tran Duy Hung', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:32.548000', '2019-10-14 07:21:32.548000');
 INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Trung Liet', 'Nguyen Luong Bang', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:53.649250', '2019-10-14 07:21:53.649250');
 INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Hao Nam', 'Lang Ha', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:22:13.185435', '2019-10-14 07:22:13.185435');
-INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, b'1', 1, 'Hà Nội', 'Hoàng Mai', 'Định Công', 'Định Công Hạ', '96A Định Công', NULL, '20.98470977059105,105.83861725767213', 4, NULL, 1, '2019-10-23 16:00:34.078774', '2019-10-23 16:00:34.078774');
-INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, b'1', 4, 'Hà Nội', 'Hai Bà Trưng', 'Minh Khai', NULL, '12 giai phong', NULL, '20.9714041,105.8409441', NULL, NULL, NULL, '2019-10-23 16:00:32.450541', '2019-10-23 16:00:32.450541');
-INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, b'0', 4, 'Hà Nội', 'Hà Đông', 'Dương Nội', NULL, '12 quang trung ha dong', NULL, '20.9462691,105.7438515', NULL, NULL, NULL, '2019-10-23 16:00:38.121630', '2019-10-23 16:00:38.121630');
+INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, b'1', 1, 'Hà Nội', 'Hoàng Mai', 'Định Công', 'Định Công Hạ', '96A Định Công', NULL, '20.98470977059105,105.83861725767213', 4, NULL, 1, '2019-10-27 13:21:05.450599', '2019-10-27 13:21:05.450599');
+INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, b'1', 4, 'Hà Nội', 'Hai Bà Trưng', 'Minh Khai', NULL, '12 giai phong', NULL, '20.9714041,105.8409441', NULL, NULL, NULL, '2019-10-27 13:21:06.186437', '2019-10-27 13:21:06.186437');
+INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, b'0', 4, 'Hà Nội', 'Hà Đông', 'Dương Nội', NULL, '12 quang trung ha dong', NULL, '20.9462691,105.7438515', NULL, NULL, NULL, '2019-10-27 13:21:16.952949', '2019-10-27 13:21:16.952949');
 
 -- ----------------------------
 -- Table structure for building_service
@@ -214,17 +215,31 @@ CREATE TABLE `room`  (
   `room_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the room',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of group that room belongs to',
   `room_name` text CHARACTER SET utf8mb4  NULL COMMENT 'name of the room',
-  `room_status` tinyint(2) NULL DEFAULT NULL COMMENT 'Status code of room',
+  `room_status` tinyint(2) NULL DEFAULT NULL COMMENT 'Room status code',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`room_id`) USING BTREE,
   INDEX `FK_room_group`(`room_group_id`) USING BTREE,
   CONSTRAINT `FK_room_group` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+>>>>>>> 1dc183fc2aac8ad7492977c7dee1597844ccf8ff
 
 -- ----------------------------
 -- Records of room
 -- ----------------------------
+<<<<<<< HEAD
+INSERT INTO `room` VALUES (1, 5, '104', 1, '2019-10-27 13:17:04.476821', '2019-10-27 13:17:04.476821');
+INSERT INTO `room` VALUES (2, 5, '102', 1, '2019-10-27 13:17:04.993397', '2019-10-27 13:17:04.993397');
+INSERT INTO `room` VALUES (3, 5, '107', 1, '2019-10-27 13:17:06.990243', '2019-10-27 13:17:06.990243');
+INSERT INTO `room` VALUES (4, 8, '201', 1, '2019-10-27 13:17:07.606553', '2019-10-27 13:17:07.606553');
+INSERT INTO `room` VALUES (5, 8, '202', 0, '2019-10-27 13:17:08.181132', '2019-10-27 13:17:08.181132');
+INSERT INTO `room` VALUES (6, 8, '301', 1, '2019-10-27 13:17:08.950491', '2019-10-27 13:17:08.950491');
+INSERT INTO `room` VALUES (7, 8, '302', 0, '2019-10-27 13:17:09.566379', '2019-10-27 13:17:09.566379');
+INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, '2019-10-27 13:17:10.648944', '2019-10-27 13:17:10.648944');
+=======
 INSERT INTO `room` VALUES (1, 5, '104', 0, '2019-10-23 15:14:18.525780', '2019-10-23 15:14:18.525780');
 INSERT INTO `room` VALUES (2, 5, '102', 0, '2019-10-23 15:14:20.029931', '2019-10-23 15:14:20.029931');
 INSERT INTO `room` VALUES (3, 5, '107', 1, '2019-10-23 15:14:20.665722', '2019-10-23 15:14:20.665722');
@@ -240,6 +255,7 @@ INSERT INTO `room` VALUES (12, 10, '111', 1, NULL, NULL);
 INSERT INTO `room` VALUES (13, 10, '102', 0, NULL, NULL);
 INSERT INTO `room` VALUES (14, 10, '203', 1, NULL, NULL);
 INSERT INTO `room` VALUES (15, 10, '204', 1, NULL, NULL);
+>>>>>>> 1dc183fc2aac8ad7492977c7dee1597844ccf8ff
 
 -- ----------------------------
 -- Table structure for room_amenities
@@ -421,8 +437,8 @@ CREATE TABLE `tenant_review`  (
 -- Records of tenant_review
 -- ----------------------------
 INSERT INTO `tenant_review` VALUES (1, 1, 2, 'good ', 3, 4, 5, NULL, NULL);
-INSERT INTO `tenant_review` VALUES (2, 2, 2, 'nice', 4, 5, 3, NULL, NULL);
-INSERT INTO `tenant_review` VALUES (3, 2, 5, 'clean', 3, 3, 3, NULL, NULL);
+INSERT INTO `tenant_review` VALUES (2, 1, 8, 'nice', 4, 5, 4, NULL, NULL);
+INSERT INTO `tenant_review` VALUES (3, 2, 8, NULL, 5, 3, 3, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for transaction
