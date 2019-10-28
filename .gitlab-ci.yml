@@ -35,20 +35,20 @@ variables:
 #    when: always
 #    paths:
 #      - ./hovi-server/coverage
-#
-#image_build:
-#  stage: image_build
-#  image: docker:stable
-#  only:
-#    - production
-#  before_script:
-#    - docker info
-#    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-#  script:
-#    - docker pull $SERVER_CACHE_IMAGE:latest || true
-#    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:latest -t hovi-server ./hovi-server
-#    - docker tag hovi-server $SERVER_CACHE_IMAGE:prod
-#    - docker push $SERVER_CACHE_IMAGE:prod
+
+image_build:
+  stage: image_build
+  image: docker:stable
+  only:
+    - production
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  script:
+    - docker pull $SERVER_CACHE_IMAGE:latest || true
+    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:latest -t hovi-server ./hovi-server
+    - docker tag hovi-server $SERVER_CACHE_IMAGE:prod
+    - docker push $SERVER_CACHE_IMAGE:prod
 
 deploy_live:
   image:
