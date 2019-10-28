@@ -2,8 +2,9 @@ import { Request, Response, NextFunction, Handler } from 'express';
 import * as bcrypt from 'bcryptjs';
 import { validateByModel } from '../utils';
 import FirebaseApp from '../utils/firebaseApp';
-import { HTTP400Error, HTTP409Error } from '../utils/httpErrors';
+import { HTTP400Error } from '../utils/httpErrors';
 import { User } from '../models/user';
+import {ConstantValues} from "../utils/constant-values";
 
 export default class AuthFunction {
 
@@ -45,18 +46,18 @@ export default class AuthFunction {
   static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
 
-    body['email'] = 'example@homohouse.vn';
-    body['address'] = 'not yet';
-    body['facebookId'] = 'example-facebook-id';
-    body['googleId'] = 'example-google-id';
+    body['email'] = ConstantValues.DEFAULT_EMAIL;
+    body['address'] = ConstantValues.DEFAULT_ADDRESS;
+    body['facebookId'] = ConstantValues.DEFAULT_FACEBOOK_ID;
+    body['googleId'] = ConstantValues.DEFAULT_GOOGLE_ID;
 
     const error = await validateByModel(User, body);
-    console.log(error);
+    console.log(body);
     if (error) next(error);
     else {
-      const checkPhoneNumber = await User.repo.findOne({ phoneNumber: body['phoneNumber'] });
-      if (checkPhoneNumber) next(new HTTP409Error({
-        phoneNumber: 'Phone number already exists',
+      const checkPhoneNumber = await User.repo.findOne({ phoneNumber: body['phone'] });
+      if (checkPhoneNumber) next(new HTTP400Error({
+        phone: 'Phone number already exists',
       }));
 
       else {

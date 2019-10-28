@@ -2,14 +2,9 @@ import {
   BaseEntity,
   Column,
   Entity,
-  EntityRepository,
-  getCustomRepository,
-  getManager,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryColumn,
+  EntityRepository, getCustomRepository,
   Repository,
+  PrimaryColumn, ManyToOne, JoinColumn, OneToMany, getManager,
 } from 'typeorm';
 import { Building } from './building';
 import { Room } from './room';
@@ -18,6 +13,8 @@ import { Length } from 'class-validator';
 import { RoomImage } from './room-image';
 import { BuildingService } from './building-service';
 import { User } from './user';
+import {RoomType} from "./building-type";
+import {TenantReview} from "./tenant-review";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -28,9 +25,9 @@ export class RoomGroup extends BaseEntity {
     gender: 'gender',
     rentPrice: 'rent_price',
     area: 'area',
-    bedroomQuantity: 'bedroom_quantity',
-    bathroomQuantity: 'bathroom_quantity',
-    wcQuantity: 'wc_quantity',
+    bedroom: 'bedroom_quantity',
+    bathroom: 'bathroom_quantity',
+    wc: 'wc_quantity',
     direction: 'direction',
     isAvailable: 'is_available',
     isVerified: 'is_verified',
@@ -41,8 +38,8 @@ export class RoomGroup extends BaseEntity {
     viewAmount: 'view_amount',
     phoneViewAmount: 'phone_view_amount',
     isSponsored: 'is_sponsored',
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    create: 'created_at',
+    update: 'updated_at',
   };
 
   @PrimaryColumn({
@@ -61,43 +58,50 @@ export class RoomGroup extends BaseEntity {
 
   @Column({
     type: 'boolean',
+    unique: false,
     name: RoomGroup.schema.gender,
   })
   gender: boolean;
 
   @Column({
     type: 'double',
+    unique: false,
     name: RoomGroup.schema.rentPrice,
   })
   rentPrice: number;
 
   @Column({
     type: 'double',
+    unique: false,
     name: RoomGroup.schema.area,
   })
   area: number;
 
   @Column({
     type: 'int',
-    name: RoomGroup.schema.bedroomQuantity,
+    unique: false,
+    name: RoomGroup.schema.bedroom,
   })
-  bedroomQuantity: number;
+  bedroom: number;
 
   @Column({
     type: 'int',
-    name: RoomGroup.schema.bathroomQuantity,
+    unique: false,
+    name: RoomGroup.schema.bathroom,
   })
-  bathroomQuantity: number;
+  bathroom: number;
 
   @Column({
     type: 'int',
-    name: RoomGroup.schema.wcQuantity,
+    unique: false,
+    name: RoomGroup.schema.wc,
   })
-  wcQuantity: number;
+  wc: number;
 
   @Column({
     type: 'varchar',
     length: 255,
+    unique: false,
     name: RoomGroup.schema.direction,
   })
   @Length(0, 255)
@@ -105,12 +109,14 @@ export class RoomGroup extends BaseEntity {
 
   @Column({
     type: 'boolean',
+    unique: false,
     name: RoomGroup.schema.isAvailable,
   })
   isAvailable: boolean;
 
   @Column({
     type: 'boolean',
+    unique: false,
     name: RoomGroup.schema.isVerified,
   })
   isVerified: boolean;
@@ -118,27 +124,25 @@ export class RoomGroup extends BaseEntity {
 
   @Column({
     type: 'double',
+    unique: false,
     name: RoomGroup.schema.depositPrice,
   })
   depositPrice: number;
 
   @Column({
     type: 'text',
+    unique: false,
     name: RoomGroup.schema.description,
   })
   description: string;
 
   @Column({
     type: 'int',
+    unique: false,
     name: RoomGroup.schema.capacity,
   })
   capacity: number;
 
-  @Column({
-    type: 'int',
-    name: RoomGroup.schema.quantity,
-  })
-  quantity: number;
 
   @Column({
     type: 'int',
@@ -155,7 +159,7 @@ export class RoomGroup extends BaseEntity {
   phoneViewAmount: number;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: RoomGroup.schema.isSponsored,
   })
@@ -166,18 +170,18 @@ export class RoomGroup extends BaseEntity {
     precision: 6,
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
-    name: RoomGroup.schema.createdAt,
+    name: RoomGroup.schema.create,
   })
-  createdAt: Date;
+  create: Date;
 
   @Column({
     type: 'timestamp',
     precision: 6,
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
-    name: RoomGroup.schema.updatedAt,
+    name: RoomGroup.schema.update,
   })
-  updatedAt: Date;
+  update: Date;
 
   @OneToMany(type => Room, room => room.roomGroup)
   @JoinColumn({ name: RoomGroup.schema.id })
@@ -190,6 +194,10 @@ export class RoomGroup extends BaseEntity {
   @OneToMany(type => RoomImage, roomImage => roomImage.roomGroup)
   @JoinColumn({ name: RoomGroup.schema.id })
   roomImages: RoomImage[];
+
+  @OneToMany(type => TenantReview, tenantReview => tenantReview.roomGroup)
+  @JoinColumn({ name: RoomGroup.schema.id })
+  tenantReviews: TenantReview[];
 
 
   static get repo(): RoomGroupRepository {
@@ -205,9 +213,9 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       roomGroup.gender = roomGroupUpdate.gender ? roomGroupUpdate.gender : roomGroup.gender;
       roomGroup.rentPrice = roomGroupUpdate.rentPrice ? roomGroupUpdate.rentPrice : roomGroup.rentPrice;
       roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
-      roomGroup.bedroomQuantity = roomGroupUpdate.bedroomQuantity ? roomGroupUpdate.bedroomQuantity : roomGroup.bedroomQuantity;
-      roomGroup.bathroomQuantity = roomGroupUpdate.bathroomQuantity ? roomGroupUpdate.bathroomQuantity : roomGroup.bathroomQuantity;
-      roomGroup.wcQuantity = roomGroupUpdate.wcQuantity ? roomGroupUpdate.wcQuantity : roomGroup.wcQuantity;
+      roomGroup.bedroom = roomGroupUpdate.bedroom ? roomGroupUpdate.bedroom : roomGroup.bedroom;
+      roomGroup.bathroom = roomGroupUpdate.bathroom ? roomGroupUpdate.bathroom : roomGroup.bathroom;
+      roomGroup.wc = roomGroupUpdate.wc ? roomGroupUpdate.wc : roomGroup.wc;
       roomGroup.direction = roomGroupUpdate.direction ? roomGroupUpdate.direction : roomGroup.direction;
       roomGroup.isAvailable = roomGroupUpdate.isAvailable ? roomGroupUpdate.isAvailable : roomGroup.isAvailable;
       roomGroup.isVerified = roomGroupUpdate.isVerified ? roomGroupUpdate.isVerified : roomGroup.isVerified;
@@ -223,16 +231,23 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
   }
 
   async getImages(roomGroupId: any) {
-    return await getManager()
+    const images = await getManager()
       .createQueryBuilder(RoomImage, 'room_image')
       .select(['room_image.image_url'])
       .innerJoin(RoomGroup, 'room_group', 'room_image.room_group_id = room_group.room_group_id')
       .where('room_image.room_group_id = :room_group_id', { room_group_id: roomGroupId })
       .getRawMany();
+    return images;
   }
 
-  async getRoomGroupDetail(roomGroupId: any, roomGroup: any) {
+  async getRoomGroupDetail(roomGroupId: any, roomGroup: RoomGroup) {
+    if (Number.isInteger(roomGroupId)) {
+      return null;
+    }
     const building = await Building.repo.findOne(roomGroup.buildingId);
+    const buildingTypeArray = await RoomType.repo.getBuildingType(building.typeId);
+    const buildingType = buildingTypeArray[0].building_type;
+    const availableRooms = await Room.repo.getAvailableRoomsInGroup(roomGroupId);
     const amenities = await RoomAmenities.repo.getAmenitiesDetailRoomGroup(roomGroupId);
     const amenitiesNot = await RoomAmenities.repo.getAmenitiesDetailNotInRoomGroup(roomGroupId);
     let amenitiesConcat = [];
@@ -251,8 +266,10 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       let temp = [element.image_url];
       imageLinks = imageLinks.concat(temp);
     });
-
-    return {
+    const rating = await TenantReview.repo.getRatingResult(roomGroupId);
+    const result = {
+      buildingTypeId: building.typeId,
+      availableRooms: availableRooms,
       images: imageLinks,
       title: building.buildingName + ' ' + building.province + ' ' + `${building.street ? building.street : ''}`,
       generalAddress: {
@@ -260,7 +277,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         district: building.district,
         ward: building.ward,
       },
-      status: (roomGroup.quantity > 0) ? 'Còn phòng' : 'Không còn phòng',
+      status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
       area: roomGroup.area,
       capacity: roomGroup.capacity,
       gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
@@ -272,6 +289,15 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       },
       services: services,
       phone: phone,
+      rating: {
+        accuracy_rate: rating[0].accuracy_rate,
+        host_rate: rating[0].host_rate,
+        security_rate: rating[0].security_rate
+      }
     };
+    //console.log(result);
+    return result;
   }
+
+
 }
