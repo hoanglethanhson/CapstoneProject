@@ -59,6 +59,9 @@ deploy_live:
     - production
   when: manual
   script:
+    - sudo cp /etc/kubernetes/admin.conf $HOME/
+    - sudo chown $(id -u):$(id -g) $HOME/admin.conf
+    - export KUBECONFIG=$HOME/admin.conf
     - kubectl version
 #    - kubectl apply -f ./k8s/ingress
     - kubectl apply -f ./k8s/mysql
