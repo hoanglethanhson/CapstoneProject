@@ -11,7 +11,8 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 27/10/2019 20:26:20
+
+ Date: 26/10/2019 00:05:29
 */
 
 SET NAMES utf8mb4;
@@ -220,11 +221,16 @@ CREATE TABLE `room`  (
   PRIMARY KEY (`room_id`) USING BTREE,
   INDEX `FK_room_group`(`room_group_id`) USING BTREE,
   CONSTRAINT `FK_room_group` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+<<<<<<< HEAD
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+=======
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+>>>>>>> 1dc183fc2aac8ad7492977c7dee1597844ccf8ff
 
 -- ----------------------------
 -- Records of room
 -- ----------------------------
+<<<<<<< HEAD
 INSERT INTO `room` VALUES (1, 5, '104', 1, '2019-10-27 13:17:04.476821', '2019-10-27 13:17:04.476821');
 INSERT INTO `room` VALUES (2, 5, '102', 1, '2019-10-27 13:17:04.993397', '2019-10-27 13:17:04.993397');
 INSERT INTO `room` VALUES (3, 5, '107', 1, '2019-10-27 13:17:06.990243', '2019-10-27 13:17:06.990243');
@@ -233,6 +239,23 @@ INSERT INTO `room` VALUES (5, 8, '202', 0, '2019-10-27 13:17:08.181132', '2019-1
 INSERT INTO `room` VALUES (6, 8, '301', 1, '2019-10-27 13:17:08.950491', '2019-10-27 13:17:08.950491');
 INSERT INTO `room` VALUES (7, 8, '302', 0, '2019-10-27 13:17:09.566379', '2019-10-27 13:17:09.566379');
 INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, '2019-10-27 13:17:10.648944', '2019-10-27 13:17:10.648944');
+=======
+INSERT INTO `room` VALUES (1, 5, '104', 0, '2019-10-23 15:14:18.525780', '2019-10-23 15:14:18.525780');
+INSERT INTO `room` VALUES (2, 5, '102', 0, '2019-10-23 15:14:20.029931', '2019-10-23 15:14:20.029931');
+INSERT INTO `room` VALUES (3, 5, '107', 1, '2019-10-23 15:14:20.665722', '2019-10-23 15:14:20.665722');
+INSERT INTO `room` VALUES (4, 8, '201', 1, '2019-10-23 15:14:21.236473', '2019-10-23 15:14:21.236473');
+INSERT INTO `room` VALUES (5, 8, '202', 1, '2019-10-23 15:14:28.681470', '2019-10-23 15:14:28.681470');
+INSERT INTO `room` VALUES (6, 8, '301', 1, '2019-10-23 15:14:29.302333', '2019-10-23 15:14:29.302333');
+INSERT INTO `room` VALUES (7, 8, '302', 0, '2019-10-23 15:14:30.679915', '2019-10-23 15:14:30.679915');
+INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, '2019-10-23 15:14:31.828924', '2019-10-23 15:14:31.828924');
+INSERT INTO `room` VALUES (9, 2, '101', 1, NULL, NULL);
+INSERT INTO `room` VALUES (10, 2, '204', 1, NULL, NULL);
+INSERT INTO `room` VALUES (11, 2, '102', 0, NULL, NULL);
+INSERT INTO `room` VALUES (12, 10, '111', 1, NULL, NULL);
+INSERT INTO `room` VALUES (13, 10, '102', 0, NULL, NULL);
+INSERT INTO `room` VALUES (14, 10, '203', 1, NULL, NULL);
+INSERT INTO `room` VALUES (15, 10, '204', 1, NULL, NULL);
+>>>>>>> 1dc183fc2aac8ad7492977c7dee1597844ccf8ff
 
 -- ----------------------------
 -- Table structure for room_amenities
@@ -299,7 +322,7 @@ CREATE TABLE `room_group`  (
   PRIMARY KEY (`room_group_id`) USING BTREE,
   INDEX `FK_room_group_building`(`building_id`) USING BTREE,
   CONSTRAINT `FK_room_group_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_group
@@ -309,7 +332,8 @@ INSERT INTO `room_group` VALUES (5, 1, b'1', 2500000, 100, 1, 1, 1, 'east', b'1'
 INSERT INTO `room_group` VALUES (6, 2, b'1', 2500000, 100, 1, 1, 1, 'north', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-15 15:26:19.469810', '2019-10-15 15:26:19.469810');
 INSERT INTO `room_group` VALUES (7, 2, b'1', 2500000, 100, 1, 1, 1, 'south', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-15 15:26:22.861635', '2019-10-15 15:26:22.861635');
 INSERT INTO `room_group` VALUES (8, 4, NULL, 1200000, 60, 1, 1, NULL, '- Điều hòa, sàn gỗ, giường tủ\n- Gần chợ, ĐH văn hóa, ĐH Mỹ thuật công nghiệp...\n- An ninh tốt, khu dân trí cao', NULL, NULL, 1000000, '', 3, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `room_group` VALUES (9, 6, NULL, NULL, 200, 2, 2, NULL, '', NULL, NULL, NULL, 'Phòng view đẹp ', 4, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `room_group` VALUES (9, 6, NULL, 2000000, 200, 2, 2, NULL, '', NULL, NULL, NULL, 'Phòng view đẹp ', 4, NULL, NULL, NULL, '2019-10-25 08:25:05.108507', '2019-10-25 08:25:05.108507');
+INSERT INTO `room_group` VALUES (10, 4, NULL, 1500000, 25, 3, 3, 3, 'east', b'1', b'1', 2000000, 'Phòng mới', 3, NULL, NULL, b'0', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for room_image
@@ -468,7 +492,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'image', 'Hoa Lac', b'1', b'1', b'1', '2019-10-14 14:35:10.245687', '2019-10-14 14:35:10.245687');
+INSERT INTO `user` VALUES (1, 'Son update new', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'image', 'Hoa Lac', b'1', b'1', b'1', '2019-10-14 14:35:10.245687', '2019-10-14 14:35:10.245687');
 INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'image', 'Hanoi', b'1', b'1', b'1', '2019-10-14 14:35:12.166768', '2019-10-14 14:35:12.166768');
 INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', NULL, NULL, NULL, '2019-10-16 14:59:24.194228', '2019-10-16 14:59:24.194228');
 INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', NULL, NULL, NULL, '2019-10-15 11:46:56.066184', '2019-10-15 11:46:56.066184');

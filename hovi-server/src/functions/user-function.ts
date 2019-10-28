@@ -27,6 +27,7 @@ export default class UserFunction {
     if (!body['email']) body['email'] = 'example@homehouse.vn';
 
     const error = await validateByModel(User, body);
+    console.log(error);
     if (error) next(error);
     else {
       const checkUsername = await User.repo.findOne({ phoneNumber: body['phone'] });

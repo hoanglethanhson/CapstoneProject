@@ -4,31 +4,29 @@ export default [
     {
         path: "/buildingType/",
         method: "get",
-        authentication: false,
         handler: roomTypeFunction.getRoomTypes
     },
     {
         path: "/buildingType/:buildingTypeId",
         method: "get",
-        authentication: false,
         handler: roomTypeFunction.getRoomType
     },
     {
         path: "/buildingType/",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: roomTypeFunction.createRoomType
     },
     {
         path: "/buildingType/:buildingTypeId",
         method: "put",
-        authentication: false,
+        authentication: true,
         handler: roomTypeFunction.updateRoomType
     },
     {
         path: "/buildingType/:buildingTypeId",
         method: "delete",
-        authentication: false,
+        authentication: true,
         handler: roomTypeFunction.deleteRoomType
     },
 ];
