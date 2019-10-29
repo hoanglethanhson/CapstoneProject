@@ -278,19 +278,19 @@ export class UserRepository extends Repository<User> {
       user_address: user.address,
       verification: [
         {
-          name: 'Selfie picture',
+          name: 'Ảnh bản thân',
           isVerified: user.isSelfieVerified
         },
         {
-          name: 'Email address',
+          name: 'Địa chỉ email',
           isVerified: (user.email != ConstantValues.DEFAULT_EMAIL) ? true : false
         },
         {
-          name: 'Phone number',
+          name: 'Số điện thoại',
           isVerified: user.isPhoneNumberVerified
         },
         {
-          name: 'Government ID',
+          name: 'Chứng minh nhân dân',
           isVerified: user.isGovernmentIdVerified
         },
       ]

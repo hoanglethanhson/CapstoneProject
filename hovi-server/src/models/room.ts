@@ -17,6 +17,7 @@ export class Room extends BaseEntity {
     roomGroupId: 'room_group_id',
     roomName: 'room_name',
     roomStatus: 'room_status',
+    minDepositPeriod: 'min_deposit_period',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   };
@@ -49,6 +50,13 @@ export class Room extends BaseEntity {
     name: Room.schema.roomStatus,
   })
   roomStatus: number;
+
+  @Column({
+    type: 'int',
+    unique: false,
+    name: Room.schema.minDepositPeriod,
+  })
+  minDepositPeriod: number;
 
   @Column({
     type: 'timestamp',
@@ -85,6 +93,8 @@ export class RoomRepository extends Repository<Room> {
     if (room) {
       room.roomGroupId = roomUpdate.roomGroupId ? roomUpdate.roomGroupId : room.roomGroupId;
       room.roomName = roomUpdate.roomName ? roomUpdate.roomName : room.roomName;
+      room.roomStatus = roomUpdate.roomStatus ? roomUpdate.roomStatus : room.roomStatus;
+      room.minDepositPeriod = roomUpdate.minDepositPeriod ? roomUpdate.minDepositPeriod : room.minDepositPeriod;
       await this.save(room);
     }
     return room;

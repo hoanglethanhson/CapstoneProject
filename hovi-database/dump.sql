@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 28/10/2019 21:10:56
+ Date: 30/10/2019 00:04:12
 */
 
 SET NAMES utf8mb4;
@@ -215,6 +215,7 @@ CREATE TABLE `room`  (
   `room_group_id` int(5) NOT NULL COMMENT 'ID of group that room belongs to',
   `room_name` text CHARACTER SET utf8mb4  NULL COMMENT 'name of the room',
   `room_status` tinyint(2) NULL DEFAULT NULL COMMENT 'Room status code',
+  `min_deposit_period` int(5) NULL DEFAULT NULL COMMENT 'minimun months of deposit',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`room_id`) USING BTREE,
@@ -225,14 +226,14 @@ CREATE TABLE `room`  (
 -- ----------------------------
 -- Records of room
 -- ----------------------------
-INSERT INTO `room` VALUES (1, 5, '104', 1, '2019-10-27 13:17:04.476821', '2019-10-27 13:17:04.476821');
-INSERT INTO `room` VALUES (2, 5, '102', 1, '2019-10-27 13:17:04.993397', '2019-10-27 13:17:04.993397');
-INSERT INTO `room` VALUES (3, 5, '107', 1, '2019-10-27 13:17:06.990243', '2019-10-27 13:17:06.990243');
-INSERT INTO `room` VALUES (4, 8, '201', 1, '2019-10-27 13:17:07.606553', '2019-10-27 13:17:07.606553');
-INSERT INTO `room` VALUES (5, 8, '202', 0, '2019-10-27 13:17:08.181132', '2019-10-27 13:17:08.181132');
-INSERT INTO `room` VALUES (6, 8, '301', 1, '2019-10-27 13:17:08.950491', '2019-10-27 13:17:08.950491');
-INSERT INTO `room` VALUES (7, 8, '302', 0, '2019-10-27 13:17:09.566379', '2019-10-27 13:17:09.566379');
-INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, '2019-10-27 13:17:10.648944', '2019-10-27 13:17:10.648944');
+INSERT INTO `room` VALUES (1, 5, '104', 1, 1, '2019-10-29 17:02:11.229066', '2019-10-29 17:02:11.229066');
+INSERT INTO `room` VALUES (2, 5, '102', 1, 1, '2019-10-29 17:02:11.561850', '2019-10-29 17:02:11.561850');
+INSERT INTO `room` VALUES (3, 5, '107', 1, 1, '2019-10-29 17:02:11.887191', '2019-10-29 17:02:11.887191');
+INSERT INTO `room` VALUES (4, 8, '201', 1, 2, '2019-10-29 17:02:12.784098', '2019-10-29 17:02:12.784098');
+INSERT INTO `room` VALUES (5, 8, '202', 0, 1, '2019-10-29 17:02:13.164253', '2019-10-29 17:02:13.164253');
+INSERT INTO `room` VALUES (6, 8, '301', 1, 2, '2019-10-29 17:02:13.928063', '2019-10-29 17:02:13.928063');
+INSERT INTO `room` VALUES (7, 8, '302', 0, 1, '2019-10-29 17:02:14.403061', '2019-10-29 17:02:14.403061');
+INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, 1, '2019-10-29 17:02:15.185133', '2019-10-29 17:02:15.185133');
 
 -- ----------------------------
 -- Table structure for room_amenities
@@ -471,11 +472,11 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'image', 'Hoa Lac', b'1', b'1', b'1', b'1', b'1', b'1', '2019-10-28 10:02:32.047576', '2019-10-28 10:02:32.047576');
-INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'image', 'Hanoi', b'0', b'1', b'1', b'0', b'1', b'1', '2019-10-28 10:02:37.788540', '2019-10-28 10:02:37.788540');
-INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', b'1', b'1', b'0', b'0', NULL, NULL, '2019-10-28 10:02:42.486375', '2019-10-28 10:02:42.486375');
-INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', b'1', b'1', b'1', b'1', NULL, NULL, '2019-10-28 10:02:47.161290', '2019-10-28 10:02:47.161290');
-INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, NULL, NULL, NULL, NULL, b'1', NULL, b'1', '2019-10-23 11:28:01.191345', '2019-10-23 11:28:01.191345');
+INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hoa Lac', b'1', b'1', b'1', b'1', b'1', b'1', '2019-10-29 16:59:51.292078', '2019-10-29 16:59:51.292078');
+INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hanoi', b'0', b'1', b'1', b'0', b'1', b'1', '2019-10-29 16:59:52.243773', '2019-10-29 16:59:52.243773');
+INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'0', b'0', NULL, NULL, '2019-10-29 16:59:53.214943', '2019-10-29 16:59:53.214943');
+INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'1', b'1', NULL, NULL, '2019-10-29 16:59:53.947092', '2019-10-29 16:59:53.947092');
+INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', NULL, NULL, NULL, NULL, b'1', NULL, b'1', '2019-10-29 16:59:54.903230', '2019-10-29 16:59:54.903230');
 
 -- ----------------------------
 -- Table structure for user_verification_image
