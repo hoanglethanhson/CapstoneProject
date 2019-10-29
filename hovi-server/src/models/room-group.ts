@@ -290,12 +290,12 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       services: services,
       phone: phone,
       rating: {
+        number_of_reviews: rating[0].number_of_reviews,
         accuracy_rate: rating[0].accuracy_rate,
         host_rate: rating[0].host_rate,
         security_rate: rating[0].security_rate
       }
     };
-    //console.log(result);
     return result;
   }
 

@@ -121,7 +121,7 @@ export class TenantReviewRepository extends Repository<TenantReview> {
     }
 
     async getRatingResult(roomGroupId: any) {
-        return await this.manager.query("SELECT AVG(accuracy_star) as \'accuracy_rate\', AVG(host_star) as \'host_rate'\, " +
+        return await this.manager.query("SELECT COUNT(*) as \'number_of_reviews\', AVG(accuracy_star) as \'accuracy_rate\', AVG(host_star) as \'host_rate'\, " +
             "AVG(security_star) as \'security_rate\' FROM `tenant_review` WHERE room_group_id = ?",
             [roomGroupId]);
     }
