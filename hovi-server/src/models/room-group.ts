@@ -24,6 +24,7 @@ export class RoomGroup extends BaseEntity {
     buildingId: 'building_id',
     gender: 'gender',
     rentPrice: 'rent_price',
+    minDepositPeriod: 'min_deposit_period',
     area: 'area',
     bedroom: 'bedroom_quantity',
     bathroom: 'bathroom_quantity',
@@ -69,6 +70,13 @@ export class RoomGroup extends BaseEntity {
     name: RoomGroup.schema.rentPrice,
   })
   rentPrice: number;
+
+  @Column({
+    type: 'int',
+    unique: false,
+    name: RoomGroup.schema.minDepositPeriod,
+  })
+  minDepositPeriod: number;
 
   @Column({
     type: 'double',
@@ -212,6 +220,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     if (roomGroup) {
       roomGroup.gender = roomGroupUpdate.gender ? roomGroupUpdate.gender : roomGroup.gender;
       roomGroup.rentPrice = roomGroupUpdate.rentPrice ? roomGroupUpdate.rentPrice : roomGroup.rentPrice;
+      roomGroup.minDepositPeriod = roomGroupUpdate.minDepositPeriod ? roomGroupUpdate.minDepositPeriod : roomGroup.minDepositPeriod;
       roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
       roomGroup.bedroom = roomGroupUpdate.bedroom ? roomGroupUpdate.bedroom : roomGroup.bedroom;
       roomGroup.bathroom = roomGroupUpdate.bathroom ? roomGroupUpdate.bathroom : roomGroup.bathroom;
