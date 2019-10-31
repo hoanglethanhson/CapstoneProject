@@ -4,31 +4,29 @@ export default [
     {
         path: "/tenantReview/",
         method: "get",
-        authentication: false,
         handler: TenantReviewFunction.getTenantReviews
     },
     {
         path: "/tenantReview/:tenantReviewId",
         method: "get",
-        authentication: false,
         handler: TenantReviewFunction.getTenantReview
     },
     {
         path: "/tenantReview/",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: TenantReviewFunction.createTenantReview
     },
     {
         path: "/tenantReview/:tenantReviewId",
         method: "put",
-        authentication: false,
+        authentication: true,
         handler: TenantReviewFunction.updateTenantReview
     },
     {
         path: "/tenantReview/:tenantReviewId",
         method: "delete",
-        authentication: false,
+        authentication: true,
         handler: TenantReviewFunction.deleteTenantReview
     },
 ];

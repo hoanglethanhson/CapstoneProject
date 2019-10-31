@@ -4,19 +4,17 @@ export default [
   {
     path: '/roomImage/',
     method: 'get',
-    authentication: false,
     handler: roomImageFunction.getRoomImages,
   },
   {
     path: '/roomImage/:roomImageId',
     method: 'get',
-    authentication: false,
     handler: roomImageFunction.getRoomImage,
   },
   {
     path: '/room-group/upload',
     method: 'post',
-    authentication: false,
+    authentication: true,
     uploadOptions: {
       type: 'file',
       fileSize: 10 * 1024 * 1024,
@@ -28,19 +26,19 @@ export default [
   {
     path: '/roomImage',
     method: 'post',
-    authentication: false,
+    authentication: true,
     handler: roomImageFunction.createRoomImage,
   },
   {
     path: '/roomImage/:roomImageId',
     method: 'put',
-    authentication: false,
+    authentication: true,
     handler: roomImageFunction.updateRoomImage,
   },
   {
     path: '/roomImage/:roomImageId',
     method: 'delete',
-    authentication: false,
+    authentication: true,
     handler: roomImageFunction.deleteRoomImage,
   },
 ];

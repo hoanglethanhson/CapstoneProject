@@ -4,37 +4,35 @@ export default [
     {
         path: "/user/",
         method: "get",
-        authentication: false,
+        authentication: true,
         handler: UserFunction.getUsers
     },
     {
         path: "/user/:userId",
         method: "get",
-        authentication: false,
         handler: UserFunction.getUser
     },
     {
         path: "/user/show/:userId",
         method: "get",
-        authentication: false,
         handler: UserFunction.getUserDetail
     },
     {
         path: "/user/",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: UserFunction.createUser
     },
     {
         path: "/user/:userId",
         method: "put",
-        authentication: false,
+        authentication: true,
         handler: UserFunction.updateUser
     },
     {
         path: "/user/:userId",
         method: "delete",
-        authentication: false,
+        authentication: true,
         handler: UserFunction.deleteUser
     },
 ];
