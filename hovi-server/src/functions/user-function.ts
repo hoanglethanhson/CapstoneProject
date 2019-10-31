@@ -28,6 +28,14 @@ export default class UserFunction {
     else next(new HTTP400Error('userId not found.'));
   };
 
+  static getUserSetting: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req['currentUserId'];
+    const user = await User.repo.getUserSetting(userId);
+
+    if (user) res.status(200).send(user);
+    else next(new HTTP400Error('userId not found.'));
+  };
+
   static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
 
