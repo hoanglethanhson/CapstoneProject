@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 30/10/2019 00:04:12
+ Date: 31/10/2019 21:16:14
 */
 
 SET NAMES utf8mb4;
@@ -215,7 +215,6 @@ CREATE TABLE `room`  (
   `room_group_id` int(5) NOT NULL COMMENT 'ID of group that room belongs to',
   `room_name` text CHARACTER SET utf8mb4  NULL COMMENT 'name of the room',
   `room_status` tinyint(2) NULL DEFAULT NULL COMMENT 'Room status code',
-  `min_deposit_period` int(5) NULL DEFAULT NULL COMMENT 'minimun months of deposit',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`room_id`) USING BTREE,
@@ -226,14 +225,14 @@ CREATE TABLE `room`  (
 -- ----------------------------
 -- Records of room
 -- ----------------------------
-INSERT INTO `room` VALUES (1, 5, '104', 1, 1, '2019-10-29 17:02:11.229066', '2019-10-29 17:02:11.229066');
-INSERT INTO `room` VALUES (2, 5, '102', 1, 1, '2019-10-29 17:02:11.561850', '2019-10-29 17:02:11.561850');
-INSERT INTO `room` VALUES (3, 5, '107', 1, 1, '2019-10-29 17:02:11.887191', '2019-10-29 17:02:11.887191');
-INSERT INTO `room` VALUES (4, 8, '201', 1, 2, '2019-10-29 17:02:12.784098', '2019-10-29 17:02:12.784098');
-INSERT INTO `room` VALUES (5, 8, '202', 0, 1, '2019-10-29 17:02:13.164253', '2019-10-29 17:02:13.164253');
-INSERT INTO `room` VALUES (6, 8, '301', 1, 2, '2019-10-29 17:02:13.928063', '2019-10-29 17:02:13.928063');
-INSERT INTO `room` VALUES (7, 8, '302', 0, 1, '2019-10-29 17:02:14.403061', '2019-10-29 17:02:14.403061');
-INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, 1, '2019-10-29 17:02:15.185133', '2019-10-29 17:02:15.185133');
+INSERT INTO `room` VALUES (1, 5, '104', 1, '2019-10-29 17:02:11.229066', '2019-10-29 17:02:11.229066');
+INSERT INTO `room` VALUES (2, 5, '102', 1, '2019-10-29 17:02:11.561850', '2019-10-29 17:02:11.561850');
+INSERT INTO `room` VALUES (3, 5, '107', 1, '2019-10-29 17:02:11.887191', '2019-10-29 17:02:11.887191');
+INSERT INTO `room` VALUES (4, 8, '201', 1, '2019-10-29 17:02:12.784098', '2019-10-29 17:02:12.784098');
+INSERT INTO `room` VALUES (5, 8, '202', 0, '2019-10-29 17:02:13.164253', '2019-10-29 17:02:13.164253');
+INSERT INTO `room` VALUES (6, 8, '301', 1, '2019-10-29 17:02:13.928063', '2019-10-29 17:02:13.928063');
+INSERT INTO `room` VALUES (7, 8, '302', 0, '2019-10-29 17:02:14.403061', '2019-10-29 17:02:14.403061');
+INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, '2019-10-29 17:02:15.185133', '2019-10-29 17:02:15.185133');
 
 -- ----------------------------
 -- Table structure for room_amenities
@@ -282,6 +281,7 @@ CREATE TABLE `room_group`  (
   `building_id` int(5) NULL DEFAULT NULL COMMENT 'ID of the building that the group belongs to',
   `gender` bit(1) NULL DEFAULT NULL COMMENT 'Gender in the group',
   `rent_price` double(10, 0) NULL DEFAULT NULL COMMENT 'Rent price of the room group',
+  `min_deposit_period` int(5) NULL DEFAULT NULL COMMENT 'minimun months of deposit',
   `area` double(10, 0) NULL DEFAULT NULL COMMENT 'Area of the room group',
   `bedroom_quantity` int(5) NULL DEFAULT NULL COMMENT 'Number of  bedrooms in the building',
   `bathroom_quantity` int(5) NULL DEFAULT NULL COMMENT 'Number of bathrooms in the building',
@@ -305,12 +305,12 @@ CREATE TABLE `room_group`  (
 -- ----------------------------
 -- Records of room_group
 -- ----------------------------
-INSERT INTO `room_group` VALUES (2, 1, b'1', 2000000, 100, 1, 1, 1, 'west', b'1', b'1', 1400000, 'Nha tro', 44, 100, 100, b'1', '2019-10-15 15:26:10.044681', '2019-10-15 15:26:10.044681');
-INSERT INTO `room_group` VALUES (5, 1, b'1', 2500000, 100, 1, 1, 1, 'east', b'1', b'1', 1400000, 'Nha tro', 44, 100, 100, b'0', '2019-10-15 15:26:17.303083', '2019-10-15 15:26:17.303083');
-INSERT INTO `room_group` VALUES (6, 2, b'1', 2500000, 100, 1, 1, 1, 'north', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-15 15:26:19.469810', '2019-10-15 15:26:19.469810');
-INSERT INTO `room_group` VALUES (7, 2, b'1', 2500000, 100, 1, 1, 1, 'south', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-15 15:26:22.861635', '2019-10-15 15:26:22.861635');
-INSERT INTO `room_group` VALUES (8, 4, NULL, 1200000, 60, 1, 1, NULL, '- Điều hòa, sàn gỗ, giường tủ\n- Gần chợ, ĐH văn hóa, ĐH Mỹ thuật công nghiệp...\n- An ninh tốt, khu dân trí cao', NULL, NULL, 1000000, '', 3, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `room_group` VALUES (9, 6, NULL, NULL, 200, 2, 2, NULL, '', NULL, NULL, NULL, 'Phòng view đẹp ', 4, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `room_group` VALUES (2, 1, b'1', 2000000, 1, 100, 1, 1, 1, 'west', b'1', b'1', 1400000, 'Nha tro', 44, 100, 100, b'1', '2019-10-31 14:15:49.429576', '2019-10-31 14:15:49.429576');
+INSERT INTO `room_group` VALUES (5, 1, b'1', 2500000, 2, 100, 1, 1, 1, 'east', b'1', b'1', 1400000, 'Nha tro', 44, 100, 100, b'0', '2019-10-31 14:15:49.988242', '2019-10-31 14:15:49.988242');
+INSERT INTO `room_group` VALUES (6, 2, b'1', 2500000, 1, 100, 1, 1, 1, 'north', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-31 14:15:50.409346', '2019-10-31 14:15:50.409346');
+INSERT INTO `room_group` VALUES (7, 2, b'1', 2500000, 2, 100, 1, 1, 1, 'south', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-31 14:15:50.999600', '2019-10-31 14:15:50.999600');
+INSERT INTO `room_group` VALUES (8, 4, NULL, 1200000, 2, 60, 1, 1, NULL, '- Điều hòa, sàn gỗ, giường tủ\n- Gần chợ, ĐH văn hóa, ĐH Mỹ thuật công nghiệp...\n- An ninh tốt, khu dân trí cao', NULL, NULL, 1000000, '', 3, NULL, NULL, NULL, '2019-10-31 14:15:51.641910', '2019-10-31 14:15:51.641910');
+INSERT INTO `room_group` VALUES (9, 6, NULL, NULL, 2, 200, 2, 2, NULL, '', NULL, NULL, NULL, 'Phòng view đẹp ', 4, NULL, NULL, NULL, '2019-10-31 14:15:54.048007', '2019-10-31 14:15:54.048007');
 
 -- ----------------------------
 -- Table structure for room_image

@@ -7,22 +7,21 @@ import { User } from '../models/user';
 export default class UserFunction {
   static getUsers: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const users = await User.repo.find();
-
-    // console.log(users);
     if (users.length != 0) res.status(200).send(users);
     else next(new HTTP400Error('0 record.'));
   };
 
   static getUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params['userId'];
+    const userId = req['currentUserId'];
     const user = await User.repo.findOne(userId);
+    //console.log(userId)
 
     if (user) res.status(200).send(user);
     else next(new HTTP400Error('userId not found.'));
   };
 
   static getUserDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params['userId'];
+    const userId = req['currentUserId'];
     const user = await User.repo.getUserDetail(userId);
 
     if (user) res.status(200).send(user);
@@ -54,7 +53,7 @@ export default class UserFunction {
 
   static updateUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
-    const userId = req.params['userId'];
+    const userId = req['currentUserId'];
     const successResponse = await User.repo.updateById(userId, body);
 
     if (successResponse) res.status(200).send(successResponse);
@@ -62,7 +61,7 @@ export default class UserFunction {
   };
 
   static deleteUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params['userId'];
+    const userId = req['currentUserId'];
     const successResponse = await User.repo.delete(userId);
 
     if (successResponse.affected != 0) res.status(200).send('Delete user successfully !');

@@ -181,7 +181,7 @@ export class User extends BaseEntity {
   isHost: boolean;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: User.schema.isActive,
   })
