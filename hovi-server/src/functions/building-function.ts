@@ -20,6 +20,7 @@ export default class BuildingFunction {
 
   static createBuilding: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
+    console.log(req['currentUserId']);
     const error = await validateByModel(Building, body);
 
     body['hostId'] = req['currentUserId'];

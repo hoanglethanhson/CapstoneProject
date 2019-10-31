@@ -8,7 +8,7 @@ const Authentication = (request: Request, response: Response, next: NextFunction
     console.debug(accessTokenFromClient);
     FirebaseAdmin.auth().verifyIdToken(accessTokenFromClient)
       .then(function(decodedToken) {
-        console.debug(decodedToken);
+        console.debug(decodedToken.uid);
         request['currentUserId'] = decodedToken.uid;
         next();
       }).catch(function(error) {
