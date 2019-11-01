@@ -4,8 +4,9 @@ import {
   Entity,
   EntityRepository, getCustomRepository,
   Repository,
-  PrimaryColumn, ManyToOne, JoinColumn, OneToMany, getManager, getRepository, getConnection,
+  PrimaryColumn, ManyToOne, JoinColumn, OneToMany, Not, LessThan, getConnection,
 } from 'typeorm';
+import { ConstantValues } from '../utils/constant-values';
 import { RoomGroup } from './room-group';
 import { Transaction } from './transaction';
 
@@ -88,10 +89,9 @@ export class Room extends BaseEntity {
 
 @EntityRepository(Room)
 export class RoomRepository extends Repository<Room> {
-  async updateById(roomId: any, roomUpdate: Room) {
+  async updateById(roomId: any, roomUpdate: any) {
     let room = await this.findOne(roomId);
     if (room) {
-      room.roomGroupId = roomUpdate.roomGroupId ? roomUpdate.roomGroupId : room.roomGroupId;
       room.roomName = roomUpdate.roomName ? roomUpdate.roomName : room.roomName;
       room.roomStatus = roomUpdate.roomStatus ? roomUpdate.roomStatus : room.roomStatus;
       room.minDepositPeriod = roomUpdate.minDepositPeriod ? roomUpdate.minDepositPeriod : room.minDepositPeriod;
@@ -100,21 +100,30 @@ export class RoomRepository extends Repository<Room> {
     return room;
   }
 
-  async createMultipleRooms(values: any) {
-    return await this.createQueryBuilder('room')
+  async createMultipleRooms(values: any, roomGroupId: number) {
+    await this.createQueryBuilder('room')
       .insert()
       .into(Room)
       .values(values)
       .execute();
+    return await this.getRoomsByRoomGroupId(roomGroupId);
+  }
+
+  async getRoomsByRoomGroupId(roomGroupId: number) {
+    return await this.createQueryBuilder('room')
+      .select(['room.roomId', 'room.roomGroupId', 'room.roomName', 'room.roomStatus'])
+      .where('room.room_group_id = :roomGroupId', { roomGroupId })
+      .andWhere('room.room_status <> :roomStatus', { roomStatus: ConstantValues.ROOM_WAS_DELETED })
+      .getMany();
   }
 
   async getAvailableRoomsInGroup(roomGroupId: any) {
     return await getConnection()
-        .createQueryBuilder()
-        .select(["room.roomId", "room.roomName"])
-        .from(Room, "room")
-        .where("room.room_group_id = :roomGroupId", {roomGroupId: roomGroupId})
-        .andWhere("room.room_status <> :notAvailable", {notAvailable: 0})
-        .getMany();
+      .createQueryBuilder()
+      .select(['room.roomId', 'room.roomName'])
+      .from(Room, 'room')
+      .where('room.room_group_id = :roomGroupId', { roomGroupId: roomGroupId })
+      .andWhere('room.room_status <> :notAvailable', { notAvailable: ConstantValues.ROOM_NOT_AVAILABLE })
+      .getMany();
   }
 }
