@@ -77,3 +77,7 @@ export const getCurrentDate = () => {
   let yyyy = today.getFullYear();
   return `${dd < 10 ? `0${dd}` : dd}-${mm < 10 ? `0${mm}` : mm}-${yyyy}`;
 };
+
+export const isObject = (value) => {
+  return value && typeof value === 'object' && value.constructor === Object;
+};

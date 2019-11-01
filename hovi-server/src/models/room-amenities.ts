@@ -81,33 +81,30 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
   }
 
   async getAmenitiesInRoomGroup(roomGroupId: any) {
-    const amenities = await getRepository(RoomGroup)
+    return await getRepository(RoomGroup)
       .createQueryBuilder('roomGroup')
       .select(['roomGroup.id', 'roomAmenities.amenitiesId', 'roomAmenities.roomGroupId'])
       .where('roomAmenities.roomGroupId = :roomGroupId', { roomGroupId: roomGroupId })
       .innerJoin('roomGroup.roomAmenities', 'roomAmenities')
       .getMany();
-    return amenities;
   }
 
   async getOneRecord(roomGroupId: any, amenitiesId: any) {
-    const record = await getRepository(RoomAmenities)
+    return await getRepository(RoomAmenities)
       .createQueryBuilder('roomAmenities')
       .where('room_group_id = :roomGroupId', { roomGroupId: roomGroupId })
       .andWhere('roomAmenities.amenitiesId = :amenitiesId', { amenitiesId: amenitiesId })
       .getOne();
-    return record;
   }
 
   async deleteOneRecord(roomGroupId: any, amenitiesId: any) {
-    const record = await getConnection()
+    return await getConnection()
       .createQueryBuilder()
       .delete()
       .from(RoomAmenities)
       .where('roomGroupId = :roomGroupId', { roomGroupId: roomGroupId })
       .andWhere('amenitiesId = :amenitiesId', { amenitiesId: amenitiesId })
       .execute();
-    return record;
   }
 
   async getAmenitiesDetailRoomGroup(roomGroupId: any) {

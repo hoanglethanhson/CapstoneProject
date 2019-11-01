@@ -16,7 +16,7 @@ export default [
     method: 'post',
     authentication: true,
     uploadOptions: {
-      type: 'file',
+      type: 'photos',
       fileSize: 10 * 1024 * 1024,
       isMultiple: true,
       maxQuantity: 8,

@@ -14,13 +14,11 @@ export default [
     {
         path: "/feedback/",
         method: "post",
-        authentication: true,
         handler: feedbackFunction.createFeedback
     },
     {
         path: "/feedback/:feedbackId",
         method: "put",
-        authentication: true,
         handler: feedbackFunction.updateFeedback
     },
     {
