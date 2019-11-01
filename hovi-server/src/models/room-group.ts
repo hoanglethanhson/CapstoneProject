@@ -2,14 +2,9 @@ import {
   BaseEntity,
   Column,
   Entity,
-  EntityRepository,
-  getCustomRepository,
-  getManager,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryColumn,
+  EntityRepository, getCustomRepository,
   Repository,
+  PrimaryColumn, ManyToOne, JoinColumn, OneToMany, getManager,
 } from 'typeorm';
 import { Building } from './building';
 import { Room } from './room';
@@ -18,6 +13,8 @@ import { Length } from 'class-validator';
 import { RoomImage } from './room-image';
 import { BuildingService } from './building-service';
 import { User } from './user';
+import {RoomType} from "./building-type";
+import {TenantReview} from "./tenant-review";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -37,7 +34,6 @@ export class RoomGroup extends BaseEntity {
     depositPrice: 'deposit_price',
     description: 'description',
     capacity: 'capacity',
-    quantity: 'quantity',
     viewAmount: 'view_amount',
     phoneViewAmount: 'phone_view_amount',
     isSponsored: 'is_sponsored',
@@ -61,18 +57,21 @@ export class RoomGroup extends BaseEntity {
 
   @Column({
     type: 'boolean',
+    unique: false,
     name: RoomGroup.schema.gender,
   })
   gender: boolean;
 
   @Column({
     type: 'double',
+    unique: false,
     name: RoomGroup.schema.rentPrice,
   })
   rentPrice: number;
 
   @Column({
     type: 'double',
+    unique: false,
     name: RoomGroup.schema.area,
   })
   area: number;
@@ -149,7 +148,7 @@ export class RoomGroup extends BaseEntity {
   phoneViewAmount: number;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: RoomGroup.schema.isSponsored,
   })
@@ -184,6 +183,10 @@ export class RoomGroup extends BaseEntity {
   @OneToMany(type => RoomImage, roomImage => roomImage.roomGroup)
   @JoinColumn({ name: RoomGroup.schema.id })
   roomImages: RoomImage[];
+
+  @OneToMany(type => TenantReview, tenantReview => tenantReview.roomGroup)
+  @JoinColumn({ name: RoomGroup.schema.id })
+  tenantReviews: TenantReview[];
 
 
   static get repo(): RoomGroupRepository {
@@ -225,8 +228,14 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       .getRawMany();
   }
 
-  async getRoomGroupDetail(roomGroupId: any, roomGroup: any) {
+  async getRoomGroupDetail(roomGroupId: any, roomGroup: RoomGroup) {
+    if (Number.isInteger(roomGroupId)) {
+      return null;
+    }
     const building = await Building.repo.findOne(roomGroup.buildingId);
+    const buildingTypeArray = await RoomType.repo.getBuildingType(building.typeId);
+    const buildingType = buildingTypeArray[0].building_type;
+    const availableRooms = await Room.repo.getAvailableRoomsInGroup(roomGroupId);
     const amenities = await RoomAmenities.repo.getAmenitiesDetailRoomGroup(roomGroupId);
     const amenitiesNot = await RoomAmenities.repo.getAmenitiesDetailNotInRoomGroup(roomGroupId);
     let amenitiesConcat = [];
@@ -245,8 +254,10 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       let temp = [element.image_url];
       imageLinks = imageLinks.concat(temp);
     });
-
-    return {
+    const rating = await TenantReview.repo.getRatingResult(roomGroupId);
+    const result = {
+      buildingTypeId: building.typeId,
+      availableRooms: availableRooms,
       images: imageLinks,
       title: building.buildingName + ' ' + building.province + ' ' + `${building.street ? building.street : ''}`,
       generalAddress: {
@@ -254,7 +265,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         district: building.district,
         ward: building.ward,
       },
-      status: (roomGroup.quantity > 0) ? 'Còn phòng' : 'Không còn phòng',
+      status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
       area: roomGroup.area,
       capacity: roomGroup.capacity,
       gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
@@ -266,6 +277,15 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       },
       services: services,
       phone: phone,
+      rating: {
+        number_of_reviews: rating[0].number_of_reviews,
+        accuracy_rate: rating[0].accuracy_rate,
+        host_rate: rating[0].host_rate,
+        security_rate: rating[0].security_rate
+      }
     };
+    return result;
   }
+
+
 }

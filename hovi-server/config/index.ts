@@ -9,5 +9,6 @@ export default {
   MYSQL_HOST: process.env.MYSQL_HOST,
   MYSQL_PORT: parseInt(process.env.MYSQL_PORT, 10),
   GOOGLE_CLOUD_PROJECT_ID: process.env.GOOGLE_CLOUD_PROJECT_ID,
-  BUCKET_NAME: process.env.BUCKET_NAME
+  BUCKET_NAME: process.env.BUCKET_NAME,
+  ES_ENDPOINT: process.env.ES_ENDPOINT,
 };

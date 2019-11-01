@@ -110,7 +110,7 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
   async getAmenitiesDetailRoomGroup(roomGroupId: any) {
     return await getManager()
       .createQueryBuilder(RoomAmenities, 'room_amenities')
-      .select(['room_amenities.amenities_id', 'amenities.usable_name as amenities_name'])
+      .select(['room_amenities.amenities_id', 'amenities.icon_id', 'amenities.usable_name as amenities_name'])
       .innerJoin(RoomGroup, 'room_group', 'room_group.room_group_id = room_amenities.room_group_id')
       .innerJoin(Amenities, 'amenities', 'room_amenities.amenities_id = amenities.amenities_id')
       .where('room_amenities.room_group_id = :room_group_id', { room_group_id: roomGroupId })
@@ -118,9 +118,10 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
   }
 
   async getAmenitiesDetailNotInRoomGroup(roomGroupId: any) {
-    return await this.manager.query("SELECT amenities.amenities_id, amenities.unusable_name as \'amenities_name\' FROM amenities where amenities.amenities_id\n" +
-      "NOT IN (select room_amenities.amenities_id from room_amenities INNER JOIN room_group on room_amenities.room_group_id = room_group.room_group_id WHERE room_group.room_group_id = ?)",
-      [roomGroupId]);
+    const amenitiesNot = await this.manager.query("SELECT amenities.amenities_id, amenities.icon_id, amenities.unusable_name as \'amenities_name\' FROM amenities where amenities.amenities_id\n" +
+        "NOT IN (select room_amenities.amenities_id from room_amenities INNER JOIN room_group on room_amenities.room_group_id = room_group.room_group_id WHERE room_group.room_group_id = ?)",
+        [roomGroupId]);
+    return amenitiesNot;
   }
 }
 

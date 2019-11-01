@@ -13,6 +13,11 @@ export default [
         handler: UserFunction.getUser
     },
     {
+        path: "/user/show/:userId",
+        method: "get",
+        handler: UserFunction.getUserDetail
+    },
+    {
         path: "/user/",
         method: "post",
         authentication: true,

@@ -6,6 +6,12 @@ export default [
         method: "get",
         handler: roomGroupFunction.getRoomGroups
     },
+    // {
+    //     path: "/roomGroup/:roomGroupId",
+    //     method: "get",
+    //     authentication: false,
+    //     handler: roomGroupFunction.getRoomGroup
+    // },
     {
         path: "/roomGroup/:buildingId",
         method: "get",

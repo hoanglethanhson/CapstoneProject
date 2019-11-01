@@ -12,6 +12,8 @@ import { MaxLength, IsEmail, Length } from 'class-validator';
 import { Building } from './building';
 import { Transaction } from './transaction';
 import { Feedback } from './feedback';
+import {TenantReview} from "./tenant-review";
+import {ConstantValues} from "../utils/constant-values";
 
 @Entity(User.tableName)
 @Unique(['phoneNumber'])
@@ -31,6 +33,9 @@ export class User extends BaseEntity {
     email: 'email',
     avatar: 'avatar',
     address: 'address',
+    isPhoneNumberVerified: 'is_phone_number_verified',
+    isSelfieVerified: 'is_selfie_verified',
+    isGovernmentIdVerified: 'is_government_id_verified',
     isVerified: 'is_verified',
     isHost: 'is_host',
     isActive: 'is_active',
@@ -84,6 +89,7 @@ export class User extends BaseEntity {
     length: 255,
     name: User.schema.phoneToken,
   })
+  @MaxLength(255)
   phoneToken: string;
 
   @Column({
@@ -94,7 +100,7 @@ export class User extends BaseEntity {
   roleAdmin: string;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     name: User.schema.gender,
   })
   gender: boolean;
@@ -140,14 +146,35 @@ export class User extends BaseEntity {
   address: string;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
+    unique: false,
+    name: User.schema.isPhoneNumberVerified,
+  })
+  isPhoneNumberVerified: boolean;
+
+  @Column({
+    type: 'boolean',
+    unique: false,
+    name: User.schema.isSelfieVerified,
+  })
+  isSelfieVerified: boolean;
+
+  @Column({
+    type: 'boolean',
+    unique: false,
+    name: User.schema.isGovernmentIdVerified,
+  })
+  isGovernmentIdVerified: boolean;
+
+  @Column({
+    type: 'boolean',
     unique: false,
     name: User.schema.isVerified,
   })
   isVerified: boolean;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: User.schema.isHost,
   })
@@ -190,6 +217,10 @@ export class User extends BaseEntity {
   @JoinColumn({ name: User.schema.id })
   feedbacks: Feedback[];
 
+  @OneToMany(type => TenantReview, tenantReview => tenantReview.user)
+  @JoinColumn({ name: User.schema.id })
+  tenantReviews: TenantReview[];
+
   checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
     return bcrypt.compareSync(unencryptedPassword, this.password);
   }
@@ -223,7 +254,7 @@ export class UserRepository extends Repository<User> {
   }
 
   async verifyPhoneNumber(phoneNumber: string, verifyId: string) {
-    let user = await this.findOne({ phoneNumber: phoneNumber });
+    let user = await this.findOne({phoneNumber: phoneNumber});
     if (user.phoneToken === verifyId) {
       user.phoneToken = '';
       await this.save(user);
@@ -232,7 +263,38 @@ export class UserRepository extends Repository<User> {
   }
 
   async getHostPhone(userId: number) {
-    let user = await this.findOne({ id: userId });
+    let user = await this.findOne({id: userId});
     return user.phoneNumber;
+  }
+
+  async getUserDetail(userId: any) {
+    const user = await this.findOne({id: userId});
+    if (user == null) {
+      return null;
+    }
+    const result = {
+      user_avatar: user.avatar,
+      user_name: user.firstName + " " + user.lastName,
+      user_address: user.address,
+      verification: [
+        {
+          name: 'Ảnh bản thân',
+          isVerified: user.isSelfieVerified
+        },
+        {
+          name: 'Địa chỉ email',
+          isVerified: (user.email != ConstantValues.DEFAULT_EMAIL) ? true : false
+        },
+        {
+          name: 'Số điện thoại',
+          isVerified: user.isPhoneNumberVerified
+        },
+        {
+          name: 'Chứng minh nhân dân',
+          isVerified: user.isGovernmentIdVerified
+        },
+      ]
+    }
+    return result;
   }
 }

@@ -21,13 +21,20 @@ export default class UserFunction {
     else next(new HTTP400Error('userId not found.'));
   };
 
+  static getUserDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params['userId'];
+    const user = await User.repo.getUserDetail(userId);
+
+    if (user) res.status(200).send(user);
+    else next(new HTTP400Error('userId not found.'));
+  };
+
   static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
 
     if (!body['email']) body['email'] = 'example@homehouse.vn';
 
     const error = await validateByModel(User, body);
-    console.log(error);
     if (error) next(error);
     else {
       const checkUsername = await User.repo.findOne({ phoneNumber: body['phone'] });

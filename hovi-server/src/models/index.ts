@@ -12,6 +12,7 @@ import {BuildingService} from "./building-service";
 import {RoomAmenities} from "./room-amenities";
 import {Transaction} from "./transaction";
 import {Feedback} from "./feedback";
+import {TenantReview} from "./tenant-review";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -38,7 +39,8 @@ export class DatabaseManager {
                 BuildingService,
                 RoomAmenities,
                 Transaction,
-                Feedback
+                Feedback,
+                TenantReview
             ],
             maxQueryExecutionTime: 1000
         });

@@ -48,7 +48,7 @@ export class Transaction extends BaseEntity {
     roomId: number;
 
     @Column({
-        type: "bit",
+        type: "boolean",
         unique: false,
         name: Transaction.schema.isTransited
     })

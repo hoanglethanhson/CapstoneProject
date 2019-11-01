@@ -24,6 +24,7 @@ export default [
     {
         path: "/feedback/:feedbackId",
         method: "delete",
+        authentication: true,
         handler: feedbackFunction.deleteFeedback
     },
 ];
