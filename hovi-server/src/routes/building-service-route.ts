@@ -4,6 +4,7 @@ export default [
   {
     path: '/buildingService/multiple',
     method: 'post',
+    authentication: true,
     handler: buildingServiceFunction.createMultipleBuildingService,
   },
   {

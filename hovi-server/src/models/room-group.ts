@@ -26,21 +26,20 @@ export class RoomGroup extends BaseEntity {
     rentPrice: 'rent_price',
     minDepositPeriod: 'min_deposit_period',
     area: 'area',
-    bedroom: 'bedroom_quantity',
-    bathroom: 'bathroom_quantity',
-    wc: 'wc_quantity',
+    bedroomQuantity: 'bedroom_quantity',
+    bathroomQuantity: 'bathroom_quantity',
+    wcQuantity: 'wc_quantity',
     direction: 'direction',
     isAvailable: 'is_available',
     isVerified: 'is_verified',
     depositPrice: 'deposit_price',
     description: 'description',
     capacity: 'capacity',
-    quantity: 'quantity',
     viewAmount: 'view_amount',
     phoneViewAmount: 'phone_view_amount',
     isSponsored: 'is_sponsored',
-    create: 'created_at',
-    update: 'updated_at',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
   };
 
   @PrimaryColumn({
@@ -87,29 +86,25 @@ export class RoomGroup extends BaseEntity {
 
   @Column({
     type: 'int',
-    unique: false,
-    name: RoomGroup.schema.bedroom,
+    name: RoomGroup.schema.bedroomQuantity,
   })
-  bedroom: number;
+  bedroomQuantity: number;
 
   @Column({
     type: 'int',
-    unique: false,
-    name: RoomGroup.schema.bathroom,
+    name: RoomGroup.schema.bathroomQuantity,
   })
-  bathroom: number;
+  bathroomQuantity: number;
 
   @Column({
     type: 'int',
-    unique: false,
-    name: RoomGroup.schema.wc,
+    name: RoomGroup.schema.wcQuantity,
   })
-  wc: number;
+  wcQuantity: number;
 
   @Column({
     type: 'varchar',
     length: 255,
-    unique: false,
     name: RoomGroup.schema.direction,
   })
   @Length(0, 255)
@@ -117,14 +112,12 @@ export class RoomGroup extends BaseEntity {
 
   @Column({
     type: 'boolean',
-    unique: false,
     name: RoomGroup.schema.isAvailable,
   })
   isAvailable: boolean;
 
   @Column({
     type: 'boolean',
-    unique: false,
     name: RoomGroup.schema.isVerified,
   })
   isVerified: boolean;
@@ -132,25 +125,21 @@ export class RoomGroup extends BaseEntity {
 
   @Column({
     type: 'double',
-    unique: false,
     name: RoomGroup.schema.depositPrice,
   })
   depositPrice: number;
 
   @Column({
     type: 'text',
-    unique: false,
     name: RoomGroup.schema.description,
   })
   description: string;
 
   @Column({
     type: 'int',
-    unique: false,
     name: RoomGroup.schema.capacity,
   })
   capacity: number;
-
 
   @Column({
     type: 'int',
@@ -178,18 +167,18 @@ export class RoomGroup extends BaseEntity {
     precision: 6,
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
-    name: RoomGroup.schema.create,
+    name: RoomGroup.schema.createdAt,
   })
-  create: Date;
+  createdAt: Date;
 
   @Column({
     type: 'timestamp',
     precision: 6,
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
-    name: RoomGroup.schema.update,
+    name: RoomGroup.schema.updatedAt,
   })
-  update: Date;
+  updatedAt: Date;
 
   @OneToMany(type => Room, room => room.roomGroup)
   @JoinColumn({ name: RoomGroup.schema.id })
@@ -222,9 +211,9 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       roomGroup.rentPrice = roomGroupUpdate.rentPrice ? roomGroupUpdate.rentPrice : roomGroup.rentPrice;
       roomGroup.minDepositPeriod = roomGroupUpdate.minDepositPeriod ? roomGroupUpdate.minDepositPeriod : roomGroup.minDepositPeriod;
       roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
-      roomGroup.bedroom = roomGroupUpdate.bedroom ? roomGroupUpdate.bedroom : roomGroup.bedroom;
-      roomGroup.bathroom = roomGroupUpdate.bathroom ? roomGroupUpdate.bathroom : roomGroup.bathroom;
-      roomGroup.wc = roomGroupUpdate.wc ? roomGroupUpdate.wc : roomGroup.wc;
+      roomGroup.bedroomQuantity = roomGroupUpdate.bedroomQuantity ? roomGroupUpdate.bedroomQuantity : roomGroup.bedroomQuantity;
+      roomGroup.bathroomQuantity = roomGroupUpdate.bathroomQuantity ? roomGroupUpdate.bathroomQuantity : roomGroup.bathroomQuantity;
+      roomGroup.wcQuantity = roomGroupUpdate.wcQuantity ? roomGroupUpdate.wcQuantity : roomGroup.wcQuantity;
       roomGroup.direction = roomGroupUpdate.direction ? roomGroupUpdate.direction : roomGroup.direction;
       roomGroup.isAvailable = roomGroupUpdate.isAvailable ? roomGroupUpdate.isAvailable : roomGroup.isAvailable;
       roomGroup.isVerified = roomGroupUpdate.isVerified ? roomGroupUpdate.isVerified : roomGroup.isVerified;
@@ -240,13 +229,12 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
   }
 
   async getImages(roomGroupId: any) {
-    const images = await getManager()
+    return await getManager()
       .createQueryBuilder(RoomImage, 'room_image')
       .select(['room_image.image_url'])
       .innerJoin(RoomGroup, 'room_group', 'room_image.room_group_id = room_group.room_group_id')
       .where('room_image.room_group_id = :room_group_id', { room_group_id: roomGroupId })
       .getRawMany();
-    return images;
   }
 
   async getRoomGroupDetail(roomGroupId: any, roomGroup: RoomGroup) {
