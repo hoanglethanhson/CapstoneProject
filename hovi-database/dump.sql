@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 02/11/2019 14:28:12
+ Date: 03/11/2019 00:02:54
 */
 
 SET NAMES utf8mb4;
@@ -52,7 +52,7 @@ INSERT INTO `amenities` VALUES (11, '11', 'Bàn ghế', '', NULL, '2019-10-23 12
 -- ----------------------------
 DROP TABLE IF EXISTS `bank_transfer_history`;
 CREATE TABLE `bank_transfer_history`  (
-  `transfer_id` int(4) NOT NULL COMMENT 'ID of the bank transferation',
+  `transfer_id` int(4) NOT NULL AUTO_INCREMENT COMMENT 'ID of the bank transferation',
   `transaction_id` int(5) NULL DEFAULT NULL COMMENT 'ID of related transaction',
   `sender_user_id` int(5) NULL DEFAULT NULL COMMENT 'Sender user id',
   `sender_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of sender',
@@ -73,7 +73,12 @@ CREATE TABLE `bank_transfer_history`  (
   CONSTRAINT `FK_transaction_bank_transfer_history_transaction_id` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`transaction_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of bank_transfer_history
+-- ----------------------------
+INSERT INTO `bank_transfer_history` VALUES (1, 1, 1, 'BIDV', '1234', 1, 2, 'TPBank', '5678', 2, '2019-11-02 13:54:02.079330', 100000, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for building
@@ -102,7 +107,7 @@ CREATE TABLE `building`  (
   INDEX `FK_user_building`(`host_id`) USING BTREE,
   CONSTRAINT `FK_type_building` FOREIGN KEY (`building_type_id`) REFERENCES `building_type` (`type_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_building` FOREIGN KEY (`host_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of building

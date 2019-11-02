@@ -17,7 +17,7 @@ import {MaxLength} from "class-validator";
 
 @Entity(BankTransferHistory.tableName)
 export class BankTransferHistory extends BaseEntity {
-    static readonly tableName = 'transaction';
+    static readonly tableName = 'bank_transfer_history';
     static readonly schema = {
         transferId: 'transfer_id',
         transactionId: 'transaction_id',
