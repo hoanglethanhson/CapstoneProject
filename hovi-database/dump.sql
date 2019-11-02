@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 31/10/2019 21:16:14
+ Date: 02/11/2019 14:28:12
 */
 
 SET NAMES utf8mb4;
@@ -48,6 +48,34 @@ INSERT INTO `amenities` VALUES (10, '10', 'Tủ', '', NULL, '2019-10-23 12:19:04
 INSERT INTO `amenities` VALUES (11, '11', 'Bàn ghế', '', NULL, '2019-10-23 12:19:05.396939', '2019-10-23 12:19:05.396939');
 
 -- ----------------------------
+-- Table structure for bank_transfer_history
+-- ----------------------------
+DROP TABLE IF EXISTS `bank_transfer_history`;
+CREATE TABLE `bank_transfer_history`  (
+  `transfer_id` int(4) NOT NULL COMMENT 'ID of the bank transferation',
+  `transaction_id` int(5) NULL DEFAULT NULL COMMENT 'ID of related transaction',
+  `sender_user_id` int(5) NULL DEFAULT NULL COMMENT 'Sender user id',
+  `sender_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of sender',
+  `sender_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Sender account number',
+  `sender_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Sender user type',
+  `receiver_user_id` int(5) NULL DEFAULT NULL COMMENT 'Receiver user id',
+  `receiver_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of receiver',
+  `receiver_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Receiver account number',
+  `receiver_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Receiver user type',
+  `transfer_time` timestamp(6) NULL DEFAULT NULL COMMENT 'Time of transferation',
+  `money_amount` double(10, 0) NULL DEFAULT NULL COMMENT 'Money amount of the transfer',
+  `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
+  `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
+  PRIMARY KEY (`transfer_id`) USING BTREE,
+  INDEX `FK_user_bank_transfer_history-sender_id`(`sender_user_id`) USING BTREE,
+  INDEX `FK_user_bank_transfer_history-receiver_id`(`receiver_user_id`) USING BTREE,
+  INDEX `FK_transaction_bank_transfer_history_transaction_id`(`transaction_id`) USING BTREE,
+  CONSTRAINT `FK_transaction_bank_transfer_history_transaction_id` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`transaction_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for building
 -- ----------------------------
 DROP TABLE IF EXISTS `building`;
@@ -79,12 +107,13 @@ CREATE TABLE `building`  (
 -- ----------------------------
 -- Records of building
 -- ----------------------------
-INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, 'Hanoi', 'Thanh Xuan', 'Nhan Chinh', 'Tran Duy Hung', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:32.548000', '2019-10-14 07:21:32.548000');
-INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Trung Liet', 'Nguyen Luong Bang', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:53.649250', '2019-10-14 07:21:53.649250');
-INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Hao Nam', 'Lang Ha', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:22:13.185435', '2019-10-14 07:22:13.185435');
-INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, b'1', 1, 'Hà Nội', 'Hoàng Mai', 'Định Công', 'Định Công Hạ', '96A Định Công', NULL, '20.98470977059105,105.83861725767213', 4, NULL, 1, '2019-10-27 13:21:05.450599', '2019-10-27 13:21:05.450599');
-INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, b'1', 4, 'Hà Nội', 'Hai Bà Trưng', 'Minh Khai', NULL, '12 giai phong', NULL, '20.9714041,105.8409441', NULL, NULL, NULL, '2019-10-27 13:21:06.186437', '2019-10-27 13:21:06.186437');
-INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, b'0', 4, 'Hà Nội', 'Hà Đông', 'Dương Nội', NULL, '12 quang trung ha dong', NULL, '20.9462691,105.7438515', NULL, NULL, NULL, '2019-10-27 13:21:16.952949', '2019-10-27 13:21:16.952949');
+INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Tran Duy Hung', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:02.079330', '2019-11-02 13:54:02.079330');
+INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Nguyen Luong Bang', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:03.064471', '2019-11-02 13:54:03.064471');
+INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Lang Ha', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:03.748599', '2019-11-02 13:54:03.748599');
+INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Định Công Hạ', '96A Định Công', NULL, '20.98470977059105,105.83861725767213', 4, NULL, 1, '2019-11-02 13:54:04.361796', '2019-11-02 13:54:04.361796');
+INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, b'1', 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 giai phong', NULL, '20.9714041,105.8409441', NULL, NULL, NULL, '2019-11-02 13:54:05.921972', '2019-11-02 13:54:05.921972');
+INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, b'0', 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 quang trung ha dong', NULL, '20.9462691,105.7438515', NULL, NULL, NULL, '2019-11-02 13:54:05.195791', '2019-11-02 13:54:05.195791');
+INSERT INTO `building` VALUES (7, 'Chung cư An Nam', 1, NULL, 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 giai phong', '', '20.9714041,105.8409441', 23, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for building_service
@@ -425,7 +454,7 @@ CREATE TABLE `transaction`  (
   `transaction_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the transaction',
   `user_id` int(5) NOT NULL COMMENT 'ID of the user who make the transaction',
   `room_id` int(5) NOT NULL COMMENT 'ID of room in the transaction',
-  `is_transited` bit(1) NULL DEFAULT NULL COMMENT 'deposit money transited to host or not',
+  `transaction_status` tinyint(1) NULL DEFAULT NULL COMMENT 'Status code of the transaction',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`transaction_id`) USING BTREE,
@@ -438,7 +467,7 @@ CREATE TABLE `transaction`  (
 -- ----------------------------
 -- Records of transaction
 -- ----------------------------
-INSERT INTO `transaction` VALUES (1, 1, 1, b'1', '2019-10-08 21:14:41.938875', '2019-10-08 21:14:41.938875');
+INSERT INTO `transaction` VALUES (1, 1, 1, 1, '2019-10-08 21:14:41.938875', '2019-10-08 21:14:41.938875');
 
 -- ----------------------------
 -- Table structure for user
@@ -464,6 +493,7 @@ CREATE TABLE `user`  (
   `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'User is verified or not',
   `is_host` bit(1) NULL DEFAULT NULL COMMENT 'User is host or not',
   `is_active` bit(1) NULL DEFAULT NULL COMMENT 'User is active or not',
+  `balance` double(20, 0) NULL DEFAULT NULL COMMENT 'Balance of user in system',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`user_id`) USING BTREE
@@ -472,11 +502,11 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hoa Lac', b'1', b'1', b'1', b'1', b'1', b'1', '2019-10-29 16:59:51.292078', '2019-10-29 16:59:51.292078');
-INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hanoi', b'0', b'1', b'1', b'0', b'1', b'1', '2019-10-29 16:59:52.243773', '2019-10-29 16:59:52.243773');
-INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'0', b'0', NULL, NULL, '2019-10-29 16:59:53.214943', '2019-10-29 16:59:53.214943');
-INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'1', b'1', NULL, NULL, '2019-10-29 16:59:53.947092', '2019-10-29 16:59:53.947092');
-INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', NULL, NULL, NULL, NULL, b'1', NULL, b'1', '2019-10-29 16:59:54.903230', '2019-10-29 16:59:54.903230');
+INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hoa Lac', b'1', b'1', b'1', b'1', b'1', b'1', 0, '2019-11-02 05:37:51.457571', '2019-11-02 05:37:51.457571');
+INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hanoi', b'0', b'1', b'1', b'0', b'1', b'1', 0, '2019-11-02 05:37:51.802284', '2019-11-02 05:37:51.802284');
+INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'0', b'0', NULL, NULL, 0, '2019-11-02 05:37:52.191719', '2019-11-02 05:37:52.191719');
+INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'1', b'1', NULL, NULL, 0, '2019-11-02 05:37:52.603088', '2019-11-02 05:37:52.603088');
+INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', NULL, NULL, NULL, NULL, b'1', NULL, b'1', 0, '2019-11-02 05:37:54.882924', '2019-11-02 05:37:54.882924');
 
 -- ----------------------------
 -- Table structure for user_verification_image
