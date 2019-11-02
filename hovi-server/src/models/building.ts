@@ -10,6 +10,7 @@ import { RoomType } from './building-type';
 import { User } from './user';
 import { RoomGroup } from './room-group';
 import { BuildingService } from './building-service';
+import { ConstantValues } from '../utils/constant-values';
 
 @Entity(Building.tableName)
 export class Building extends BaseEntity {
@@ -185,6 +186,7 @@ export class BuildingRepository extends Repository<Building> {
       .leftJoinAndSelect('roomGroup.roomImages', 'roomImages')
       .where('building.typeId = :typeId', { typeId })
       .andWhere('building.hostId = :hostId', { hostId })
+      .andWhere('room.room_status <> :roomStatus', { roomStatus: ConstantValues.ROOM_WAS_DELETED })
       .getMany();
   }
 

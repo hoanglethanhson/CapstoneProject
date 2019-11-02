@@ -265,7 +265,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       buildingTypeId: building.typeId,
       availableRooms: availableRooms,
       images: imageLinks,
-      title: building.buildingName + ' ' + building.province + ' ' + `${building.ward ? building.ward : ''}`,
+      title: `${building.buildingName} - ${JSON.parse(building.ward)[0]}, ${JSON.parse(building.district)[0]}, ${JSON.parse(building.province)[0]}`,
       generalAddress: {
         province: building.province,
         district: building.district,
