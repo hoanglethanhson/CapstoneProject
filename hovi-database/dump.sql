@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 31/10/2019 21:16:14
+ Date: 01/11/2019 21:24:03
 */
 
 SET NAMES utf8mb4;
@@ -46,6 +46,33 @@ INSERT INTO `amenities` VALUES (8, '8', 'Bình nóng lạnh', '', NULL, '2019-10
 INSERT INTO `amenities` VALUES (9, '9', 'Giường', '', NULL, '2019-10-23 12:19:02.765866', '2019-10-23 12:19:02.765866');
 INSERT INTO `amenities` VALUES (10, '10', 'Tủ', '', NULL, '2019-10-23 12:19:04.547522', '2019-10-23 12:19:04.547522');
 INSERT INTO `amenities` VALUES (11, '11', 'Bàn ghế', '', NULL, '2019-10-23 12:19:05.396939', '2019-10-23 12:19:05.396939');
+
+-- ----------------------------
+-- Table structure for bank_transfer_history
+-- ----------------------------
+DROP TABLE IF EXISTS `bank_transfer_history`;
+CREATE TABLE `bank_transfer_history`  (
+  `transfer_id` int(4) NOT NULL COMMENT 'ID of the bank transferation',
+  `transaction_id` int(5) NULL DEFAULT NULL COMMENT 'ID of related transaction',
+  `sender_user_id` int(5) NULL DEFAULT NULL COMMENT 'Sender user id',
+  `sender_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of sender',
+  `sender_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Sender account number',
+  `sender_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Sender user type',
+  `receiver_user_id` int(5) NULL DEFAULT NULL COMMENT 'Receiver user id',
+  `receiver_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of receiver',
+  `receiver_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Receiver account number',
+  `receiver_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Receiver user type',
+  `transfer_time` timestamp(6) NULL DEFAULT NULL COMMENT 'Time of transferation',
+  `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
+  `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
+  PRIMARY KEY (`transfer_id`) USING BTREE,
+  INDEX `FK_user_bank_transfer_history-sender_id`(`sender_user_id`) USING BTREE,
+  INDEX `FK_user_bank_transfer_history-receiver_id`(`receiver_user_id`) USING BTREE,
+  INDEX `FK_transaction_bank_transfer_history_transaction_id`(`transaction_id`) USING BTREE,
+  CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_transaction_bank_transfer_history_transaction_id` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`transaction_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for building
