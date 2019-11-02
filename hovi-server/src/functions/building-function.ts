@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, Handler } from 'express';
+import { Handler, NextFunction, Request, Response } from 'express';
 import { validateByModel } from '../utils';
 import { HTTP400Error } from '../utils/httpErrors';
 import { Building } from '../models/building';
@@ -11,11 +11,28 @@ export default class BuildingFunction {
   };
 
   static getBuilding: Handler = async (req: Request, res: Response, next: NextFunction) => {
-    const buildingId = req.params['buildingId'];
-    const building = await Building.repo.findOne(buildingId);
+    const typeId = req.params['buildingTypeId'];
+    const hostId = req['currentUserId'];
+    console.log(typeId);
+    console.log(hostId);
 
-    if (building) res.status(200).send(building);
-    else next(new HTTP400Error('buildingId not found.'));
+    const building = await Building.repo.getBuildingInformation(Number(typeId), hostId);
+    if (building) {
+      const dataResponse = building.map(data => {
+        const { id, typeId, buildingName, buildingServices, floorQuantity, roomGroups, province, district, ward, addressDescription, detailedAddress } = data;
+        return roomGroups.map(value => {
+          return {
+            ...value,
+            buildingServices,
+            building: {
+              id, typeId, buildingName, floorQuantity, province, district, ward, addressDescription, detailedAddress,
+            },
+          };
+        });
+      });
+      const merged = [].concat.apply([], dataResponse);
+      res.status(200).send(merged);
+    } else next(new HTTP400Error('buildingId not found.'));
   };
 
   static createBuilding: Handler = async (req: Request, res: Response, next: NextFunction) => {
