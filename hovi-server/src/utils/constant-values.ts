@@ -8,4 +8,9 @@ export class ConstantValues {
   static readonly ROOM_WAS_DELETED = -1;
   static readonly ROOM_NOT_AVAILABLE = 0;
   static readonly ROOM_AVAILABLE = 1;
+
+  //DEFINE USER TYPE
+  static readonly TENANT = 1;
+  static readonly HOST = 2;
+  static readonly ADMIN = 3;
 }
