@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 02/11/2019 12:39:40
+ Date: 02/11/2019 15:01:14
 */
 
 SET NAMES utf8mb4;
@@ -63,6 +63,7 @@ CREATE TABLE `bank_transfer_history`  (
   `receiver_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Receiver account number',
   `receiver_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Receiver user type',
   `transfer_time` timestamp(6) NULL DEFAULT NULL COMMENT 'Time of transferation',
+  `money_amount` double(10, 0) NULL DEFAULT NULL COMMENT 'Money amount of the transfer',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`transfer_id`) USING BTREE,
