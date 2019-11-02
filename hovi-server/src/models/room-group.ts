@@ -13,8 +13,8 @@ import { Length } from 'class-validator';
 import { RoomImage } from './room-image';
 import { BuildingService } from './building-service';
 import { User } from './user';
-import {RoomType} from "./building-type";
-import {TenantReview} from "./tenant-review";
+import { RoomType } from './building-type';
+import { TenantReview } from './tenant-review';
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -228,6 +228,12 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     return roomGroup;
   }
 
+  async getRoomGroupByBuildingId(buildingId: any) {
+    return await this.find({
+      buildingId,
+    });
+  }
+
   async getImages(roomGroupId: any) {
     return await getManager()
       .createQueryBuilder(RoomImage, 'room_image')
@@ -268,7 +274,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       buildingTypeId: building.typeId,
       availableRooms: availableRooms,
       images: imageLinks,
-      title: building.buildingName + ' ' + building.province + ' ' + `${building.street ? building.street : ''}`,
+      title: building.buildingName + ' ' + building.province + ' ' + `${building.ward ? building.ward : ''}`,
       generalAddress: {
         province: building.province,
         district: building.district,
@@ -290,11 +296,10 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         number_of_reviews: rating[0].number_of_reviews,
         accuracy_rate: rating[0].accuracy_rate,
         host_rate: rating[0].host_rate,
-        security_rate: rating[0].security_rate
-      }
+        security_rate: rating[0].security_rate,
+      },
     };
     return result;
   }
-
 
 }
