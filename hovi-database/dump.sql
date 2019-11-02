@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Concis_test2
+ Source Server         : CP_DB
  Source Server Type    : MySQL
  Source Server Version : 50727
  Source Host           : localhost:3307
@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 02/11/2019 20:54:39
+ Date: 02/11/2019 14:28:12
 */
 
 SET NAMES utf8mb4;
@@ -21,21 +21,20 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Table structure for amenities
 -- ----------------------------
 DROP TABLE IF EXISTS `amenities`;
-CREATE TABLE `amenities` (
+CREATE TABLE `amenities`  (
   `amenities_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of amenities',
-  `icon_id` varchar(50) DEFAULT NULL COMMENT 'id of icon show UI',
-  `usable_name` varchar(255) DEFAULT NULL COMMENT 'Name of amenities when usable',
-  `unusable_name` varchar(255) DEFAULT NULL COMMENT 'Name of amenities when unusable',
-  `description` text COMMENT 'Description for amenities',
+  `icon_id` varchar(50) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'id of icon show UI',
+  `usable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when usable',
+  `unusable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when unusable',
+  `description` text CHARACTER SET utf8mb4  NULL COMMENT 'Description for amenities',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`amenities_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of amenities
 -- ----------------------------
-BEGIN;
 INSERT INTO `amenities` VALUES (1, '1', 'Không chung chủ', 'Chung chủ', 'tự do khu nhà ở', '2019-10-23 12:18:55.952131', '2019-10-23 12:18:55.952131');
 INSERT INTO `amenities` VALUES (2, '2', 'Khép kín', 'Chung phòng tắm', 'Khu vực ở có khép kín hay k?', '2019-10-23 12:18:56.705670', '2019-10-23 12:18:56.705670');
 INSERT INTO `amenities` VALUES (3, '3', 'Ban công', '', 'Ban công phòng', '2019-10-23 12:18:57.511849', '2019-10-23 12:18:57.511849');
@@ -47,41 +46,67 @@ INSERT INTO `amenities` VALUES (8, '8', 'Bình nóng lạnh', '', NULL, '2019-10
 INSERT INTO `amenities` VALUES (9, '9', 'Giường', '', NULL, '2019-10-23 12:19:02.765866', '2019-10-23 12:19:02.765866');
 INSERT INTO `amenities` VALUES (10, '10', 'Tủ', '', NULL, '2019-10-23 12:19:04.547522', '2019-10-23 12:19:04.547522');
 INSERT INTO `amenities` VALUES (11, '11', 'Bàn ghế', '', NULL, '2019-10-23 12:19:05.396939', '2019-10-23 12:19:05.396939');
-COMMIT;
+
+-- ----------------------------
+-- Table structure for bank_transfer_history
+-- ----------------------------
+DROP TABLE IF EXISTS `bank_transfer_history`;
+CREATE TABLE `bank_transfer_history`  (
+  `transfer_id` int(4) NOT NULL COMMENT 'ID of the bank transferation',
+  `transaction_id` int(5) NULL DEFAULT NULL COMMENT 'ID of related transaction',
+  `sender_user_id` int(5) NULL DEFAULT NULL COMMENT 'Sender user id',
+  `sender_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of sender',
+  `sender_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Sender account number',
+  `sender_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Sender user type',
+  `receiver_user_id` int(5) NULL DEFAULT NULL COMMENT 'Receiver user id',
+  `receiver_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of receiver',
+  `receiver_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Receiver account number',
+  `receiver_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Receiver user type',
+  `transfer_time` timestamp(6) NULL DEFAULT NULL COMMENT 'Time of transferation',
+  `money_amount` double(10, 0) NULL DEFAULT NULL COMMENT 'Money amount of the transfer',
+  `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
+  `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
+  PRIMARY KEY (`transfer_id`) USING BTREE,
+  INDEX `FK_user_bank_transfer_history-sender_id`(`sender_user_id`) USING BTREE,
+  INDEX `FK_user_bank_transfer_history-receiver_id`(`receiver_user_id`) USING BTREE,
+  INDEX `FK_transaction_bank_transfer_history_transaction_id`(`transaction_id`) USING BTREE,
+  CONSTRAINT `FK_transaction_bank_transfer_history_transaction_id` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`transaction_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for building
 -- ----------------------------
 DROP TABLE IF EXISTS `building`;
-CREATE TABLE `building` (
+CREATE TABLE `building`  (
   `building_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of building',
-  `building_name` varchar(255) DEFAULT NULL COMMENT 'name of the building',
-  `building_type_id` int(2) DEFAULT NULL COMMENT 'ID of building type',
-  `is_mix_gender` bit(1) DEFAULT NULL COMMENT 'Male and female can stays in the same room or not',
-  `host_id` int(11) DEFAULT NULL COMMENT 'ID of host of building',
-  `province` varchar(255) DEFAULT 'default value' COMMENT 'Province of the building',
-  `district` varchar(255) DEFAULT NULL COMMENT 'District of the building',
-  `ward` varchar(255) DEFAULT NULL COMMENT 'Ward of the building',
-  `street` varchar(255) DEFAULT NULL COMMENT 'Street of the building',
-  `detailed_address` varchar(255) DEFAULT NULL COMMENT 'Detailed address of the building',
-  `address_description` varchar(255) DEFAULT NULL,
-  `location` text COMMENT 'Location of the building',
-  `floor_quantity` int(2) DEFAULT NULL COMMENT 'Number of floors in the building',
-  `is_verified` bit(1) DEFAULT NULL COMMENT 'Building is verified or not',
-  `is_completed` int(1) DEFAULT NULL COMMENT 'Number of completed steps in posting a room',
+  `building_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'name of the building',
+  `building_type_id` int(2) NULL DEFAULT NULL COMMENT 'ID of building type',
+  `is_mix_gender` bit(1) NULL DEFAULT NULL COMMENT 'Male and female can stays in the same room or not',
+  `host_id` int(11) NULL DEFAULT NULL COMMENT 'ID of host of building',
+  `province` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT 'default value' COMMENT 'Province of the building',
+  `district` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'District of the building',
+  `ward` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Ward of the building',
+  `street` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Street of the building',
+  `detailed_address` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Detailed address of the building',
+  `address_description` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL,
+  `location` text CHARACTER SET utf8mb4  NULL COMMENT 'Location of the building',
+  `floor_quantity` int(2) NULL DEFAULT NULL COMMENT 'Number of floors in the building',
+  `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'Building is verified or not',
+  `is_completed` int(1) NULL DEFAULT NULL COMMENT 'Number of completed steps in posting a room',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`building_id`) USING BTREE,
-  KEY `FK_room_type_building` (`building_type_id`) USING BTREE,
-  KEY `FK_user_building` (`host_id`) USING BTREE,
-  CONSTRAINT `FK_type_building` FOREIGN KEY (`building_type_id`) REFERENCES `building_type` (`type_id`),
-  CONSTRAINT `FK_user_building` FOREIGN KEY (`host_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_room_type_building`(`building_type_id`) USING BTREE,
+  INDEX `FK_user_building`(`host_id`) USING BTREE,
+  CONSTRAINT `FK_type_building` FOREIGN KEY (`building_type_id`) REFERENCES `building_type` (`type_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_building` FOREIGN KEY (`host_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of building
 -- ----------------------------
-BEGIN;
 INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Tran Duy Hung', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:02.079330', '2019-11-02 13:54:02.079330');
 INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Nguyen Luong Bang', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:03.064471', '2019-11-02 13:54:03.064471');
 INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Lang Ha', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:03.748599', '2019-11-02 13:54:03.748599');
@@ -89,29 +114,27 @@ INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, b'1', 1, '[\"Ha�
 INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, b'1', 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 giai phong', NULL, '20.9714041,105.8409441', NULL, NULL, NULL, '2019-11-02 13:54:05.921972', '2019-11-02 13:54:05.921972');
 INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, b'0', 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 quang trung ha dong', NULL, '20.9462691,105.7438515', NULL, NULL, NULL, '2019-11-02 13:54:05.195791', '2019-11-02 13:54:05.195791');
 INSERT INTO `building` VALUES (7, 'Chung cư An Nam', 1, NULL, 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 giai phong', '', '20.9714041,105.8409441', 23, NULL, NULL, NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for building_service
 -- ----------------------------
 DROP TABLE IF EXISTS `building_service`;
-CREATE TABLE `building_service` (
+CREATE TABLE `building_service`  (
   `building_id` int(5) NOT NULL COMMENT 'ID of the building',
   `service_id` int(5) NOT NULL COMMENT 'ID of the service in the building',
-  `service_price` double(10,0) DEFAULT NULL COMMENT 'Price of service',
-  `note` text COMMENT 'Note for building service',
+  `service_price` double(10, 0) NULL DEFAULT NULL COMMENT 'Price of service',
+  `note` text CHARACTER SET utf8mb4  NULL COMMENT 'Note for building service',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
-  PRIMARY KEY (`building_id`,`service_id`) USING BTREE,
-  KEY `FK_service` (`service_id`) USING BTREE,
-  CONSTRAINT `FK_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`),
-  CONSTRAINT `FK_service` FOREIGN KEY (`service_id`) REFERENCES `service` (`service_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  PRIMARY KEY (`building_id`, `service_id`) USING BTREE,
+  INDEX `FK_service`(`service_id`) USING BTREE,
+  CONSTRAINT `FK_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_service` FOREIGN KEY (`service_id`) REFERENCES `service` (`service_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of building_service
 -- ----------------------------
-BEGIN;
 INSERT INTO `building_service` VALUES (1, 1, 50000, NULL, NULL, NULL);
 INSERT INTO `building_service` VALUES (1, 3, 20000, NULL, '2019-10-16 15:59:50.363769', '2019-10-16 15:59:50.363769');
 INSERT INTO `building_service` VALUES (1, 5, 30000, NULL, NULL, NULL);
@@ -127,154 +150,137 @@ INSERT INTO `building_service` VALUES (5, 3, NULL, 'Theo giá nhà nước', NUL
 INSERT INTO `building_service` VALUES (6, 1, 200000, NULL, NULL, NULL);
 INSERT INTO `building_service` VALUES (6, 2, NULL, 'Theo giá nhà nước', NULL, NULL);
 INSERT INTO `building_service` VALUES (6, 3, 60000, 'Theo tháng + phụ trội tính thêm', NULL, NULL);
-INSERT INTO `building_service` VALUES (7, 1, 200000, 'Giá theo tháng', NULL, NULL);
-INSERT INTO `building_service` VALUES (7, 2, 70000, 'Free 50 số điện, phụ trội tính thêm', NULL, NULL);
-INSERT INTO `building_service` VALUES (7, 3, NULL, 'Theo giá nhà nước', NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for building_type
 -- ----------------------------
 DROP TABLE IF EXISTS `building_type`;
-CREATE TABLE `building_type` (
+CREATE TABLE `building_type`  (
   `type_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the room type',
-  `building_type` varchar(255) DEFAULT NULL COMMENT 'Name of the type',
+  `building_type` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of the type',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time ',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`type_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of building_type
 -- ----------------------------
-BEGIN;
 INSERT INTO `building_type` VALUES (1, 'Căn hộ chung cư', '2019-10-17 04:26:20.980356', '2019-10-17 04:26:20.980356');
 INSERT INTO `building_type` VALUES (2, 'Nhà nguyên căn', '2019-10-17 04:26:19.703176', '2019-10-17 04:26:19.703176');
 INSERT INTO `building_type` VALUES (3, 'Khu nhà trọ', '2019-10-17 04:26:14.933942', '2019-10-17 04:26:14.933942');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for feedback
 -- ----------------------------
 DROP TABLE IF EXISTS `feedback`;
-CREATE TABLE `feedback` (
+CREATE TABLE `feedback`  (
   `feedback_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the feedback',
-  `user_id` int(5) DEFAULT NULL COMMENT 'ID of user who sends the feedback',
-  `email` varchar(255) DEFAULT NULL COMMENT 'Email of the user who sends feedback',
-  `content` text NOT NULL COMMENT 'Content of the feedback',
+  `user_id` int(5) NULL DEFAULT NULL COMMENT 'ID of user who sends the feedback',
+  `email` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Email of the user who sends feedback',
+  `content` text CHARACTER SET utf8mb4  NOT NULL COMMENT 'Content of the feedback',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`feedback_id`) USING BTREE,
-  KEY `FK_user_feedback` (`user_id`) USING BTREE,
-  CONSTRAINT `FK_user_feedback` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_user_feedback`(`user_id`) USING BTREE,
+  CONSTRAINT `FK_user_feedback` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of feedback
 -- ----------------------------
-BEGIN;
 INSERT INTO `feedback` VALUES (1, 1, 'email', 'feedback', NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for host_review
 -- ----------------------------
 DROP TABLE IF EXISTS `host_review`;
-CREATE TABLE `host_review` (
+CREATE TABLE `host_review`  (
   `review_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the review',
-  `host_id` int(5) DEFAULT NULL COMMENT 'ID of the host who sends the review',
-  `tenant_id` int(5) DEFAULT NULL COMMENT 'ID of targeted tenant of the review',
-  `comment` text COMMENT 'Content of the comment',
+  `host_id` int(5) NULL DEFAULT NULL COMMENT 'ID of the host who sends the review',
+  `tenant_id` int(5) NULL DEFAULT NULL COMMENT 'ID of targeted tenant of the review',
+  `comment` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the comment',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`review_id`) USING BTREE,
-  KEY `FK_user_host` (`host_id`) USING BTREE,
-  KEY `FK_user_tenant` (`tenant_id`) USING BTREE,
-  CONSTRAINT `FK_user_host` FOREIGN KEY (`host_id`) REFERENCES `user` (`user_id`),
-  CONSTRAINT `FK_user_tenant` FOREIGN KEY (`tenant_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_user_host`(`host_id`) USING BTREE,
+  INDEX `FK_user_tenant`(`tenant_id`) USING BTREE,
+  CONSTRAINT `FK_user_host` FOREIGN KEY (`host_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_tenant` FOREIGN KEY (`tenant_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of host_review
 -- ----------------------------
-BEGIN;
 INSERT INTO `host_review` VALUES (1, 1, 2, 'good', NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for reported_room
 -- ----------------------------
 DROP TABLE IF EXISTS `reported_room`;
-CREATE TABLE `reported_room` (
+CREATE TABLE `reported_room`  (
   `user_id` int(5) NOT NULL COMMENT 'ID of user who sends the report',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of reported room group',
-  `report_content` text COMMENT 'Content of the report',
+  `report_content` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the report',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
-  PRIMARY KEY (`user_id`,`room_group_id`) USING BTREE,
-  KEY `FK_room_report` (`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_room_report` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`),
-  CONSTRAINT `FK_user_report` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  PRIMARY KEY (`user_id`, `room_group_id`) USING BTREE,
+  INDEX `FK_room_report`(`room_group_id`) USING BTREE,
+  CONSTRAINT `FK_room_report` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_report` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of reported_room
 -- ----------------------------
-BEGIN;
 INSERT INTO `reported_room` VALUES (1, 2, 'messy', NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for room
 -- ----------------------------
 DROP TABLE IF EXISTS `room`;
-CREATE TABLE `room` (
+CREATE TABLE `room`  (
   `room_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the room',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of group that room belongs to',
-  `room_name` text COMMENT 'name of the room',
-  `room_status` tinyint(2) DEFAULT NULL COMMENT 'Room status code',
-  `min_deposit_period` int(5) DEFAULT NULL COMMENT 'minimun months of deposit',
+  `room_name` text CHARACTER SET utf8mb4  NULL COMMENT 'name of the room',
+  `room_status` tinyint(2) NULL DEFAULT NULL COMMENT 'Room status code',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`room_id`) USING BTREE,
-  KEY `FK_room_group` (`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_room_group` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_room_group`(`room_group_id`) USING BTREE,
+  CONSTRAINT `FK_room_group` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room
 -- ----------------------------
-BEGIN;
-INSERT INTO `room` VALUES (1, 5, '104', 1, 1, '2019-10-29 17:02:11.229066', '2019-10-29 17:02:11.229066');
-INSERT INTO `room` VALUES (2, 5, '102', 1, 1, '2019-10-29 17:02:11.561850', '2019-10-29 17:02:11.561850');
-INSERT INTO `room` VALUES (3, 5, '107', 1, 1, '2019-10-29 17:02:11.887191', '2019-10-29 17:02:11.887191');
-INSERT INTO `room` VALUES (4, 8, '201', 1, 2, '2019-10-29 17:02:12.784098', '2019-10-29 17:02:12.784098');
-INSERT INTO `room` VALUES (5, 8, '202', 0, 1, '2019-10-29 17:02:13.164253', '2019-10-29 17:02:13.164253');
-INSERT INTO `room` VALUES (6, 8, '301', 1, 2, '2019-10-29 17:02:13.928063', '2019-10-29 17:02:13.928063');
-INSERT INTO `room` VALUES (7, 8, '302', 0, 1, '2019-10-29 17:02:14.403061', '2019-10-29 17:02:14.403061');
-INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, 1, '2019-10-29 17:02:15.185133', '2019-10-29 17:02:15.185133');
-INSERT INTO `room` VALUES (9, 10, 'Thuê cả nhà', 1, NULL, NULL, NULL);
-COMMIT;
+INSERT INTO `room` VALUES (1, 5, '104', 1, '2019-10-29 17:02:11.229066', '2019-10-29 17:02:11.229066');
+INSERT INTO `room` VALUES (2, 5, '102', 1, '2019-10-29 17:02:11.561850', '2019-10-29 17:02:11.561850');
+INSERT INTO `room` VALUES (3, 5, '107', 1, '2019-10-29 17:02:11.887191', '2019-10-29 17:02:11.887191');
+INSERT INTO `room` VALUES (4, 8, '201', 1, '2019-10-29 17:02:12.784098', '2019-10-29 17:02:12.784098');
+INSERT INTO `room` VALUES (5, 8, '202', 0, '2019-10-29 17:02:13.164253', '2019-10-29 17:02:13.164253');
+INSERT INTO `room` VALUES (6, 8, '301', 1, '2019-10-29 17:02:13.928063', '2019-10-29 17:02:13.928063');
+INSERT INTO `room` VALUES (7, 8, '302', 0, '2019-10-29 17:02:14.403061', '2019-10-29 17:02:14.403061');
+INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, '2019-10-29 17:02:15.185133', '2019-10-29 17:02:15.185133');
 
 -- ----------------------------
 -- Table structure for room_amenities
 -- ----------------------------
 DROP TABLE IF EXISTS `room_amenities`;
-CREATE TABLE `room_amenities` (
+CREATE TABLE `room_amenities`  (
   `room_group_id` int(5) NOT NULL COMMENT 'ID of the room group',
   `amenities_id` int(5) NOT NULL COMMENT 'ID of amenities in the room group',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
-  PRIMARY KEY (`room_group_id`,`amenities_id`) USING BTREE,
-  KEY `FK_Amenities-Room_Amenities` (`amenities_id`) USING BTREE,
-  CONSTRAINT `FK_Amenities-Room_Amenities` FOREIGN KEY (`amenities_id`) REFERENCES `amenities` (`amenities_id`),
-  CONSTRAINT `FK_Room-Room_Amenities` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  PRIMARY KEY (`room_group_id`, `amenities_id`) USING BTREE,
+  INDEX `FK_Amenities-Room_Amenities`(`amenities_id`) USING BTREE,
+  CONSTRAINT `FK_Amenities-Room_Amenities` FOREIGN KEY (`amenities_id`) REFERENCES `amenities` (`amenities_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_Room-Room_Amenities` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_amenities
 -- ----------------------------
-BEGIN;
 INSERT INTO `room_amenities` VALUES (2, 1, NULL, NULL);
 INSERT INTO `room_amenities` VALUES (2, 2, NULL, NULL);
 INSERT INTO `room_amenities` VALUES (5, 1, NULL, NULL);
@@ -294,77 +300,65 @@ INSERT INTO `room_amenities` VALUES (9, 4, NULL, NULL);
 INSERT INTO `room_amenities` VALUES (9, 6, NULL, NULL);
 INSERT INTO `room_amenities` VALUES (9, 7, NULL, NULL);
 INSERT INTO `room_amenities` VALUES (9, 8, NULL, NULL);
-INSERT INTO `room_amenities` VALUES (10, 1, NULL, NULL);
-INSERT INTO `room_amenities` VALUES (10, 2, NULL, NULL);
-INSERT INTO `room_amenities` VALUES (10, 3, NULL, NULL);
-INSERT INTO `room_amenities` VALUES (10, 4, NULL, NULL);
-INSERT INTO `room_amenities` VALUES (10, 6, NULL, NULL);
-INSERT INTO `room_amenities` VALUES (10, 7, NULL, NULL);
-INSERT INTO `room_amenities` VALUES (10, 8, NULL, NULL);
-INSERT INTO `room_amenities` VALUES (10, 9, NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for room_group
 -- ----------------------------
 DROP TABLE IF EXISTS `room_group`;
-CREATE TABLE `room_group` (
+CREATE TABLE `room_group`  (
   `room_group_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the room group',
-  `building_id` int(5) DEFAULT NULL COMMENT 'ID of the building that the group belongs to',
-  `gender` bit(1) DEFAULT NULL COMMENT 'Gender in the group',
-  `rent_price` double(10,0) DEFAULT NULL COMMENT 'Rent price of the room group',
-  `area` double(10,0) DEFAULT NULL COMMENT 'Area of the room group',
-  `bedroom_quantity` int(5) DEFAULT NULL COMMENT 'Number of  bedrooms in the building',
-  `bathroom_quantity` int(5) DEFAULT NULL COMMENT 'Number of bathrooms in the building',
-  `wc_quantity` int(5) DEFAULT NULL COMMENT 'Number of WCs in the building',
-  `direction` varchar(255) DEFAULT NULL COMMENT 'direction of the room',
-  `is_available` bit(1) DEFAULT NULL COMMENT 'The group is available or not',
-  `is_verified` bit(1) DEFAULT NULL COMMENT 'Room group is verified or not',
-  `deposit_price` double(10,0) DEFAULT NULL COMMENT 'Deposit price of the room group',
-  `description` text COMMENT 'Description of the room group',
-  `capacity` int(10) DEFAULT NULL COMMENT 'Capacity of the room group',
-  `view_amount` int(10) DEFAULT NULL COMMENT 'View amount of the room group',
-  `phone_view_amount` int(10) DEFAULT NULL COMMENT 'View via phone amount of the room group',
-  `is_sponsored` bit(1) DEFAULT NULL COMMENT 'The room group is sponsored or not',
+  `building_id` int(5) NULL DEFAULT NULL COMMENT 'ID of the building that the group belongs to',
+  `gender` bit(1) NULL DEFAULT NULL COMMENT 'Gender in the group',
+  `rent_price` double(10, 0) NULL DEFAULT NULL COMMENT 'Rent price of the room group',
+  `min_deposit_period` int(5) NULL DEFAULT NULL COMMENT 'minimun months of deposit',
+  `area` double(10, 0) NULL DEFAULT NULL COMMENT 'Area of the room group',
+  `bedroom_quantity` int(5) NULL DEFAULT NULL COMMENT 'Number of  bedrooms in the building',
+  `bathroom_quantity` int(5) NULL DEFAULT NULL COMMENT 'Number of bathrooms in the building',
+  `wc_quantity` int(5) NULL DEFAULT NULL COMMENT 'Number of WCs in the building',
+  `direction` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'direction of the room',
+  `is_available` bit(1) NULL DEFAULT NULL COMMENT 'The group is available or not',
+  `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'Room group is verified or not',
+  `deposit_price` double(10, 0) NULL DEFAULT NULL COMMENT 'Deposit price of the room group',
+  `description` text CHARACTER SET utf8mb4  NULL COMMENT 'Description of the room group',
+  `capacity` int(10) NULL DEFAULT NULL COMMENT 'Capacity of the room group',
+  `view_amount` int(10) NULL DEFAULT NULL COMMENT 'View amount of the room group',
+  `phone_view_amount` int(10) NULL DEFAULT NULL COMMENT 'View via phone amount of the room group',
+  `is_sponsored` bit(1) NULL DEFAULT NULL COMMENT 'The room group is sponsored or not',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`room_group_id`) USING BTREE,
-  KEY `FK_room_group_building` (`building_id`) USING BTREE,
-  CONSTRAINT `FK_room_group_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_room_group_building`(`building_id`) USING BTREE,
+  CONSTRAINT `FK_room_group_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_group
 -- ----------------------------
-BEGIN;
-INSERT INTO `room_group` VALUES (2, 1, b'1', 2000000, 100, 1, 1, 1, 'west', b'1', b'1', 1400000, 'Nha tro', 44, 100, 100, b'1', '2019-10-15 15:26:10.044681', '2019-10-15 15:26:10.044681');
-INSERT INTO `room_group` VALUES (5, 1, b'1', 2500000, 100, 1, 1, 1, 'east', b'1', b'1', 1400000, 'Nha tro', 44, 100, 100, b'0', '2019-10-15 15:26:17.303083', '2019-10-15 15:26:17.303083');
-INSERT INTO `room_group` VALUES (6, 2, b'1', 2500000, 100, 1, 1, 1, 'north', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-15 15:26:19.469810', '2019-10-15 15:26:19.469810');
-INSERT INTO `room_group` VALUES (7, 2, b'1', 2500000, 100, 1, 1, 1, 'south', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-15 15:26:22.861635', '2019-10-15 15:26:22.861635');
-INSERT INTO `room_group` VALUES (8, 4, NULL, 1200000, 60, 1, 1, NULL, '- Điều hòa, sàn gỗ, giường tủ\n- Gần chợ, ĐH văn hóa, ĐH Mỹ thuật công nghiệp...\n- An ninh tốt, khu dân trí cao', NULL, NULL, 1000000, '', 3, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `room_group` VALUES (9, 6, NULL, NULL, 200, 2, 2, NULL, '', NULL, NULL, NULL, 'Phòng view đẹp ', 4, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `room_group` VALUES (10, 7, NULL, 8500000, 100, 1, 1, NULL, 'Đông Bắc', NULL, NULL, 5000000, 'Nhà đẹp hướng sông tô lịch', 2, NULL, NULL, NULL, NULL, NULL);
-COMMIT;
+INSERT INTO `room_group` VALUES (2, 1, b'1', 2000000, 1, 100, 1, 1, 1, 'west', b'1', b'1', 1400000, 'Nha tro', 44, 100, 100, b'1', '2019-10-31 14:15:49.429576', '2019-10-31 14:15:49.429576');
+INSERT INTO `room_group` VALUES (5, 1, b'1', 2500000, 2, 100, 1, 1, 1, 'east', b'1', b'1', 1400000, 'Nha tro', 44, 100, 100, b'0', '2019-10-31 14:15:49.988242', '2019-10-31 14:15:49.988242');
+INSERT INTO `room_group` VALUES (6, 2, b'1', 2500000, 1, 100, 1, 1, 1, 'north', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-31 14:15:50.409346', '2019-10-31 14:15:50.409346');
+INSERT INTO `room_group` VALUES (7, 2, b'1', 2500000, 2, 100, 1, 1, 1, 'south', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-31 14:15:50.999600', '2019-10-31 14:15:50.999600');
+INSERT INTO `room_group` VALUES (8, 4, NULL, 1200000, 2, 60, 1, 1, NULL, '- Điều hòa, sàn gỗ, giường tủ\n- Gần chợ, ĐH văn hóa, ĐH Mỹ thuật công nghiệp...\n- An ninh tốt, khu dân trí cao', NULL, NULL, 1000000, '', 3, NULL, NULL, NULL, '2019-10-31 14:15:51.641910', '2019-10-31 14:15:51.641910');
+INSERT INTO `room_group` VALUES (9, 6, NULL, NULL, 2, 200, 2, 2, NULL, '', NULL, NULL, NULL, 'Phòng view đẹp ', 4, NULL, NULL, NULL, '2019-10-31 14:15:54.048007', '2019-10-31 14:15:54.048007');
 
 -- ----------------------------
 -- Table structure for room_image
 -- ----------------------------
 DROP TABLE IF EXISTS `room_image`;
-CREATE TABLE `room_image` (
+CREATE TABLE `room_image`  (
   `image_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the image',
-  `image_url` text COMMENT 'URL of the image',
-  `room_group_id` int(2) DEFAULT NULL COMMENT 'ID of room group of image',
+  `image_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL of the image',
+  `room_group_id` int(2) NULL DEFAULT NULL COMMENT 'ID of room group of image',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`image_id`) USING BTREE,
-  KEY `FK_roomGroup_image` (`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_roomGroup_image` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_roomGroup_image`(`room_group_id`) USING BTREE,
+  CONSTRAINT `FK_roomGroup_image` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_image
 -- ----------------------------
-BEGIN;
 INSERT INTO `room_image` VALUES (2, 'https://q-xx.bstatic.com/xdata/images/hotel/840x460/174379346.jpg?k=e7f909825cb86d6cf345cd5b0792257264f620199e384cd325b7457719dd6740&o=', 2, '2019-10-16 13:53:26.619273', '2019-10-16 13:53:26.619273');
 INSERT INTO `room_image` VALUES (3, 'https://www.hoteljob.vn/files/Anh-HTJ-Hong/homestay-la-gi.jpg', 5, '2019-10-16 13:53:38.324897', '2019-10-16 13:53:38.324897');
 INSERT INTO `room_image` VALUES (5, 'data:image/jpeg;base64,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', 5, '2019-10-16 13:53:45.146095', '2019-10-16 13:53:45.146095');
@@ -378,53 +372,44 @@ INSERT INTO `room_image` VALUES (12, 'https://storage.googleapis.com/room_images
 INSERT INTO `room_image` VALUES (13, 'https://storage.googleapis.com/room_images_bucket/23-10-2019-9-1.jpg', 9, NULL, NULL);
 INSERT INTO `room_image` VALUES (14, 'https://storage.googleapis.com/room_images_bucket/23-10-2019-9-3.jpg', 9, NULL, NULL);
 INSERT INTO `room_image` VALUES (15, 'https://storage.googleapis.com/room_images_bucket/23-10-2019-9-4.jpg', 9, NULL, NULL);
-INSERT INTO `room_image` VALUES (16, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572701928435-4', 10, NULL, NULL);
-INSERT INTO `room_image` VALUES (17, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572701928435-2', 10, NULL, NULL);
-INSERT INTO `room_image` VALUES (18, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572701928435-10', 10, NULL, NULL);
-INSERT INTO `room_image` VALUES (19, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572701928435-8', 10, NULL, NULL);
-INSERT INTO `room_image` VALUES (20, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572701928435-6', 10, NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for saved_room
 -- ----------------------------
 DROP TABLE IF EXISTS `saved_room`;
-CREATE TABLE `saved_room` (
+CREATE TABLE `saved_room`  (
   `user_id` int(5) NOT NULL COMMENT 'ID of the user who saved the room',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of the saved room group',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
-  PRIMARY KEY (`user_id`,`room_group_id`) USING BTREE,
-  KEY `FK_room_group_saved_room` (`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_room_group_saved_room` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`),
-  CONSTRAINT `FK_user_saved_room` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  PRIMARY KEY (`user_id`, `room_group_id`) USING BTREE,
+  INDEX `FK_room_group_saved_room`(`room_group_id`) USING BTREE,
+  CONSTRAINT `FK_room_group_saved_room` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_saved_room` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of saved_room
 -- ----------------------------
-BEGIN;
 INSERT INTO `saved_room` VALUES (1, 2, NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for service
 -- ----------------------------
 DROP TABLE IF EXISTS `service`;
-CREATE TABLE `service` (
+CREATE TABLE `service`  (
   `service_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the service',
-  `icon_id` varchar(50) DEFAULT NULL,
-  `service_name` varchar(255) DEFAULT NULL COMMENT 'Name of the service',
-  `description` text COMMENT 'Description of the service',
+  `icon_id` varchar(50) CHARACTER SET utf8mb4  NULL DEFAULT NULL,
+  `service_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of the service',
+  `description` text CHARACTER SET utf8mb4  NULL COMMENT 'Description of the service',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`service_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of service
 -- ----------------------------
-BEGIN;
 INSERT INTO `service` VALUES (1, '1', 'Wifi', 'Internet access', '2019-10-23 12:18:47.727281', '2019-10-23 12:18:47.727281');
 INSERT INTO `service` VALUES (2, '2', 'Điện', 'Giá điện', '2019-10-23 12:18:48.405884', '2019-10-23 12:18:48.405884');
 INSERT INTO `service` VALUES (3, '3', 'Nước', 'Giá nước', '2019-10-23 12:18:49.143173', '2019-10-23 12:18:49.143173');
@@ -432,125 +417,117 @@ INSERT INTO `service` VALUES (4, '4', 'Bảo vệ', 'Bảo vệ vật tư', '201
 INSERT INTO `service` VALUES (5, '5', 'Giặt đồ', 'Giặt quần áo', '2019-10-23 12:18:50.828194', '2019-10-23 12:18:50.828194');
 INSERT INTO `service` VALUES (6, '6', 'Trông xe', 'Trông xe tại nhà', '2019-10-23 12:18:51.756663', '2019-10-23 12:18:51.756663');
 INSERT INTO `service` VALUES (7, '7', 'Dọn vệ sinh', 'Dịch vụ dọn vệ sinh tận phòng', '2019-10-23 12:18:52.902631', '2019-10-23 12:18:52.902631');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for tenant_review
 -- ----------------------------
 DROP TABLE IF EXISTS `tenant_review`;
-CREATE TABLE `tenant_review` (
+CREATE TABLE `tenant_review`  (
   `review_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the review',
   `user_id` int(5) NOT NULL COMMENT 'ID of user who sends the review',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of reviewed room group',
-  `comment` text COMMENT 'Content of the review',
-  `accuracy_star` int(2) DEFAULT NULL COMMENT 'Rating stars for accuracy',
-  `host_star` int(2) DEFAULT NULL COMMENT 'Rating stars for hosting',
-  `security_star` int(2) DEFAULT NULL COMMENT 'Rating stars for security',
+  `comment` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the review',
+  `accuracy_star` int(2) NULL DEFAULT NULL COMMENT 'Rating stars for accuracy',
+  `host_star` int(2) NULL DEFAULT NULL COMMENT 'Rating stars for hosting',
+  `security_star` int(2) NULL DEFAULT NULL COMMENT 'Rating stars for security',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`review_id`) USING BTREE,
-  KEY `FK_user_tenant_review` (`user_id`) USING BTREE,
-  KEY `FK_room_group_review` (`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_room_group_review` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`),
-  CONSTRAINT `FK_user_tenant_review` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_user_tenant_review`(`user_id`) USING BTREE,
+  INDEX `FK_room_group_review`(`room_group_id`) USING BTREE,
+  CONSTRAINT `FK_room_group_review` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_tenant_review` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tenant_review
 -- ----------------------------
-BEGIN;
 INSERT INTO `tenant_review` VALUES (1, 1, 2, 'good ', 3, 4, 5, NULL, NULL);
 INSERT INTO `tenant_review` VALUES (2, 1, 8, 'nice', 4, 5, 4, NULL, NULL);
 INSERT INTO `tenant_review` VALUES (3, 2, 8, NULL, 5, 3, 3, NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for transaction
 -- ----------------------------
 DROP TABLE IF EXISTS `transaction`;
-CREATE TABLE `transaction` (
+CREATE TABLE `transaction`  (
   `transaction_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the transaction',
   `user_id` int(5) NOT NULL COMMENT 'ID of the user who make the transaction',
   `room_id` int(5) NOT NULL COMMENT 'ID of room in the transaction',
-  `is_transited` bit(1) DEFAULT NULL COMMENT 'deposit money transited to host or not',
+  `transaction_status` tinyint(1) NULL DEFAULT NULL COMMENT 'Status code of the transaction',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`transaction_id`) USING BTREE,
-  KEY `FK_User_Transaction` (`user_id`) USING BTREE,
-  KEY `FK_Room_Transaction` (`room_id`) USING BTREE,
-  CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`),
-  CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_User_Transaction`(`user_id`) USING BTREE,
+  INDEX `FK_Room_Transaction`(`room_id`) USING BTREE,
+  CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of transaction
 -- ----------------------------
-BEGIN;
-INSERT INTO `transaction` VALUES (1, 1, 1, b'1', '2019-10-08 21:14:41.938875', '2019-10-08 21:14:41.938875');
-COMMIT;
+INSERT INTO `transaction` VALUES (1, 1, 1, 1, '2019-10-08 21:14:41.938875', '2019-10-08 21:14:41.938875');
 
 -- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
+CREATE TABLE `user`  (
   `user_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the user',
-  `first_name` varchar(255) DEFAULT NULL COMMENT 'First name of the user',
-  `last_name` varchar(255) DEFAULT NULL COMMENT 'Last name of the user',
-  `phone_number` varchar(20) DEFAULT NULL COMMENT 'Phone number of the user',
-  `password` varchar(255) DEFAULT NULL COMMENT 'Password of user',
-  `phone_token` text COMMENT 'Phone token of the user',
-  `role_admin` varchar(255) DEFAULT NULL COMMENT 'Role of account login admin page',
-  `gender` bit(1) DEFAULT NULL COMMENT 'Gender of the user',
-  `facebook_id` varchar(255) DEFAULT NULL COMMENT 'Facebook ID of the user',
-  `google_id` varchar(255) DEFAULT NULL COMMENT 'Google ID of the user',
-  `email` varchar(255) DEFAULT NULL COMMENT 'Email of the user',
-  `avatar` text COMMENT 'Avatar URL of the user',
-  `address` text COMMENT 'Address of the user',
-  `is_phone_number_verified` bit(1) DEFAULT NULL COMMENT 'User phone number is verified or not',
-  `is_selfie_verified` bit(1) DEFAULT NULL COMMENT 'User selfie image is verified or not',
-  `is_government_id_verified` bit(1) DEFAULT NULL COMMENT 'User government id card is verified or not',
-  `is_verified` bit(1) DEFAULT NULL COMMENT 'User is verified or not',
-  `is_host` bit(1) DEFAULT NULL COMMENT 'User is host or not',
-  `is_active` bit(1) DEFAULT NULL COMMENT 'User is active or not',
+  `first_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'First name of the user',
+  `last_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Last name of the user',
+  `phone_number` varchar(20) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Phone number of the user',
+  `password` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Password of user',
+  `phone_token` text CHARACTER SET utf8mb4  NULL COMMENT 'Phone token of the user',
+  `role_admin` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Role of account login admin page',
+  `gender` bit(1) NULL DEFAULT NULL COMMENT 'Gender of the user',
+  `facebook_id` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Facebook ID of the user',
+  `google_id` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Google ID of the user',
+  `email` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Email of the user',
+  `avatar` text CHARACTER SET utf8mb4  NULL COMMENT 'Avatar URL of the user',
+  `address` text CHARACTER SET utf8mb4  NULL COMMENT 'Address of the user',
+  `is_phone_number_verified` bit(1) NULL DEFAULT NULL COMMENT 'User phone number is verified or not',
+  `is_selfie_verified` bit(1) NULL DEFAULT NULL COMMENT 'User selfie image is verified or not',
+  `is_government_id_verified` bit(1) NULL DEFAULT NULL COMMENT 'User government id card is verified or not',
+  `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'User is verified or not',
+  `is_host` bit(1) NULL DEFAULT NULL COMMENT 'User is host or not',
+  `is_active` bit(1) NULL DEFAULT NULL COMMENT 'User is active or not',
+  `balance` double(20, 0) NULL DEFAULT NULL COMMENT 'Balance of user in system',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-BEGIN;
-INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hoa Lac', b'1', b'1', b'1', b'1', b'1', b'1', '2019-10-29 16:59:51.292078', '2019-10-29 16:59:51.292078');
-INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hanoi', b'0', b'1', b'1', b'0', b'1', b'1', '2019-10-29 16:59:52.243773', '2019-10-29 16:59:52.243773');
-INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'0', b'0', NULL, NULL, '2019-10-29 16:59:53.214943', '2019-10-29 16:59:53.214943');
-INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'1', b'1', NULL, NULL, '2019-10-29 16:59:53.947092', '2019-10-29 16:59:53.947092');
-INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', NULL, NULL, NULL, NULL, b'1', NULL, b'1', '2019-10-29 16:59:54.903230', '2019-10-29 16:59:54.903230');
-COMMIT;
+INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hoa Lac', b'1', b'1', b'1', b'1', b'1', b'1', 0, '2019-11-02 05:37:51.457571', '2019-11-02 05:37:51.457571');
+INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hanoi', b'0', b'1', b'1', b'0', b'1', b'1', 0, '2019-11-02 05:37:51.802284', '2019-11-02 05:37:51.802284');
+INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'0', b'0', NULL, NULL, 0, '2019-11-02 05:37:52.191719', '2019-11-02 05:37:52.191719');
+INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'1', b'1', NULL, NULL, 0, '2019-11-02 05:37:52.603088', '2019-11-02 05:37:52.603088');
+INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', NULL, NULL, NULL, NULL, b'1', NULL, b'1', 0, '2019-11-02 05:37:54.882924', '2019-11-02 05:37:54.882924');
 
 -- ----------------------------
 -- Table structure for user_verification_image
 -- ----------------------------
 DROP TABLE IF EXISTS `user_verification_image`;
-CREATE TABLE `user_verification_image` (
+CREATE TABLE `user_verification_image`  (
   `card_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the user card',
   `user_id` int(5) NOT NULL COMMENT 'ID of the user',
-  `id_card_front_url` text COMMENT 'URL to the front side of the ID Lisence Card image',
-  `id_card_back_url` text COMMENT 'URL to the back side of the ID Lisence Card image',
-  `selfie_url` text COMMENT 'URL to the selfie image of the user',
+  `id_card_front_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL to the front side of the ID Lisence Card image',
+  `id_card_back_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL to the back side of the ID Lisence Card image',
+  `selfie_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL to the selfie image of the user',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`card_id`) USING BTREE,
-  KEY `FK_user_verification` (`user_id`) USING BTREE,
-  CONSTRAINT `FK_user_verification` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_user_verification`(`user_id`) USING BTREE,
+  CONSTRAINT `FK_user_verification` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_verification_image
 -- ----------------------------
-BEGIN;
 INSERT INTO `user_verification_image` VALUES (1, 1, 'front update', 'back', 'selfie', NULL, NULL);
-COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
