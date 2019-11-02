@@ -36,13 +36,7 @@ export default class RoomGroupFunction {
    * @param next
    */
   static createRoomGroup: Handler = async (req: Request, res: Response, next: NextFunction) => {
-    const { buildingId, data } = req.body || {};
-
-    /**
-     * Validate form room group is valid
-     */
-    const error = await validateByModel(RoomGroup, data);
-    if (error) next(new HTTP400Error(error));
+    const { buildingId, roomGroupId, data } = req.body || {};
 
     /**
      * format data for room (Nhà nguyên căn, Căn hộ chung cư => Thuê cả nhà [1 đơn vị])
@@ -51,61 +45,56 @@ export default class RoomGroupFunction {
     let roomData = ['Thuê cả nhà'];
     if (data.roomNames && Array.isArray(data.roomNames) && data.roomNames.length > 0) roomData = data.roomNames;
 
-    const newRoomGroup = await RoomGroup.repo.save({ buildingId, ...data });
-    let formatRoomData = roomData.map(room => {
-      return { roomGroupId: newRoomGroup.id, roomName: room, roomStatus: ConstantValues.ROOM_AVAILABLE };
-    });
-
-    const responseRoomGroup = await RoomGroup.repo.findOne({ id: newRoomGroup.id });
-    const responseRoom = await Room.repo.createMultipleRooms(formatRoomData, newRoomGroup.id);
-
-    /**
-     * insert into ES
-     */
-    // await EsFunction.createRoomES(responseRoomGroup);
-
-    res.status(200).send({
-      roomGroupId: newRoomGroup.id,
-      dataResponse: {
-        roomGroupData: responseRoomGroup,
-        roomData: responseRoom,
-      },
-    });
-
     /**
      * Check roomGroupId if room group is exits when update else create
      */
-    // console.log(roomGroupId);
-    // if (roomGroupId) {
-    //   const successResponse = await RoomGroup.repo.updateById(roomGroupId, data);
-    //
-    //   let roomCreateData = [], updatePromise = [];
-    //   for (let i = 0; i < roomData.length; i++) {
-    //     if (isObject(roomData[i])) {
-    //       updatePromise.push(Room.repo.updateById(roomData[i]['roomId'], {
-    //         roomStatus: roomData[i]['roomStatus'],
-    //         roomName: roomData[i]['roomName'],
-    //       }));
-    //     } else {
-    //       roomCreateData.push({
-    //         roomGroupId, roomName: roomData[i], roomStatus: ConstantValues.ROOM_AVAILABLE,
-    //       });
-    //     }
-    //   }
-    //
-    //   await Promise.all(updatePromise);
-    //   if (roomCreateData.length) await Room.repo.createMultipleRooms(roomCreateData, roomGroupId);
-    //
-    //   const responseRoom = await Room.repo.getRoomsByRoomGroupId(roomGroupId);
-    //
-    //   if (!successResponse) next(new HTTP400Error('RoomGroupId not found'));
-    //   res.status(200).send({
-    //     roomGroupId, dataResponse: {
-    //       roomGroupData: successResponse,
-    //       roomData: responseRoom,
-    //     },
-    //   });
-    // }
+    if (roomGroupId) {
+      // update room group information
+      const successResponse = await RoomGroup.repo.updateById(roomGroupId, data);
+
+      let roomCreateData = [], updatePromise = [];
+      for (let i = 0; i < roomData.length; i++) {
+        if (isObject(roomData[i])) updatePromise.push(Room.repo.updateById(roomData[i]['roomId'], {
+          roomStatus: roomData[i]['roomStatus'],
+          roomName: roomData[i]['roomName'],
+        }));
+
+        else roomCreateData.push({
+          roomGroupId, roomName: roomData[i], roomStatus: ConstantValues.ROOM_AVAILABLE,
+        });
+      }
+
+      if (roomCreateData.length) await Room.repo.createMultipleRooms(roomCreateData, roomGroupId);
+      await Promise.all(updatePromise);
+
+      if (!successResponse) next(new HTTP400Error('RoomGroupId not found'));
+      res.status(200).send({
+        roomGroupId, dataResponse: {
+          roomGroupData: successResponse,
+        },
+      });
+    } else {
+      const newRoomGroup = await RoomGroup.repo.save({ buildingId, ...data });
+      let formatRoomData = roomData.map(room => {
+        return { roomGroupId: newRoomGroup.id, roomName: room, roomStatus: ConstantValues.ROOM_AVAILABLE };
+      });
+
+      const responseRoomGroup = await RoomGroup.repo.findOne({ id: newRoomGroup.id });
+      const responseRoom = await Room.repo.createMultipleRooms(formatRoomData, newRoomGroup.id);
+
+      /**
+       * insert into ES
+       */
+      // await EsFunction.createRoomES(responseRoomGroup);
+
+      res.status(200).send({
+        roomGroupId: newRoomGroup.id,
+        dataResponse: {
+          roomGroupData: responseRoomGroup,
+          roomData: responseRoom,
+        },
+      });
+    }
   };
 
   static getRoomGroupDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
