@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 03/11/2019 00:02:54
+ Date: 03/11/2019 16:49:15
 */
 
 SET NAMES utf8mb4;
@@ -53,7 +53,6 @@ INSERT INTO `amenities` VALUES (11, '11', 'Bàn ghế', '', NULL, '2019-10-23 12
 DROP TABLE IF EXISTS `bank_transfer_history`;
 CREATE TABLE `bank_transfer_history`  (
   `transfer_id` int(4) NOT NULL AUTO_INCREMENT COMMENT 'ID of the bank transferation',
-  `transaction_id` int(5) NULL DEFAULT NULL COMMENT 'ID of related transaction',
   `sender_user_id` int(5) NULL DEFAULT NULL COMMENT 'Sender user id',
   `sender_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of sender',
   `sender_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Sender account number',
@@ -64,21 +63,21 @@ CREATE TABLE `bank_transfer_history`  (
   `receiver_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Receiver user type',
   `transfer_time` timestamp(6) NULL DEFAULT NULL COMMENT 'Time of transferation',
   `money_amount` double(10, 0) NULL DEFAULT NULL COMMENT 'Money amount of the transfer',
+  `transfer_note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Note of transfer',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`transfer_id`) USING BTREE,
   INDEX `FK_user_bank_transfer_history-sender_id`(`sender_user_id`) USING BTREE,
   INDEX `FK_user_bank_transfer_history-receiver_id`(`receiver_user_id`) USING BTREE,
-  INDEX `FK_transaction_bank_transfer_history_transaction_id`(`transaction_id`) USING BTREE,
-  CONSTRAINT `FK_transaction_bank_transfer_history_transaction_id` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`transaction_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of bank_transfer_history
 -- ----------------------------
-INSERT INTO `bank_transfer_history` VALUES (1, 1, 1, 'BIDV', '1234', 1, 2, 'TPBank', '5678', 2, '2019-11-02 13:54:02.079330', 100000, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (1, 1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC.1', '2019-11-03 09:28:58.879061', '2019-11-03 09:28:58.879061');
+INSERT INTO `bank_transfer_history` VALUES (2, 2, 'SGD NHNN VIET NAM', '00000034005', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC.3', '2019-11-03 09:29:18.634881', '2019-11-03 09:29:18.634881');
 
 -- ----------------------------
 -- Table structure for building
@@ -467,12 +466,15 @@ CREATE TABLE `transaction`  (
   INDEX `FK_Room_Transaction`(`room_id`) USING BTREE,
   CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of transaction
 -- ----------------------------
-INSERT INTO `transaction` VALUES (1, 1, 1, 1, '2019-10-08 21:14:41.938875', '2019-10-08 21:14:41.938875');
+INSERT INTO `transaction` VALUES (1, 1, 1, 0, '2019-11-03 09:25:26.016203', '2019-11-03 09:25:26.016203');
+INSERT INTO `transaction` VALUES (2, 3, 5, 0, NULL, NULL);
+INSERT INTO `transaction` VALUES (3, 2, 3, 0, NULL, NULL);
+INSERT INTO `transaction` VALUES (4, 4, 4, 0, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for user

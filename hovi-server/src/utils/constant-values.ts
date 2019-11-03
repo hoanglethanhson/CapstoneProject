@@ -21,4 +21,9 @@ export class ConstantValues {
   static readonly ENOUGH_BALANCE = 1;
   static readonly EXPIRE_FAILED = -3;
   static readonly HOST_DEPOSIT_TRANSFERRED = 2;
+
+  //DEFINE ADMIN USER INFO
+  static readonly ADMIN_USER_ID = 5;
+  static readonly ADMIN_BANK = "TPBank";
+  static readonly ADMIN_ACCOUNT_NUMBER = "02725034001";
 }

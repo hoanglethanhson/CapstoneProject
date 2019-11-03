@@ -73,8 +73,6 @@ export class Transaction extends BaseEntity {
     })
     updateAt: Date;
 
-    bankTransferHistories: BankTransferHistory[];
-
     static get repo(): TransactionRepository {
         return getCustomRepository(TransactionRepository);
     }
@@ -95,4 +93,8 @@ export class TransactionRepository extends Repository<Transaction> {
         return transaction;
     }
 
+    async getTenantId(transactionId: any) {
+        let transaction = await this.findOne(transactionId);
+        return transaction.userId;
+    }
 }
