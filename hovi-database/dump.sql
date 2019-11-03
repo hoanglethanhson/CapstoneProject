@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 02/11/2019 15:01:14
+ Date: 02/11/2019 14:28:12
 */
 
 SET NAMES utf8mb4;
@@ -107,12 +107,13 @@ CREATE TABLE `building`  (
 -- ----------------------------
 -- Records of building
 -- ----------------------------
-INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, 'Hanoi', 'Thanh Xuan', 'Nhan Chinh', 'Tran Duy Hung', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:32.548000', '2019-10-14 07:21:32.548000');
-INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Trung Liet', 'Nguyen Luong Bang', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:53.649250', '2019-10-14 07:21:53.649250');
-INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Hao Nam', 'Lang Ha', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:22:13.185435', '2019-10-14 07:22:13.185435');
-INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, b'1', 1, 'Hà Nội', 'Hoàng Mai', 'Định Công', 'Định Công Hạ', '96A Định Công', NULL, '20.98470977059105,105.83861725767213', 4, NULL, 1, '2019-10-27 13:21:05.450599', '2019-10-27 13:21:05.450599');
-INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, b'1', 4, 'Hà Nội', 'Hai Bà Trưng', 'Minh Khai', NULL, '12 giai phong', NULL, '20.9714041,105.8409441', NULL, NULL, NULL, '2019-10-27 13:21:06.186437', '2019-10-27 13:21:06.186437');
-INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, b'0', 4, 'Hà Nội', 'Hà Đông', 'Dương Nội', NULL, '12 quang trung ha dong', NULL, '20.9462691,105.7438515', NULL, NULL, NULL, '2019-10-27 13:21:16.952949', '2019-10-27 13:21:16.952949');
+INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Tran Duy Hung', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:02.079330', '2019-11-02 13:54:02.079330');
+INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Nguyen Luong Bang', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:03.064471', '2019-11-02 13:54:03.064471');
+INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Lang Ha', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:03.748599', '2019-11-02 13:54:03.748599');
+INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Định Công Hạ', '96A Định Công', NULL, '20.98470977059105,105.83861725767213', 4, NULL, 1, '2019-11-02 13:54:04.361796', '2019-11-02 13:54:04.361796');
+INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, b'1', 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 giai phong', NULL, '20.9714041,105.8409441', NULL, NULL, NULL, '2019-11-02 13:54:05.921972', '2019-11-02 13:54:05.921972');
+INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, b'0', 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 quang trung ha dong', NULL, '20.9462691,105.7438515', NULL, NULL, NULL, '2019-11-02 13:54:05.195791', '2019-11-02 13:54:05.195791');
+INSERT INTO `building` VALUES (7, 'Chung cư An Nam', 1, NULL, 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 giai phong', '', '20.9714041,105.8409441', 23, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for building_service

@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : HoviDB
+ Source Server         : Concis_test2
  Source Server Type    : MySQL
  Source Server Version : 50727
  Source Host           : localhost:3307
@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 23/10/2019 21:49:28
+ Date: 02/11/2019 20:54:39
 */
 
 SET NAMES utf8mb4;
@@ -76,18 +76,19 @@ CREATE TABLE `building` (
   KEY `FK_user_building` (`host_id`) USING BTREE,
   CONSTRAINT `FK_type_building` FOREIGN KEY (`building_type_id`) REFERENCES `building_type` (`type_id`),
   CONSTRAINT `FK_user_building` FOREIGN KEY (`host_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of building
 -- ----------------------------
 BEGIN;
-INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, 'Hanoi', 'Thanh Xuan', 'Nhan Chinh', 'Tran Duy Hung', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:32.548000', '2019-10-14 07:21:32.548000');
-INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Trung Liet', 'Nguyen Luong Bang', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:21:53.649250', '2019-10-14 07:21:53.649250');
-INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, 'Hanoi', 'Dong Da', 'Hao Nam', 'Lang Ha', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-10-14 07:22:13.185435', '2019-10-14 07:22:13.185435');
-INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, NULL, NULL, 'Hà Nội', 'Hoàng Mai', 'Định Công', 'Định Công Hạ', '96A Định Công', NULL, '20.98470977059105,105.83861725767213', 4, NULL, 1, '2019-10-17 04:32:01.263736', '2019-10-17 04:32:01.263736');
-INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, NULL, 4, 'Hà Nội', 'Hai Bà Trưng', 'Minh Khai', NULL, '12 giai phong', NULL, '20.9714041,105.8409441', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, NULL, 4, 'Hà Nội', 'Hà Đông', 'Dương Nội', NULL, '12 quang trung ha dong', NULL, '20.9462691,105.7438515', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `building` VALUES (1, 'happy building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Tran Duy Hung', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:02.079330', '2019-11-02 13:54:02.079330');
+INSERT INTO `building` VALUES (2, 'new building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Nguyen Luong Bang', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:03.064471', '2019-11-02 13:54:03.064471');
+INSERT INTO `building` VALUES (3, '3rd building', 1, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Lang Ha', 'Detailed Hanoi', NULL, 'Hanoi location', 3, b'1', 0, '2019-11-02 13:54:03.748599', '2019-11-02 13:54:03.748599');
+INSERT INTO `building` VALUES (4, 'Nhà trọ Thành Công', 3, b'1', 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', 'Định Công Hạ', '96A Định Công', NULL, '20.98470977059105,105.83861725767213', 4, NULL, 1, '2019-11-02 13:54:04.361796', '2019-11-02 13:54:04.361796');
+INSERT INTO `building` VALUES (5, 'Chung cư an khánh', 1, b'1', 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 giai phong', NULL, '20.9714041,105.8409441', NULL, NULL, NULL, '2019-11-02 13:54:05.921972', '2019-11-02 13:54:05.921972');
+INSERT INTO `building` VALUES (6, 'Chung cư An Khánh', 1, b'0', 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 quang trung ha dong', NULL, '20.9462691,105.7438515', NULL, NULL, NULL, '2019-11-02 13:54:05.195791', '2019-11-02 13:54:05.195791');
+INSERT INTO `building` VALUES (7, 'Chung cư An Nam', 1, NULL, 4, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', NULL, '12 giai phong', '', '20.9714041,105.8409441', 23, NULL, NULL, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -126,6 +127,9 @@ INSERT INTO `building_service` VALUES (5, 3, NULL, 'Theo giá nhà nước', NUL
 INSERT INTO `building_service` VALUES (6, 1, 200000, NULL, NULL, NULL);
 INSERT INTO `building_service` VALUES (6, 2, NULL, 'Theo giá nhà nước', NULL, NULL);
 INSERT INTO `building_service` VALUES (6, 3, 60000, 'Theo tháng + phụ trội tính thêm', NULL, NULL);
+INSERT INTO `building_service` VALUES (7, 1, 200000, 'Giá theo tháng', NULL, NULL);
+INSERT INTO `building_service` VALUES (7, 2, 70000, 'Free 50 số điện, phụ trội tính thêm', NULL, NULL);
+INSERT INTO `building_service` VALUES (7, 3, NULL, 'Theo giá nhà nước', NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -228,25 +232,28 @@ CREATE TABLE `room` (
   `room_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the room',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of group that room belongs to',
   `room_name` text COMMENT 'name of the room',
+  `room_status` tinyint(2) DEFAULT NULL COMMENT 'Room status code',
+  `min_deposit_period` int(5) DEFAULT NULL COMMENT 'minimun months of deposit',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`room_id`) USING BTREE,
   KEY `FK_room_group` (`room_group_id`) USING BTREE,
   CONSTRAINT `FK_room_group` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of room
 -- ----------------------------
 BEGIN;
-INSERT INTO `room` VALUES (1, 5, '104', '2019-10-08 21:08:23.550000', '2019-10-08 21:08:23.550000');
-INSERT INTO `room` VALUES (2, 5, '102', '2019-10-08 21:08:23.550000', '2019-10-08 21:08:23.550000');
-INSERT INTO `room` VALUES (3, 5, '107', '2019-10-08 21:08:23.550000', '2019-10-08 21:08:23.550000');
-INSERT INTO `room` VALUES (4, 8, '201', NULL, NULL);
-INSERT INTO `room` VALUES (5, 8, '202', NULL, NULL);
-INSERT INTO `room` VALUES (6, 8, '301', NULL, NULL);
-INSERT INTO `room` VALUES (7, 8, '302', NULL, NULL);
-INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', NULL, NULL);
+INSERT INTO `room` VALUES (1, 5, '104', 1, 1, '2019-10-29 17:02:11.229066', '2019-10-29 17:02:11.229066');
+INSERT INTO `room` VALUES (2, 5, '102', 1, 1, '2019-10-29 17:02:11.561850', '2019-10-29 17:02:11.561850');
+INSERT INTO `room` VALUES (3, 5, '107', 1, 1, '2019-10-29 17:02:11.887191', '2019-10-29 17:02:11.887191');
+INSERT INTO `room` VALUES (4, 8, '201', 1, 2, '2019-10-29 17:02:12.784098', '2019-10-29 17:02:12.784098');
+INSERT INTO `room` VALUES (5, 8, '202', 0, 1, '2019-10-29 17:02:13.164253', '2019-10-29 17:02:13.164253');
+INSERT INTO `room` VALUES (6, 8, '301', 1, 2, '2019-10-29 17:02:13.928063', '2019-10-29 17:02:13.928063');
+INSERT INTO `room` VALUES (7, 8, '302', 0, 1, '2019-10-29 17:02:14.403061', '2019-10-29 17:02:14.403061');
+INSERT INTO `room` VALUES (8, 9, 'Thuê cả nhà', 1, 1, '2019-10-29 17:02:15.185133', '2019-10-29 17:02:15.185133');
+INSERT INTO `room` VALUES (9, 10, 'Thuê cả nhà', 1, NULL, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -287,6 +294,14 @@ INSERT INTO `room_amenities` VALUES (9, 4, NULL, NULL);
 INSERT INTO `room_amenities` VALUES (9, 6, NULL, NULL);
 INSERT INTO `room_amenities` VALUES (9, 7, NULL, NULL);
 INSERT INTO `room_amenities` VALUES (9, 8, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (10, 1, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (10, 2, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (10, 3, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (10, 4, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (10, 6, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (10, 7, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (10, 8, NULL, NULL);
+INSERT INTO `room_amenities` VALUES (10, 9, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -316,7 +331,7 @@ CREATE TABLE `room_group` (
   PRIMARY KEY (`room_group_id`) USING BTREE,
   KEY `FK_room_group_building` (`building_id`) USING BTREE,
   CONSTRAINT `FK_room_group_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of room_group
@@ -328,6 +343,7 @@ INSERT INTO `room_group` VALUES (6, 2, b'1', 2500000, 100, 1, 1, 1, 'north', b'1
 INSERT INTO `room_group` VALUES (7, 2, b'1', 2500000, 100, 1, 1, 1, 'south', b'1', b'1', 1400000, 'Nha tro 3', 44, 100, 100, b'0', '2019-10-15 15:26:22.861635', '2019-10-15 15:26:22.861635');
 INSERT INTO `room_group` VALUES (8, 4, NULL, 1200000, 60, 1, 1, NULL, '- Điều hòa, sàn gỗ, giường tủ\n- Gần chợ, ĐH văn hóa, ĐH Mỹ thuật công nghiệp...\n- An ninh tốt, khu dân trí cao', NULL, NULL, 1000000, '', 3, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `room_group` VALUES (9, 6, NULL, NULL, 200, 2, 2, NULL, '', NULL, NULL, NULL, 'Phòng view đẹp ', 4, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `room_group` VALUES (10, 7, NULL, 8500000, 100, 1, 1, NULL, 'Đông Bắc', NULL, NULL, 5000000, 'Nhà đẹp hướng sông tô lịch', 2, NULL, NULL, NULL, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -343,7 +359,7 @@ CREATE TABLE `room_image` (
   PRIMARY KEY (`image_id`) USING BTREE,
   KEY `FK_roomGroup_image` (`room_group_id`) USING BTREE,
   CONSTRAINT `FK_roomGroup_image` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of room_image
@@ -362,6 +378,11 @@ INSERT INTO `room_image` VALUES (12, 'https://storage.googleapis.com/room_images
 INSERT INTO `room_image` VALUES (13, 'https://storage.googleapis.com/room_images_bucket/23-10-2019-9-1.jpg', 9, NULL, NULL);
 INSERT INTO `room_image` VALUES (14, 'https://storage.googleapis.com/room_images_bucket/23-10-2019-9-3.jpg', 9, NULL, NULL);
 INSERT INTO `room_image` VALUES (15, 'https://storage.googleapis.com/room_images_bucket/23-10-2019-9-4.jpg', 9, NULL, NULL);
+INSERT INTO `room_image` VALUES (16, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572701928435-4', 10, NULL, NULL);
+INSERT INTO `room_image` VALUES (17, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572701928435-2', 10, NULL, NULL);
+INSERT INTO `room_image` VALUES (18, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572701928435-10', 10, NULL, NULL);
+INSERT INTO `room_image` VALUES (19, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572701928435-8', 10, NULL, NULL);
+INSERT INTO `room_image` VALUES (20, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572701928435-6', 10, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -432,13 +453,15 @@ CREATE TABLE `tenant_review` (
   KEY `FK_room_group_review` (`room_group_id`) USING BTREE,
   CONSTRAINT `FK_room_group_review` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`),
   CONSTRAINT `FK_user_tenant_review` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of tenant_review
 -- ----------------------------
 BEGIN;
 INSERT INTO `tenant_review` VALUES (1, 1, 2, 'good ', 3, 4, 5, NULL, NULL);
+INSERT INTO `tenant_review` VALUES (2, 1, 8, 'nice', 4, 5, 4, NULL, NULL);
+INSERT INTO `tenant_review` VALUES (3, 2, 8, NULL, 5, 3, 3, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -484,6 +507,9 @@ CREATE TABLE `user` (
   `email` varchar(255) DEFAULT NULL COMMENT 'Email of the user',
   `avatar` text COMMENT 'Avatar URL of the user',
   `address` text COMMENT 'Address of the user',
+  `is_phone_number_verified` bit(1) DEFAULT NULL COMMENT 'User phone number is verified or not',
+  `is_selfie_verified` bit(1) DEFAULT NULL COMMENT 'User selfie image is verified or not',
+  `is_government_id_verified` bit(1) DEFAULT NULL COMMENT 'User government id card is verified or not',
   `is_verified` bit(1) DEFAULT NULL COMMENT 'User is verified or not',
   `is_host` bit(1) DEFAULT NULL COMMENT 'User is host or not',
   `is_active` bit(1) DEFAULT NULL COMMENT 'User is active or not',
@@ -496,11 +522,11 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'image', 'Hoa Lac', b'1', b'1', b'1', '2019-10-14 14:35:10.245687', '2019-10-14 14:35:10.245687');
-INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'image', 'Hanoi', b'1', b'1', b'1', '2019-10-14 14:35:12.166768', '2019-10-14 14:35:12.166768');
-INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', NULL, NULL, NULL, '2019-10-16 14:59:24.194228', '2019-10-16 14:59:24.194228');
-INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', NULL, 'not yet', NULL, NULL, NULL, '2019-10-15 11:46:56.066184', '2019-10-15 11:46:56.066184');
-INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, NULL, b'1', NULL, b'1', '2019-10-23 11:28:01.191345', '2019-10-23 11:28:01.191345');
+INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hoa Lac', b'1', b'1', b'1', b'1', b'1', b'1', '2019-10-29 16:59:51.292078', '2019-10-29 16:59:51.292078');
+INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hanoi', b'0', b'1', b'1', b'0', b'1', b'1', '2019-10-29 16:59:52.243773', '2019-10-29 16:59:52.243773');
+INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'0', b'0', NULL, NULL, '2019-10-29 16:59:53.214943', '2019-10-29 16:59:53.214943');
+INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'1', b'1', NULL, NULL, '2019-10-29 16:59:53.947092', '2019-10-29 16:59:53.947092');
+INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', NULL, NULL, NULL, NULL, b'1', NULL, b'1', '2019-10-29 16:59:54.903230', '2019-10-29 16:59:54.903230');
 COMMIT;
 
 -- ----------------------------
