@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction, Handler } from 'express';
-import { validateByModel, isObject } from '../utils';
+import { isObject } from '../utils';
 import { HTTP400Error } from '../utils/httpErrors';
 import { RoomGroup } from '../models/room-group';
 import { Room } from '../models/room';
-import EsFunction from './es-function';
 import { ConstantValues } from '../utils/constant-values';
 
 export default class RoomGroupFunction {
@@ -81,11 +80,6 @@ export default class RoomGroupFunction {
 
       const responseRoomGroup = await RoomGroup.repo.findOne({ id: newRoomGroup.id });
       const responseRoom = await Room.repo.createMultipleRooms(formatRoomData, newRoomGroup.id);
-
-      /**
-       * insert into ES
-       */
-      // await EsFunction.createRoomES(responseRoomGroup);
 
       res.status(200).send({
         roomGroupId: newRoomGroup.id,

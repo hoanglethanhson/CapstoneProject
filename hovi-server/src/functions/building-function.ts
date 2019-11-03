@@ -1,13 +1,13 @@
 import { Handler, NextFunction, Request, Response } from 'express';
 import { validateByModel } from '../utils';
-import { HTTP400Error } from '../utils/httpErrors';
+import { HTTP404Error } from '../utils/httpErrors';
 import { Building } from '../models/building';
 
 export default class BuildingFunction {
   static getBuildings: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const buildings = await Building.repo.find();
     if (buildings.length != 0) res.status(200).send(buildings);
-    else next(new HTTP400Error('0 record.'));
+    else next(new HTTP404Error('0 record.'));
   };
 
   static getBuilding: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -16,9 +16,9 @@ export default class BuildingFunction {
     console.log(typeId);
     console.log(hostId);
 
-    const building = await Building.repo.getBuildingInformation(Number(typeId), hostId);
-    if (building) {
-      const dataResponse = building.map(data => {
+    const buildings = await Building.repo.getBuildingInformation(Number(typeId), hostId);
+    if (buildings) {
+      const dataResponse = buildings.map(data => {
         const { id, typeId, buildingName, buildingServices, floorQuantity, roomGroups, province, district, ward, addressDescription, detailedAddress } = data;
         return roomGroups.map(value => {
           return {
@@ -32,7 +32,7 @@ export default class BuildingFunction {
       });
       const merged = [].concat.apply([], dataResponse);
       res.status(200).send(merged);
-    } else next(new HTTP400Error('buildingId not found.'));
+    } else next(new HTTP404Error('buildingId not found.'));
   };
 
   static createBuilding: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -62,7 +62,7 @@ export default class BuildingFunction {
     const successResponse = await Building.repo.updateById(buildingId, body);
 
     if (successResponse) res.status(200).send(successResponse);
-    else next(new HTTP400Error('BuildingId not found'));
+    else next(new HTTP404Error('BuildingId not found'));
   };
 
   static deleteBuilding: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -70,6 +70,6 @@ export default class BuildingFunction {
     const successResponse = await Building.repo.delete(buildingId);
 
     if (successResponse.affected != 0) res.status(200).send('Delete building successfully !');
-    else next(new HTTP400Error('Building not found'));
+    else next(new HTTP404Error('Building not found'));
   };
 }
