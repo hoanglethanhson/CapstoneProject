@@ -87,14 +87,14 @@ export default class BankTransferHistoryFunction {
         for (let i = 0; i < resultArray.length; i++)
             error[i] = await validateByModel(BankTransferHistory, resultArray[i]);
 
-        if (error[0]) next(new HTTP400Error(error));
+        if (error[0]) next(new HTTP400Error(error[0]));
         else {
             await BankTransferHistoryFunction.saveRecords(resultArray);
             res.status(200).send(resultArray);
         }
     };
 
-   static async saveRecords(resultArray: any) {
+    static async saveRecords(resultArray: any) {
         if (Array.isArray(resultArray)) {
             for (const result of resultArray) {
                 await BankTransferHistory.repo.save(result);
