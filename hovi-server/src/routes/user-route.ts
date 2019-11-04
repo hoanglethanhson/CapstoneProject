@@ -32,7 +32,7 @@ export default [
         handler: UserFunction.createUser
     },
     {
-        path: "/user/:userId",
+        path: "/user/",
         method: "put",
         authentication: true,
         handler: UserFunction.updateUser
