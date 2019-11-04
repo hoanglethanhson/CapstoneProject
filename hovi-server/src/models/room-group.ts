@@ -13,8 +13,8 @@ import { Length } from 'class-validator';
 import { RoomImage } from './room-image';
 import { BuildingService } from './building-service';
 import { User } from './user';
-import {RoomType} from "./building-type";
-import {TenantReview} from "./tenant-review";
+import { RoomType } from './building-type';
+import { TenantReview } from './tenant-review';
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -24,6 +24,7 @@ export class RoomGroup extends BaseEntity {
     buildingId: 'building_id',
     gender: 'gender',
     rentPrice: 'rent_price',
+    minDepositPeriod: 'min_deposit_period',
     area: 'area',
     bedroomQuantity: 'bedroom_quantity',
     bathroomQuantity: 'bathroom_quantity',
@@ -68,6 +69,13 @@ export class RoomGroup extends BaseEntity {
     name: RoomGroup.schema.rentPrice,
   })
   rentPrice: number;
+
+  @Column({
+    type: 'int',
+    unique: false,
+    name: RoomGroup.schema.minDepositPeriod,
+  })
+  minDepositPeriod: number;
 
   @Column({
     type: 'double',
@@ -201,6 +209,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     if (roomGroup) {
       roomGroup.gender = roomGroupUpdate.gender ? roomGroupUpdate.gender : roomGroup.gender;
       roomGroup.rentPrice = roomGroupUpdate.rentPrice ? roomGroupUpdate.rentPrice : roomGroup.rentPrice;
+      roomGroup.minDepositPeriod = roomGroupUpdate.minDepositPeriod ? roomGroupUpdate.minDepositPeriod : roomGroup.minDepositPeriod;
       roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
       roomGroup.bedroomQuantity = roomGroupUpdate.bedroomQuantity ? roomGroupUpdate.bedroomQuantity : roomGroup.bedroomQuantity;
       roomGroup.bathroomQuantity = roomGroupUpdate.bathroomQuantity ? roomGroupUpdate.bathroomQuantity : roomGroup.bathroomQuantity;
@@ -217,6 +226,12 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       await this.save(roomGroup);
     }
     return roomGroup;
+  }
+
+  async getRoomGroupByBuildingId(buildingId: any) {
+    return await this.find({
+      buildingId,
+    });
   }
 
   async getImages(roomGroupId: any) {
@@ -259,7 +274,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       buildingTypeId: building.typeId,
       availableRooms: availableRooms,
       images: imageLinks,
-      title: building.buildingName + ' ' + building.province + ' ' + `${building.street ? building.street : ''}`,
+      title: `${building.buildingName} - ${JSON.parse(building.ward)[0]}, ${JSON.parse(building.district)[0]}, ${JSON.parse(building.province)[0]}`,
       generalAddress: {
         province: building.province,
         district: building.district,
@@ -281,11 +296,10 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         number_of_reviews: rating[0].number_of_reviews,
         accuracy_rate: rating[0].accuracy_rate,
         host_rate: rating[0].host_rate,
-        security_rate: rating[0].security_rate
-      }
+        security_rate: rating[0].security_rate,
+      },
     };
     return result;
   }
-
 
 }

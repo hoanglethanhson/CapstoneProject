@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction, Handler } from 'express';
-import { validateByModel, isObject } from '../utils';
+import { isObject } from '../utils';
 import { HTTP400Error } from '../utils/httpErrors';
 import { RoomGroup } from '../models/room-group';
 import { Room } from '../models/room';
-import EsFunction from './es-function';
 import { ConstantValues } from '../utils/constant-values';
 
 export default class RoomGroupFunction {
@@ -39,12 +38,6 @@ export default class RoomGroupFunction {
     const { buildingId, roomGroupId, data } = req.body || {};
 
     /**
-     * Validate form room group is valid
-     */
-    const error = await validateByModel(RoomGroup, data);
-    if (error) next(new HTTP400Error(error));
-
-    /**
      * format data for room (Nhà nguyên căn, Căn hộ chung cư => Thuê cả nhà [1 đơn vị])
      * Khu nhà trọ => nhiều đơn vị
      */
@@ -54,34 +47,29 @@ export default class RoomGroupFunction {
     /**
      * Check roomGroupId if room group is exits when update else create
      */
-    console.log(roomGroupId);
     if (roomGroupId) {
+      // update room group information
       const successResponse = await RoomGroup.repo.updateById(roomGroupId, data);
 
       let roomCreateData = [], updatePromise = [];
       for (let i = 0; i < roomData.length; i++) {
-        if (isObject(roomData[i])) {
-          updatePromise.push(Room.repo.updateById(roomData[i]['roomId'], {
-            roomStatus: roomData[i]['roomStatus'],
-            roomName: roomData[i]['roomName'],
-          }));
-        } else {
-          roomCreateData.push({
-            roomGroupId, roomName: roomData[i], roomStatus: ConstantValues.ROOM_AVAILABLE,
-          });
-        }
+        if (isObject(roomData[i])) updatePromise.push(Room.repo.updateById(roomData[i]['roomId'], {
+          roomStatus: roomData[i]['roomStatus'],
+          roomName: roomData[i]['roomName'],
+        }));
+
+        else roomCreateData.push({
+          roomGroupId, roomName: roomData[i], roomStatus: ConstantValues.ROOM_AVAILABLE,
+        });
       }
 
-      await Promise.all(updatePromise);
       if (roomCreateData.length) await Room.repo.createMultipleRooms(roomCreateData, roomGroupId);
-
-      const responseRoom = await Room.repo.getRoomsByRoomGroupId(roomGroupId);
+      await Promise.all(updatePromise);
 
       if (!successResponse) next(new HTTP400Error('RoomGroupId not found'));
       res.status(200).send({
         roomGroupId, dataResponse: {
           roomGroupData: successResponse,
-          roomData: responseRoom,
         },
       });
     } else {
@@ -92,11 +80,6 @@ export default class RoomGroupFunction {
 
       const responseRoomGroup = await RoomGroup.repo.findOne({ id: newRoomGroup.id });
       const responseRoom = await Room.repo.createMultipleRooms(formatRoomData, newRoomGroup.id);
-
-      /**
-       * insert into ES
-       */
-      // await EsFunction.createRoomES(responseRoomGroup);
 
       res.status(200).send({
         roomGroupId: newRoomGroup.id,

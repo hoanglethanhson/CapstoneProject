@@ -14,6 +14,7 @@ import { Transaction } from './transaction';
 import { Feedback } from './feedback';
 import {TenantReview} from "./tenant-review";
 import {ConstantValues} from "../utils/constant-values";
+import {BankTransferHistory} from "./bank-transfer-history";
 
 @Entity(User.tableName)
 @Unique(['phoneNumber'])
@@ -39,6 +40,7 @@ export class User extends BaseEntity {
     isVerified: 'is_verified',
     isHost: 'is_host',
     isActive: 'is_active',
+    balance: 'balance',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   };
@@ -181,11 +183,18 @@ export class User extends BaseEntity {
   isHost: boolean;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     unique: false,
     name: User.schema.isActive,
   })
   isActive: boolean;
+
+  @Column({
+    type: 'double',
+    unique: false,
+    name: User.schema.balance,
+  })
+  balance: number;
 
   @Column({
     type: 'timestamp',
@@ -221,6 +230,9 @@ export class User extends BaseEntity {
   @JoinColumn({ name: User.schema.id })
   tenantReviews: TenantReview[];
 
+  bankTransferHistorySenders: BankTransferHistory[];
+  bankTransferHistoryReceivers: BankTransferHistory[];
+
   checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
     return bcrypt.compareSync(unencryptedPassword, this.password);
   }
@@ -248,6 +260,7 @@ export class UserRepository extends Repository<User> {
       user.isVerified = userUpdate.isVerified ? userUpdate.isVerified : user.isVerified;
       user.isHost = userUpdate.isHost ? userUpdate.isHost : user.isHost;
       user.isActive = userUpdate.isActive ? userUpdate.isActive : user.isActive;
+      user.balance = userUpdate.balance ? userUpdate.balance : user.balance;
       await this.save(user);
     }
     return user;

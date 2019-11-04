@@ -42,7 +42,7 @@ export default class RoomAmenitiesFunction {
     /**
      * Check multiple room amenities, do not insert if only one data error
      */
-    if (errors.every(error => !!error)) next(new HTTP400Error(errors));
+    if (errors.every(error => !!error)) next(new HTTP400Error(JSON.stringify(errors)));
     else {
       let promise = [];
       /**

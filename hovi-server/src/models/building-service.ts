@@ -84,8 +84,8 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
   async updateById(buildingId: any, serviceId: any, buildingServiceUpdate: BuildingService) {
     let buildingService = await this.getOneRecord(buildingId, serviceId);
     if (buildingService) {
-      buildingService.servicePrice = buildingServiceUpdate.servicePrice ? buildingServiceUpdate.servicePrice : buildingService.servicePrice;
-      buildingService.note = buildingServiceUpdate.note ? buildingServiceUpdate.note : buildingService.note;
+      buildingService.servicePrice = buildingServiceUpdate.servicePrice;
+      buildingService.note = buildingServiceUpdate.note;
       await this.save(buildingService);
     }
     return buildingService;
@@ -97,12 +97,6 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
       .innerJoinAndSelect('building.buildingServices', 'buildingService')
       .where('buildingService.buildingId = :bId', { bId: buildingId })
       .getOne();
-  }
-
-  async saveMultiBuildingServices(buildingId: number, services: any) {
-    for (let i = 0; i < services.length; i++) {
-      await this.saveBuildingService(buildingId, services[i].serviceId);
-    }
   }
 
   async getOneRecord(buildingId: any, serviceId: any) {

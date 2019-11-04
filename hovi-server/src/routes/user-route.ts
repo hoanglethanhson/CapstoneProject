@@ -8,13 +8,15 @@ export default [
         handler: UserFunction.getUsers
     },
     {
-        path: "/user/:userId",
+        path: "/userOne/",
         method: "get",
+        authentication: true,
         handler: UserFunction.getUser
     },
     {
-        path: "/user/show/:userId",
+        path: "/userShow/",
         method: "get",
+        authentication: true,
         handler: UserFunction.getUserDetail
     },
     {

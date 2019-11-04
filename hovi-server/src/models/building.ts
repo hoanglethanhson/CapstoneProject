@@ -10,6 +10,8 @@ import { RoomType } from './building-type';
 import { User } from './user';
 import { RoomGroup } from './room-group';
 import { BuildingService } from './building-service';
+import { ConstantValues } from '../utils/constant-values';
+import { Length, IsNotEmpty } from 'class-validator';
 
 @Entity(Building.tableName)
 export class Building extends BaseEntity {
@@ -18,23 +20,18 @@ export class Building extends BaseEntity {
     id: 'building_id',
     buildingName: 'building_name',
     typeId: 'building_type_id',
-    isMixGender: 'is_mix_gender',
     province: 'province',
     district: 'district',
     ward: 'ward',
-    street: 'street',
     detailedAddress: 'detailed_address',
     addressDescription: 'address_description',
     location: 'location',
-    floor: 'floor_quantity',
+    floorQuantity: 'floor_quantity',
     hostId: 'host_id',
-    bedroom: 'bedroom_quantity',
-    bathroom: 'bathroom_quantity',
-    wc: 'wc_quantity',
     isVerified: 'is_verified',
     isCompleted: 'is_completed',
-    create: 'created_at',
-    update: 'updated_at',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
   };
 
   @PrimaryColumn({
@@ -51,6 +48,7 @@ export class Building extends BaseEntity {
     default: 'default value',
     name: Building.schema.buildingName,
   })
+  @IsNotEmpty()
   buildingName: string;
 
   @ManyToOne(type => RoomType, roomType => roomType.buildings)
@@ -66,18 +64,13 @@ export class Building extends BaseEntity {
   hostId: number;
 
   @Column({
-    type: 'bit',
-    name: Building.schema.isMixGender,
-  })
-  isMixGender: boolean;
-
-  @Column({
     type: 'varchar',
     length: 255,
     default: 'default value',
     name: Building.schema.province,
   })
-    //@Length(0, 255)
+  @IsNotEmpty()
+  @Length(0, 255)
   province: string;
 
   @Column({
@@ -86,6 +79,8 @@ export class Building extends BaseEntity {
     default: 'default value',
     name: Building.schema.district,
   })
+  @IsNotEmpty()
+  @Length(0, 255)
   district: string;
 
   @Column({
@@ -94,15 +89,9 @@ export class Building extends BaseEntity {
     default: 'default value',
     name: Building.schema.ward,
   })
+  @IsNotEmpty()
+  @Length(0, 255)
   ward: string;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    default: 'default value',
-    name: Building.schema.street,
-  })
-  street: string;
 
   @Column({
     type: 'varchar',
@@ -110,6 +99,8 @@ export class Building extends BaseEntity {
     default: 'default value',
     name: Building.schema.detailedAddress,
   })
+  @IsNotEmpty()
+  @Length(0, 255)
   detailedAddress: string;
 
   @Column({
@@ -129,12 +120,12 @@ export class Building extends BaseEntity {
 
   @Column({
     type: 'int',
-    name: Building.schema.floor,
+    name: Building.schema.floorQuantity,
   })
-  floor: number;
+  floorQuantity: number;
 
   @Column({
-    type: 'bit',
+    type: 'boolean',
     name: Building.schema.isVerified,
   })
   isVerified: boolean;
@@ -150,18 +141,18 @@ export class Building extends BaseEntity {
     precision: 6,
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
-    name: Building.schema.create,
+    name: Building.schema.createdAt,
   })
-  create: Date;
+  createdAt: Date;
 
   @Column({
     type: 'timestamp',
     precision: 6,
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
-    name: Building.schema.update,
+    name: Building.schema.updatedAt,
   })
-  update: Date;
+  updatedAt: Date;
 
   @OneToMany(type => RoomGroup, roomGroup => roomGroup.building)
   @JoinColumn({ name: Building.schema.id })
@@ -183,20 +174,39 @@ export class BuildingRepository extends Repository<Building> {
     if (building) {
       building.typeId = buildingUpdate.typeId ? buildingUpdate.typeId : building.typeId;
       building.buildingName = buildingUpdate.buildingName ? buildingUpdate.buildingName : building.buildingName;
-      building.isMixGender = buildingUpdate.isMixGender ? buildingUpdate.isMixGender : building.isMixGender;
       building.province = buildingUpdate.province ? buildingUpdate.province : building.province;
       building.district = buildingUpdate.district ? buildingUpdate.district : building.district;
       building.ward = buildingUpdate.ward ? buildingUpdate.ward : building.ward;
-      building.street = buildingUpdate.street ? buildingUpdate.street : building.street;
       building.detailedAddress = buildingUpdate.detailedAddress ? buildingUpdate.detailedAddress : building.detailedAddress;
       building.location = buildingUpdate.location ? buildingUpdate.location : building.location;
-      building.floor = buildingUpdate.floor ? buildingUpdate.floor : building.floor;
+      building.floorQuantity = buildingUpdate.floorQuantity ? buildingUpdate.floorQuantity : building.floorQuantity;
       building.isVerified = buildingUpdate.isVerified ? buildingUpdate.isVerified : building.isVerified;
-      building.create = buildingUpdate.create ? buildingUpdate.create : building.create;
-      building.update = buildingUpdate.update ? buildingUpdate.update : building.update;
       await this.save(building);
     }
     return building;
+  }
+
+  async getBuildingInformation(typeId: number, hostId: number) {
+    return this.createQueryBuilder('building')
+      .leftJoinAndSelect('building.roomGroups', 'roomGroup')
+      .leftJoinAndSelect('building.buildingServices', 'buildingService')
+      .leftJoinAndSelect('roomGroup.rooms', 'room')
+      .leftJoinAndSelect('roomGroup.roomAmenities', 'roomAmenities')
+      .leftJoinAndSelect('roomGroup.roomImages', 'roomImages')
+      .where('building.typeId = :typeId', { typeId })
+      .andWhere('building.hostId = :hostId', { hostId })
+      .andWhere('room.room_status <> :roomStatus', { roomStatus: ConstantValues.ROOM_WAS_DELETED })
+      .getMany();
+  }
+
+  async getBuildingInformationById(buildingId: number) {
+    return this.createQueryBuilder('building')
+      .leftJoinAndSelect('building.roomGroups', 'roomGroup')
+      .leftJoinAndSelect('roomGroup.roomAmenities', 'roomAmenities')
+      .leftJoinAndSelect('roomGroup.roomImages', 'roomImages')
+      .leftJoinAndSelect('roomAmenities.amenities', 'amenities')
+      .andWhere('building.id = :buildingId', { buildingId })
+      .getOne();
   }
 
   async updateStatus(buildingId: number, isComplete: number) {
@@ -207,6 +217,4 @@ export class BuildingRepository extends Repository<Building> {
     await this.save(building);
     return building;
   }
-
-
 }

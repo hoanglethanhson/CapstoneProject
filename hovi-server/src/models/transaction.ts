@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import {User} from "./user";
 import {Room} from "./room";
+import {BankTransferHistory} from "./bank-transfer-history";
 
 @Entity(Transaction.tableName)
 export class Transaction extends BaseEntity {
@@ -21,7 +22,7 @@ export class Transaction extends BaseEntity {
         transactionId: 'transaction_id',
         userId: 'user_id',
         roomId: 'room_id',
-        isTransited: 'is_transited',
+        transactionStatus: 'transaction_status',
         createAt: 'created_at',
         updateAt: 'updated_at'
     };
@@ -48,11 +49,11 @@ export class Transaction extends BaseEntity {
     roomId: number;
 
     @Column({
-        type: "boolean",
+        type: "tinyint",
         unique: false,
-        name: Transaction.schema.isTransited
+        name: Transaction.schema.transactionStatus
     })
-    isTransited: boolean;
+    transactionStatus: number;
 
     @CreateDateColumn({
         type: "timestamp",
@@ -72,6 +73,7 @@ export class Transaction extends BaseEntity {
     })
     updateAt: Date;
 
+    bankTransferHistories: BankTransferHistory[];
 
     static get repo(): TransactionRepository {
         return getCustomRepository(TransactionRepository);
@@ -85,7 +87,7 @@ export class TransactionRepository extends Repository<Transaction> {
         if (transaction) {
             transaction.userId = transactionUpdate.userId ? transactionUpdate.userId : transaction.userId;
             transaction.roomId = transactionUpdate.roomId ? transactionUpdate.roomId : transaction.roomId;
-            transaction.isTransited = transactionUpdate.isTransited ? transactionUpdate.isTransited : transaction.isTransited;
+            transaction.transactionStatus = transactionUpdate.transactionStatus ? transactionUpdate.transactionStatus : transaction.transactionStatus;
             transaction.createAt = transactionUpdate.createAt ? transactionUpdate.createAt : transaction.createAt;
             transaction.updateAt = transactionUpdate.updateAt ? transactionUpdate.updateAt : transaction.updateAt;
             await this.save(transaction);
