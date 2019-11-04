@@ -20,6 +20,12 @@ export default [
         handler: UserFunction.getUserDetail
     },
     {
+        path: "/userSetting/",
+        method: "get",
+        authentication: true,
+        handler: UserFunction.getUserSetting
+    },
+    {
         path: "/user/",
         method: "post",
         authentication: true,
