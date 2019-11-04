@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : CP_DB
+ Source Server         : HoviDB
  Source Server Type    : MySQL
  Source Server Version : 50727
  Source Host           : localhost:3307
