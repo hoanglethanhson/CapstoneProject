@@ -83,18 +83,23 @@ export class TransactionRepository extends Repository<Transaction> {
     async updateById(transactionId: any, transactionUpdate: Transaction) {
         let transaction = await this.findOne(transactionId);
         if (transaction) {
-            transaction.userId = transactionUpdate.userId ? transactionUpdate.userId : transaction.userId;
-            transaction.roomId = transactionUpdate.roomId ? transactionUpdate.roomId : transaction.roomId;
-            transaction.transactionStatus = transactionUpdate.transactionStatus ? transactionUpdate.transactionStatus : transaction.transactionStatus;
-            transaction.createAt = transactionUpdate.createAt ? transactionUpdate.createAt : transaction.createAt;
-            transaction.updateAt = transactionUpdate.updateAt ? transactionUpdate.updateAt : transaction.updateAt;
+            transaction.userId = transactionUpdate.userId ;
+            transaction.roomId = transactionUpdate.roomId;
+            transaction.transactionStatus = transactionUpdate.transactionStatus ;
+            transaction.createAt = transactionUpdate.createAt;
+            transaction.updateAt = transactionUpdate.updateAt;
             await this.save(transaction);
         }
         return transaction;
     }
 
+
     async getTenantId(transactionId: any) {
         let transaction = await this.findOne(transactionId);
         return transaction.userId;
+    }
+
+    async getTransaction(userId: any, roomId: any) {
+        return await this.find({userId: userId, roomId: roomId});
     }
 }

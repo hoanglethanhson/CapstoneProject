@@ -2,6 +2,9 @@ import {Request, Response, NextFunction, Handler} from "express";
 import {validateByModel} from '../utils';
 import {HTTP400Error} from '../utils/httpErrors';
 import {Transaction} from "../models/transaction";
+import {IsNumber} from "class-validator";
+import {ConstantValues} from "../utils/constant-values";
+import {Room} from "../models/room";
 
 export default class TransactionFunction {
     static getTransactions: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -19,16 +22,47 @@ export default class TransactionFunction {
     };
 
     static createTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const body = req.body || {};
-        const error = await validateByModel(Transaction, body);
+        const userId = req['currentUserId'];
+        const roomId = req.params['roomId'];
 
-        if (error) next(error);
-        else {
-                const newTransaction = await Transaction.repo.save(body);
-                const successResponse = await Transaction.repo.findOne({transactionId: newTransaction.transactionId});
-                res.status(200).send(successResponse);
+        if (Number(roomId) == Number.NaN){
+            next(new HTTP400Error('roomId not found.'));
+        } else {
+            if (await Room.repo.findOne(roomId)) {
+                const transaction = await Transaction.repo.getTransaction(userId, roomId);
+                if (transaction[0]) {
+                    console.log(transaction[0]);
+                    let newTransaction = transaction[0];
+                    newTransaction.transactionStatus = ConstantValues.ACCEPT_WAITING;
+                    console.log(newTransaction);
+                    const successResponse = await Transaction.repo.updateById(transaction[0].transactionId, newTransaction);
+                    res.status(200).send(successResponse);
+                } else {
+                    console.log("else branch");
+                    let newTransaction = new Transaction();
+                    newTransaction.userId = userId;
+                    newTransaction.roomId = parseInt(roomId);
+                    newTransaction.transactionStatus = ConstantValues.ACCEPT_WAITING;
+                    const result = await Transaction.repo.save(newTransaction);
+                    const successResponse = await Transaction.repo.findOne({transactionId: result.transactionId});
+                    res.status(200).send(successResponse);
+                }
+            } else {
+                next(new HTTP400Error('roomId not found.'));
+            }
         }
+
     };
+
+    static generateTransferContent: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const transactionId = req.params['transactionId'];
+        if (await Transaction.repo.findOne(transactionId)) {
+            const successResponse = "DATCOC-" + transactionId;
+            if (successResponse) res.status(200).send(successResponse);
+        } else
+            next(new HTTP400Error('transactionId not found'));
+    };
+
 
     static updateTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
@@ -38,6 +72,7 @@ export default class TransactionFunction {
         if (successResponse) res.status(200).send(successResponse);
         else next(new HTTP400Error('transactionId not found'));
     };
+
 
     static deleteTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const transactionId = req.params['transactionId'];

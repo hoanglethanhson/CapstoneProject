@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : HoviDB
+ Source Server         : CP_DB
  Source Server Type    : MySQL
  Source Server Version : 50727
  Source Host           : localhost:3307
@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 03/11/2019 16:49:15
+ Date: 05/11/2019 16:56:44
 */
 
 SET NAMES utf8mb4;
@@ -71,13 +71,15 @@ CREATE TABLE `bank_transfer_history`  (
   INDEX `FK_user_bank_transfer_history-receiver_id`(`receiver_user_id`) USING BTREE,
   CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of bank_transfer_history
 -- ----------------------------
-INSERT INTO `bank_transfer_history` VALUES (1, 1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC.1', '2019-11-03 09:28:58.879061', '2019-11-03 09:28:58.879061');
-INSERT INTO `bank_transfer_history` VALUES (2, 2, 'SGD NHNN VIET NAM', '00000034005', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC.3', '2019-11-03 09:29:18.634881', '2019-11-03 09:29:18.634881');
+INSERT INTO `bank_transfer_history` VALUES (1, 1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC-1', '2019-11-05 09:46:25.934443', '2019-11-05 09:46:25.934443');
+INSERT INTO `bank_transfer_history` VALUES (2, 2, 'SGD NHNN VIET NAM', '00000034005', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC-3', '2019-11-05 09:46:33.304627', '2019-11-05 09:46:33.304627');
+INSERT INTO `bank_transfer_history` VALUES (7, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-05-11 00:00:00.000000', 1500000, 'DATCOC.1', NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (8, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-05-11 00:00:00.000000', 1500000, 'DATCOC-100', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for building
@@ -188,12 +190,14 @@ CREATE TABLE `feedback`  (
   PRIMARY KEY (`feedback_id`) USING BTREE,
   INDEX `FK_user_feedback`(`user_id`) USING BTREE,
   CONSTRAINT `FK_user_feedback` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of feedback
 -- ----------------------------
 INSERT INTO `feedback` VALUES (1, 1, 'email', 'feedback', NULL, NULL);
+INSERT INTO `feedback` VALUES (2, NULL, 'email@gmail.com', 'feedback', NULL, NULL);
+INSERT INTO `feedback` VALUES (3, 4, NULL, 'test null email', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for host_review
@@ -504,16 +508,18 @@ CREATE TABLE `user`  (
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'Son update', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hoa Lac', b'1', b'1', b'1', b'1', b'1', b'1', 0, '2019-11-02 05:37:51.457571', '2019-11-02 05:37:51.457571');
+INSERT INTO `user` VALUES (-1, 'Error', 'Error', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (1, 'Demo', 'Hoang', '1234', '1234', 'aa', NULL, b'1', 'bb', 'gg', 'email@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hoa Lac', b'1', b'1', b'1', b'1', b'1', b'1', 0, '2019-11-04 13:26:11.089370', '2019-11-04 13:26:11.089370');
 INSERT INTO `user` VALUES (2, 'Phong', 'Tran', '111', '1234', 'bb', NULL, b'1', 'phongfb', 'phonggg', 'phongemail@gmail.com', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hanoi', b'0', b'1', b'1', b'0', b'1', b'1', 0, '2019-11-02 05:37:51.802284', '2019-11-02 05:37:51.802284');
 INSERT INTO `user` VALUES (3, 'Son', 'Hoang', '0378666519', '$2a$08$GrSTRfHhhDWgw7nfuW79X.cmLFaEBFMEl79VWdI0q6HrybashRy3C', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'0', b'0', NULL, NULL, 0, '2019-11-02 05:37:52.191719', '2019-11-02 05:37:52.191719');
 INSERT INTO `user` VALUES (4, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', NULL, b'1', 'example-facebook-id', 'example-google-id', 'example@homehouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'not yet', b'1', b'1', b'1', b'1', NULL, NULL, 0, '2019-11-02 05:37:52.603088', '2019-11-02 05:37:52.603088');
 INSERT INTO `user` VALUES (5, NULL, 'Admin', '+84123456789', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', '', 'admin', b'0', 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', NULL, NULL, NULL, NULL, b'1', NULL, b'1', 0, '2019-11-02 05:37:54.882924', '2019-11-02 05:37:54.882924');
+INSERT INTO `user` VALUES (7, 'Son', 'Hoang', '+84378666519', '12345', NULL, NULL, b'1', 'son.hoanglethanh', 'example-google-id', 'example@homohouse.vn', 'https://l.messenger.com/l.php?u=https%3A%2F%2Fgw.alipayobjects.com%2Fzos%2Fantfincdn%2FXAosXuNZyF%2FBiazfanxmamNRoxxVxka.png&h=AT0ck4IoHYRmekYmMFJEFOwx820tkxW8yD_kacYFaZRmNu8M_RYFZ69jHKRUPeiy9-Bqq84W9uQEF6f5UPcdKmvmwRB-36RmI3t1DMtNvH8aoScuj-TzfD8zXHxaR1_Du8x9NGQe_bfNyWzWMsrxoQ', 'Hoa Lac', b'1', b'1', b'1', b'1', b'0', b'1', 0, '2019-11-04 13:34:00.463719', '2019-11-04 13:34:00.463719');
 
 -- ----------------------------
 -- Table structure for user_verification_image
