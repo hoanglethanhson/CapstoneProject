@@ -16,7 +16,7 @@ export default [
     {
         path: "/transaction/:roomId",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: TransactionFunction.createTransaction
     },
     {

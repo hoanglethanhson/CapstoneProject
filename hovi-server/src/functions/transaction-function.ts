@@ -22,8 +22,8 @@ export default class TransactionFunction {
     };
 
     static createTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        //const userId = req['currentUserId'];
-        const userId = 7;
+        const userId = req['currentUserId'];
+        //const userId = 7;
         const roomId = req.params['roomId'];
 
         if (Number(roomId) == Number.NaN){
