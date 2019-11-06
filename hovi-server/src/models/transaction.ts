@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import {User} from "./user";
 import {Room} from "./room";
+import {BankTransferHistory} from "./bank-transfer-history";
 
 @Entity(Transaction.tableName)
 export class Transaction extends BaseEntity {
@@ -72,6 +73,7 @@ export class Transaction extends BaseEntity {
     })
     updateAt: Date;
 
+    bankTransferHistories: BankTransferHistory[];
 
     static get repo(): TransactionRepository {
         return getCustomRepository(TransactionRepository);

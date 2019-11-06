@@ -1,54 +1,31 @@
-export abstract class HTTPClientError extends Error {
-  readonly statusCode!: number;
-  readonly name!: string;
+import HttpException from './HttpException';
 
-  constructor(message: object | string) {
-    if (message instanceof Object) {
-      super(JSON.stringify(message));
-    } else {
-      super(message);
-    }
-    this.name = this.constructor.name;
-    Error.captureStackTrace(this, this.constructor);
+export class HTTP400Error extends HttpException {
+  constructor(message: string | string = 'Bad Request') {
+    super(400, message);
   }
 }
 
-export class HTTP400Error extends HTTPClientError {
-  readonly statusCode = 400;
-
-  constructor(message: string | object = 'Bad Request') {
-    super(message);
+export class HTTP409Error extends HttpException {
+  constructor(message: string | string = 'Already exists') {
+    super(409, message);
   }
 }
 
-export class HTTP409Error extends HTTPClientError {
-  readonly statusCode = 409;
-
-  constructor(message: string | object = 'Already exists') {
-    super(message);
+export class HTTP401Error extends HttpException {
+  constructor(message: string | string = 'Unauthorized') {
+    super(401, message);
   }
 }
 
-export class HTTP401Error extends HTTPClientError {
-  readonly statusCode = 401;
-
-  constructor(message: string | object = 'Unauthorized') {
-    super(message);
+export class HTTP403Error extends HttpException {
+  constructor(message: string | string = 'Forbidden') {
+    super(403, message);
   }
 }
 
-export class HTTP403Error extends HTTPClientError {
-  readonly statusCode = 403;
-
-  constructor(message: string | object = 'Forbidden') {
-    super(message);
-  }
-}
-
-export class HTTP404Error extends HTTPClientError {
-  readonly statusCode = 404;
-
-  constructor(message: string | object = 'Not found') {
-    super(message);
+export class HTTP404Error extends HttpException {
+  constructor(message: string | string = 'Not found') {
+    super(404, message);
   }
 }

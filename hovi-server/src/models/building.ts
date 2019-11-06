@@ -4,12 +4,14 @@ import {
   Entity,
   EntityRepository, getCustomRepository,
   Repository,
-  PrimaryColumn, ManyToOne, JoinColumn, OneToMany, getRepository,
+  PrimaryColumn, ManyToOne, JoinColumn, OneToMany,
 } from 'typeorm';
 import { RoomType } from './building-type';
 import { User } from './user';
 import { RoomGroup } from './room-group';
 import { BuildingService } from './building-service';
+import { ConstantValues } from '../utils/constant-values';
+import { Length, IsNotEmpty } from 'class-validator';
 
 @Entity(Building.tableName)
 export class Building extends BaseEntity {
@@ -46,6 +48,7 @@ export class Building extends BaseEntity {
     default: 'default value',
     name: Building.schema.buildingName,
   })
+  @IsNotEmpty()
   buildingName: string;
 
   @ManyToOne(type => RoomType, roomType => roomType.buildings)
@@ -66,7 +69,8 @@ export class Building extends BaseEntity {
     default: 'default value',
     name: Building.schema.province,
   })
-    //@Length(0, 255)
+  @IsNotEmpty()
+  @Length(0, 255)
   province: string;
 
   @Column({
@@ -75,6 +79,8 @@ export class Building extends BaseEntity {
     default: 'default value',
     name: Building.schema.district,
   })
+  @IsNotEmpty()
+  @Length(0, 255)
   district: string;
 
   @Column({
@@ -83,6 +89,8 @@ export class Building extends BaseEntity {
     default: 'default value',
     name: Building.schema.ward,
   })
+  @IsNotEmpty()
+  @Length(0, 255)
   ward: string;
 
   @Column({
@@ -91,6 +99,8 @@ export class Building extends BaseEntity {
     default: 'default value',
     name: Building.schema.detailedAddress,
   })
+  @IsNotEmpty()
+  @Length(0, 255)
   detailedAddress: string;
 
   @Column({
@@ -133,7 +143,7 @@ export class Building extends BaseEntity {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: Building.schema.createdAt,
   })
-  create: Date;
+  createdAt: Date;
 
   @Column({
     type: 'timestamp',
@@ -142,7 +152,7 @@ export class Building extends BaseEntity {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: Building.schema.updatedAt,
   })
-  update: Date;
+  updatedAt: Date;
 
   @OneToMany(type => RoomGroup, roomGroup => roomGroup.building)
   @JoinColumn({ name: Building.schema.id })
@@ -185,7 +195,18 @@ export class BuildingRepository extends Repository<Building> {
       .leftJoinAndSelect('roomGroup.roomImages', 'roomImages')
       .where('building.typeId = :typeId', { typeId })
       .andWhere('building.hostId = :hostId', { hostId })
+      .andWhere('room.room_status <> :roomStatus', { roomStatus: ConstantValues.ROOM_WAS_DELETED })
       .getMany();
+  }
+
+  async getBuildingInformationById(buildingId: number) {
+    return this.createQueryBuilder('building')
+      .leftJoinAndSelect('building.roomGroups', 'roomGroup')
+      .leftJoinAndSelect('roomGroup.roomAmenities', 'roomAmenities')
+      .leftJoinAndSelect('roomGroup.roomImages', 'roomImages')
+      .leftJoinAndSelect('roomAmenities.amenities', 'amenities')
+      .andWhere('building.id = :buildingId', { buildingId })
+      .getOne();
   }
 
   async updateStatus(buildingId: number, isComplete: number) {
@@ -196,6 +217,4 @@ export class BuildingRepository extends Repository<Building> {
     await this.save(building);
     return building;
   }
-
-
 }
