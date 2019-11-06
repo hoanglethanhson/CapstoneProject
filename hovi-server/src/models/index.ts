@@ -46,11 +46,46 @@ export class DatabaseManager {
         });
     }
 
-    static async clearData() {
+    static async clearDataUserTest() {
         if (!DatabaseManager.connection) return;
         const connection = DatabaseManager.connection;
         const deleteQuery = connection.createQueryBuilder().delete();
         await deleteQuery.from(User).execute();
+    }
+
+    static async clearDataRoomTypeTest() {
+        if (!DatabaseManager.connection) return;
+        const connection = DatabaseManager.connection;
+        const deleteQuery = connection.createQueryBuilder().delete();
+        await deleteQuery.from(RoomType).execute();
+    }
+
+    static async clearDataBuildingTest() {
+        if (!DatabaseManager.connection) return;
+        const connection = DatabaseManager.connection;
+        const deleteQuery = connection.createQueryBuilder().delete();
+        await deleteQuery.from(Building).execute();
+    }
+
+    static async clearDataRoomGroupTest() {
+        if (!DatabaseManager.connection) return;
+        const connection = DatabaseManager.connection;
+        const deleteQuery = connection.createQueryBuilder().delete();
+        await deleteQuery.from(RoomGroup).execute();
+    }
+
+    static async clearDataRoomTest() {
+        if (!DatabaseManager.connection) return;
+        const connection = DatabaseManager.connection;
+        const deleteQuery = connection.createQueryBuilder().delete();
+        await deleteQuery.from(Room).execute();
+    }
+
+    static async clearDataTransactionTest() {
+        if (!DatabaseManager.connection) return;
+        const connection = DatabaseManager.connection;
+        const deleteQuery = connection.createQueryBuilder().delete();
+        await deleteQuery.from(Transaction).execute();
     }
 
     static async close() {
