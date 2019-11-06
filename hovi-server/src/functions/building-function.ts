@@ -1,6 +1,6 @@
 import { Handler, NextFunction, Request, Response } from 'express';
 import { validateByModel } from '../utils';
-import { HTTP404Error } from '../utils/httpErrors';
+import { HTTP400Error, HTTP404Error } from '../utils/httpErrors';
 import { Building } from '../models/building';
 
 export default class BuildingFunction {
@@ -45,14 +45,11 @@ export default class BuildingFunction {
 
     if (error) next(error);
     else {
-      if (body['buildingId']) {
-        const successResponse = await Building.repo.updateById(body['buildingId'], body);
-        res.status(200).send(successResponse);
-      } else {
-        const newBuilding = await Building.repo.save(body).catch(err => console.log(err));
+      const newBuilding = await Building.repo.save(body);
+      if (newBuilding) {
         const successResponse = await Building.repo.findOne({ id: newBuilding.id });
         res.status(200).send(successResponse);
-      }
+      } else next(new HTTP400Error('Can not create building'));
     }
   };
 
