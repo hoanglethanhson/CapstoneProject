@@ -9,11 +9,12 @@ import {
     ManyToOne,
     JoinColumn,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn, getRepository, getManager
 } from 'typeorm';
 import {User} from "./user";
 import {Room} from "./room";
-import {BankTransferHistory} from "./bank-transfer-history";
+import {RoomGroup} from "./room-group";
+import {Building} from "./building";
 
 @Entity(Transaction.tableName)
 export class Transaction extends BaseEntity {
@@ -101,5 +102,23 @@ export class TransactionRepository extends Repository<Transaction> {
 
     async getTransaction(userId: any, roomId: any) {
         return await this.find({userId: userId, roomId: roomId});
+    }
+
+    async getTransactionRoomDetail(transactionId: any) {
+        let transaction = await this.findOne(transactionId);
+        if (transaction == null) {
+            return null;
+        }
+        //console.log('trans id: ' + transaction.transactionId);
+        return await getManager()
+            .createQueryBuilder(Transaction, 'transaction')
+            .select(['*'])
+            .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+            .innerJoin(RoomGroup, 'room_group', 'room.room_group_id = room_group.room_group_id')
+            .innerJoin(Building, 'building', 'building.building_id = room_group.building_id')
+            .innerJoin(User, 'user', 'user.user_id = building.host_id')
+            .where('transaction.transaction_id = :transactionId', { transactionId: transactionId })
+            .andWhere('room.room_id = :roomId', {roomId: transaction.roomId})
+            .getRawMany();
     }
 }

@@ -22,31 +22,37 @@ export default class TransactionFunction {
     };
 
     static createTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const userId = req['currentUserId'];
+        //const userId = req['currentUserId'];
+        const userId = 7;
         const roomId = req.params['roomId'];
 
         if (Number(roomId) == Number.NaN){
             next(new HTTP400Error('roomId not found.'));
         } else {
             if (await Room.repo.findOne(roomId)) {
+                let successResponse;
                 const transaction = await Transaction.repo.getTransaction(userId, roomId);
                 if (transaction[0]) {
-                    console.log(transaction[0]);
+                    //console.log(transaction[0]);
                     let newTransaction = transaction[0];
                     newTransaction.transactionStatus = ConstantValues.ACCEPT_WAITING;
-                    console.log(newTransaction);
-                    const successResponse = await Transaction.repo.updateById(transaction[0].transactionId, newTransaction);
-                    res.status(200).send(successResponse);
+                    //console.log(newTransaction);
+                    successResponse = await Transaction.repo.updateById(transaction[0].transactionId, newTransaction);
+                    //res.status(200).send(successResponse);
                 } else {
-                    console.log("else branch");
+                    //console.log("else branch");
                     let newTransaction = new Transaction();
                     newTransaction.userId = userId;
                     newTransaction.roomId = parseInt(roomId);
                     newTransaction.transactionStatus = ConstantValues.ACCEPT_WAITING;
                     const result = await Transaction.repo.save(newTransaction);
-                    const successResponse = await Transaction.repo.findOne({transactionId: result.transactionId});
-                    res.status(200).send(successResponse);
+                    successResponse = await Transaction.repo.findOne({transactionId: result.transactionId});
+                    //res.status(200).send(successResponse);
                 }
+                const detail = await Transaction.repo.getTransactionRoomDetail(successResponse.transactionId);
+                //console.log(Array.isArray(rooms));
+                res.status(200).send(detail);
+
             } else {
                 next(new HTTP400Error('roomId not found.'));
             }
