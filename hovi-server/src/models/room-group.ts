@@ -296,46 +296,47 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
      tenantComments = tenantComments.concat(review.tenantReview_comment);
    }
     const data = {
-      buildingTypeId: building.typeId,
-      roomGroupId: roomGroup.id,
-      direction: roomGroup.direction,
-      wcQuantity: roomGroup.wcQuantity,
-      bedroomQuantity: roomGroup.bedroomQuantity,
-      availableRooms: availableRooms,
-      images: imageLinks,
-      title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
-      generalAddress: {
-        province: building.province,
-        district: building.district,
-        ward: building.ward,
-      },
-      status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
-      area: roomGroup.area,
-      capacity: roomGroup.capacity,
-      gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
-      amenities: totalAmenities,
-      description: roomGroup.description,
-      roomCost: {
-        price: roomGroup.rentPrice,
-        deposit: roomGroup.depositPrice,
-      },
-      services: services,
-      hostId: host.id,
-      hostAvatar: host.avatar,
-      hostPhone: host.phoneNumber,
-      hostName: host.firstName + " " + host.lastName,
-      rating: {
-        number_of_reviews: rating[0].number_of_reviews,
-        accuracy_rate: rating[0].accuracy_rate,
-        host_rate: rating[0].host_rate,
-        security_rate: rating[0].security_rate,
-      },
-      reviewList: {
-        tenantAvatars,
-        tenantIds,
-        tenantComments
-      }
-
+       data : {
+           buildingTypeId: building.typeId,
+           roomGroupId: roomGroup.id,
+           direction: roomGroup.direction,
+           wcQuantity: roomGroup.wcQuantity,
+           bedroomQuantity: roomGroup.bedroomQuantity,
+           availableRooms: availableRooms,
+           images: imageLinks,
+           title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
+           generalAddress: {
+               province: building.province,
+               district: building.district,
+               ward: building.ward,
+           },
+           status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
+           area: roomGroup.area,
+           capacity: roomGroup.capacity,
+           gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
+           amenities: totalAmenities,
+           description: roomGroup.description,
+           roomCost: {
+               price: roomGroup.rentPrice,
+               deposit: roomGroup.depositPrice,
+           },
+           services: services,
+           hostId: host.id,
+           hostAvatar: host.avatar,
+           hostPhone: host.phoneNumber,
+           hostName: host.firstName + " " + host.lastName,
+           rating: {
+               number_of_reviews: rating[0].number_of_reviews,
+               accuracy_rate: rating[0].accuracy_rate,
+               host_rate: rating[0].host_rate,
+               security_rate: rating[0].security_rate,
+           },
+           reviewList: {
+               tenantAvatars,
+               tenantIds,
+               tenantComments
+           }
+       }
     };
    return data;
   }
