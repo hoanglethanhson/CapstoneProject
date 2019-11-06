@@ -295,7 +295,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
      tenantAvatars = tenantAvatars.concat(tenant.avatar);
      tenantComments = tenantComments.concat(review.tenantReview_comment);
    }
-    return {
+    const data = {
       buildingTypeId: building.typeId,
       roomGroupId: roomGroup.id,
       direction: roomGroup.direction,
@@ -337,6 +337,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       }
 
     };
+   return data;
   }
 
 }
