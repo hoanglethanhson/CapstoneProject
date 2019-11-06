@@ -254,6 +254,9 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       return null;
     }
     const building = await Building.repo.findOne(roomGroup.buildingId);
+    if (building == null) {
+      return null;
+    }
     const buildingTypeArray = await RoomType.repo.getBuildingType(building.typeId);
     const buildingType = buildingTypeArray[0].building_type;
     const availableRooms = await Room.repo.getAvailableRoomsInGroup(roomGroupId);
@@ -268,7 +271,11 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     }
     const totalAmenities = amenities.concat(amenitiesConcat);
     const services = await BuildingService.repo.getServiceDetailBuilding(roomGroup.buildingId);
-    const phone = await User.repo.getHostPhone(building.hostId);
+    //const phone = await User.repo.getHostPhone(building.hostId);
+    const host = await User.repo.findOne(building.hostId);
+    if (host == null) {
+      return null;
+    }
     const images = await this.getImages(roomGroupId);
     let imageLinks = [];
     images.forEach(function(element) {
@@ -276,8 +283,13 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       imageLinks = imageLinks.concat(temp);
     });
     const rating = await TenantReview.repo.getRatingResult(roomGroupId);
+    const reviewList = await TenantReview.repo.getReviewComment(roomGroupId);
     return {
       buildingTypeId: building.typeId,
+      roomGroupId: roomGroup.id,
+      direction: roomGroup.direction,
+      wcQuantity: roomGroup.wcQuantity,
+      bedroomQuantity: roomGroup.bedroomQuantity,
       availableRooms: availableRooms,
       images: imageLinks,
       title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
@@ -297,13 +309,16 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         deposit: roomGroup.depositPrice,
       },
       services: services,
-      phone: phone,
+      hostId: host.id,
+      hostPhone: host.phoneNumber,
+      hostName: host.firstName + " " + host.lastName,
       rating: {
         number_of_reviews: rating[0].number_of_reviews,
         accuracy_rate: rating[0].accuracy_rate,
         host_rate: rating[0].host_rate,
         security_rate: rating[0].security_rate,
       },
+      reviewList: reviewList
     };
   }
 
