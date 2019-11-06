@@ -129,8 +129,8 @@ export class TenantReviewRepository extends Repository<TenantReview> {
 
     async getReviewComment(roomGroupId: number) {
         return await this.createQueryBuilder('tenantReview')
-            .select(['tenantReview.comment'])
+            .select(['tenantReview.user_id', 'tenantReview.comment'])
             .where('tenantReview.room_group_id = :roomGroupId', { roomGroupId })
-            .getMany();
+            .getRawMany();
     }
 }
