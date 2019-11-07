@@ -63,7 +63,7 @@ export default class UserFunction {
     const oldPassword = body.oldPassword;
     const user = await User.repo.findOne(userId);
     if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
-      next(new HTTP400Error({error: 'Wrong current password!'}));
+      next(new HTTP400Error('Wrong current password!'));
     } else {
       const userUpdate = user;
       userUpdate.password = body.newPassword;

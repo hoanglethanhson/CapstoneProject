@@ -47,6 +47,6 @@ export default [
         path: "/userChangePassword/",
         method: "post",
         authentication: true,
-        handler: UserFunction.deleteUser
+        handler: UserFunction.changePassword
     },
 ];
