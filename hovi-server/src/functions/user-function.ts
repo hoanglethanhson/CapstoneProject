@@ -59,6 +59,22 @@ export default class UserFunction {
     }
   };
 
+  static changePassword: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const body = req.body || {};
+    const userId = req['currentUserId'];
+    const oldPassword = body.oldPassword;
+    const user = await User.repo.findOne(userId);
+    if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
+      next(new HTTP400Error({error: 'Wrong current password!'}));
+    } else {
+      const userUpdate = user;
+      userUpdate.password = body.newPassword;
+      const successResponse = await User.repo.updateById(userId, userUpdate);
+      if (successResponse) res.status(200).send(successResponse);
+      else next(new HTTP400Error('update password failed.'));
+    }
+  };
+
   static updateUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
     const userId = req['currentUserId'];
