@@ -229,7 +229,12 @@ export class User extends BaseEntity {
   @JoinColumn({ name: User.schema.id })
   tenantReviews: TenantReview[];
 
+  @OneToMany(type => BankTransferHistory, bankTransferHistory => bankTransferHistory.sender)
+  @JoinColumn({ name: User.schema.id })
   bankTransferHistorySenders: BankTransferHistory[];
+
+  @OneToMany(type => BankTransferHistory, bankTransferHistory => bankTransferHistory.receiver)
+  @JoinColumn({ name: User.schema.id })
   bankTransferHistoryReceivers: BankTransferHistory[];
 
   checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
