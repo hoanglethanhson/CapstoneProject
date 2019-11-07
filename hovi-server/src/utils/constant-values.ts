@@ -8,4 +8,17 @@ export class ConstantValues {
   static readonly ROOM_WAS_DELETED = -1;
   static readonly ROOM_NOT_AVAILABLE = 0;
   static readonly ROOM_AVAILABLE = 1;
+
+  //DEFINE USER TYPE
+  static readonly TENANT = 1;
+  static readonly HOST = 2;
+  static readonly ADMIN = 3;
+
+  //DEFINE TRANSACTION STATUS
+  static readonly ACCEPT_WAITING = 0;
+  static readonly HOST_REJECTED = -1;
+  static readonly NOT_ENOUGH_BALANCE = -2;
+  static readonly ENOUGH_BALANCE = 1;
+  static readonly EXPIRE_FAILED = -3;
+  static readonly HOST_DEPOSIT_TRANSFERRED = 2;
 }

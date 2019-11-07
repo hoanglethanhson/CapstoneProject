@@ -2,10 +2,16 @@ import {
   BaseEntity,
   Column,
   Entity,
-  EntityRepository, getCustomRepository,
+  EntityRepository,
+  getCustomRepository,
+  getManager,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
   Repository,
-  PrimaryColumn, ManyToOne, JoinColumn, OneToMany, getManager,
 } from 'typeorm';
+import { buildingTitle } from '../utils';
 import { Building } from './building';
 import { Room } from './room';
 import { RoomAmenities } from './room-amenities';
@@ -270,11 +276,11 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       imageLinks = imageLinks.concat(temp);
     });
     const rating = await TenantReview.repo.getRatingResult(roomGroupId);
-    const result = {
+    return {
       buildingTypeId: building.typeId,
       availableRooms: availableRooms,
       images: imageLinks,
-      title: `${building.buildingName} - ${JSON.parse(building.ward)[0]}, ${JSON.parse(building.district)[0]}, ${JSON.parse(building.province)[0]}`,
+      title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
       generalAddress: {
         province: building.province,
         district: building.district,
@@ -299,7 +305,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         security_rate: rating[0].security_rate,
       },
     };
-    return result;
   }
 
 }

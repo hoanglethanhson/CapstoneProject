@@ -14,9 +14,9 @@ export default class AuthFunction {
 
     const existUser = await User.repo.findOne({ phoneNumber: phone });
 
-    if (!existUser) next(new HTTP400Error({ error: 'Invalid phone number or password!' }));
+    if (!existUser) next(new HTTP400Error('Invalid phone number or password!'));
     else if (!existUser.checkIfUnencryptedPasswordIsValid(password))
-      next(new HTTP400Error({ error: 'Invalid phone number or password!' }));
+      next(new HTTP400Error('Invalid phone number or password!'));
     else {
       if (existUser.phoneToken) {
         res.status(200).send({
@@ -56,9 +56,7 @@ export default class AuthFunction {
     if (error) next(error);
     else {
       const checkPhoneNumber = await User.repo.findOne({ phoneNumber: body['phoneNumber'] });
-      if (checkPhoneNumber) next(new HTTP409Error({
-        phoneNumber: 'Phone number already exists',
-      }));
+      if (checkPhoneNumber) next(new HTTP409Error('Phone number already exists'));
 
       else {
         body['password'] = bcrypt.hashSync(body['password'], 8);
@@ -74,13 +72,9 @@ export default class AuthFunction {
   static verifyPhoneNumber: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
 
-    if (!body['phone']) next(new HTTP400Error({
-      phone: 'Phone number not be empty',
-    }));
+    if (!body['phone']) next(new HTTP400Error('Phone number not be empty'));
 
-    if (!body['phoneToken']) next(new HTTP400Error({
-      phoneToken: 'Verify id phone number not be empty',
-    }));
+    if (!body['phoneToken']) next(new HTTP400Error('Verify id phone number not be empty'));
 
     const results = await User.repo.verifyPhoneNumber(body['phone'], body['phoneToken']);
     res.status(200).send(results);

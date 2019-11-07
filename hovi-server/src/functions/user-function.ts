@@ -45,9 +45,7 @@ export default class UserFunction {
     if (error) next(error);
     else {
       const checkUsername = await User.repo.findOne({ phoneNumber: body['phone'] });
-      if (checkUsername) next(new HTTP400Error({
-        phone: 'Phone number already exists',
-      }));
+      if (checkUsername) next(new HTTP400Error('Phone number already exists'));
 
       else {
         body['password'] = bcrypt.hashSync(body['password'], 8);

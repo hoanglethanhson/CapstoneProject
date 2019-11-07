@@ -47,7 +47,7 @@ export default class BuildingServiceFunction {
 
     console.log(body);
 
-    if (error[0]) next(new HTTP400Error(error));
+    if (error[0]) next(new HTTP400Error(JSON.stringify(error)));
     else {
       let promise = [], buildingId = body.buildingId;
       for (let i = 0; i < body.data.length; i++) {
