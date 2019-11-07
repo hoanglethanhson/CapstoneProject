@@ -14,19 +14,19 @@ export default [
     {
         path: "/bankTransferHistory/",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: BankTransferHistoryFunction.createBankTransferHistory
     },
     {
         path: "/bankTransferHistory/:bankTransferHistoryId",
         method: "put",
-        authentication: false,
+        authentication: true,
         handler: BankTransferHistoryFunction.updateBankTransferHistory
     },
     {
         path: "/bankTransferHistory/:bankTransferHistoryId",
         method: "delete",
-        authentication: false,
+        authentication: true,
         handler: BankTransferHistoryFunction.deleteBankTransferHistory
     },
 ];
