@@ -15,12 +15,12 @@ export class ConstantValues {
   static readonly ADMIN = 3;
 
   //DEFINE TRANSACTION STATUS
-  static readonly ACCEPT_WAITING = 0;
+  static readonly ACCEPT_WAITING = 1;
   static readonly HOST_REJECTED = -1;
   static readonly NOT_ENOUGH_BALANCE = -2;
-  static readonly ENOUGH_BALANCE = 1;
+  static readonly ENOUGH_BALANCE = 2;
   static readonly EXPIRE_FAILED = -3;
-  static readonly HOST_DEPOSIT_TRANSFERRED = 2;
+  static readonly HOST_DEPOSIT_TRANSFERRED = 3;
 
   //DEFINE ADMIN USER INFO
   static readonly ADMIN_USER_ID = 5;
