@@ -21,6 +21,7 @@ import { BuildingService } from './building-service';
 import { User } from './user';
 import { RoomType } from './building-type';
 import { TenantReview } from './tenant-review';
+import {Transaction} from "./transaction";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -253,6 +254,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     if (Number.isInteger(roomGroupId)) {
       return null;
     }
+
     const building = await Building.repo.findOne(roomGroup.buildingId);
     if (building == null) {
       return null;
@@ -339,6 +341,44 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
        }
     };
    return data;
+  }
+
+  async getRoomGroupTransactionDetail(roomGroupId: any, userId: any) {
+    if (Number.isInteger(roomGroupId)) {
+      return null;
+    }
+    const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+    const building = await Building.repo.findOne(roomGroup.buildingId);
+    if (building == null) {
+      return null;
+    }
+    const buildingTypeArray = await RoomType.repo.getBuildingType(building.typeId);
+    const availableRooms = await Room.repo.getAvailableRoomsInGroup(roomGroupId);
+    //const phone = await User.repo.getHostPhone(building.hostId);
+    const host = await User.repo.findOne(building.hostId);
+    if (host == null) {
+      return null;
+    }
+    if (host.id = userId) {
+      return null;
+    }
+    const images = await this.getImages(roomGroupId);
+    let imageLinks = [];
+    images.forEach(function(element) {
+      let temp = [element.image_url];
+      imageLinks = imageLinks.concat(temp);
+    });
+    const transactionStatuses = await Transaction.repo.getTransactionStatus(roomGroupId, userId);
+    const data = {
+      data : {
+        availableRooms: availableRooms,
+        images: imageLinks,
+        title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
+        hostId: host.id,
+        status: transactionStatuses
+      }
+    };
+    return data;
   }
 
 }

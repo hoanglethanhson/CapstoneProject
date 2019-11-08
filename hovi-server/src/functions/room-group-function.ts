@@ -103,6 +103,19 @@ export default class RoomGroupFunction {
 
   };
 
+  static getRoomGroupTransactionDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    const roomGroupId = req.params['roomGroupId'];
+    const userId = req['currentUserId'];
+    const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+
+    if (!roomGroup) next(new HTTP400Error('roomGroupId not found.'));
+    const roomGroupDetail = await RoomGroup.repo.getRoomGroupTransactionDetail(roomGroupId, userId);
+
+    if (roomGroupDetail) res.status(200).send(roomGroupDetail);
+    else next(new HTTP400Error('error get details.'));
+
+  };
+
   static updateRoomGroup: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body || {};
     const roomGroupId = req.params['roomGroupId'];

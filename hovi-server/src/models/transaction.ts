@@ -15,6 +15,8 @@ import {User} from "./user";
 import {Room} from "./room";
 import {RoomGroup} from "./room-group";
 import {Building} from "./building";
+import {Amenities} from "./amenities";
+import {RoomAmenities} from "./room-amenities";
 
 @Entity(Transaction.tableName)
 export class Transaction extends BaseEntity {
@@ -121,4 +123,15 @@ export class TransactionRepository extends Repository<Transaction> {
             .andWhere('room.room_id = :roomId', {roomId: transaction.roomId})
             .getRawMany();
     }
+
+    async getTransactionStatus(roomGroupId: number, userId: number) {
+        return await getManager()
+            .createQueryBuilder(Transaction, 'transaction')
+            .select(['*'])
+            .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+            .where('room.room_group_id = :room_group_id', { room_group_id: roomGroupId })
+            .andWhere('transaction.user_id = :user_id', {user_id: userId})
+            .getRawMany();
+    }
+
 }
