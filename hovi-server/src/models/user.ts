@@ -246,20 +246,20 @@ export class UserRepository extends Repository<User> {
   async updateById(userId: any, userUpdate: User) {
     let user = await this.findOne(userId);
     if (user) {
-      user.firstName = userUpdate.firstName ? userUpdate.firstName : user.firstName;
-      user.lastName = userUpdate.lastName ? userUpdate.lastName : user.lastName;
-      user.phoneNumber = userUpdate.phoneNumber ? userUpdate.phoneNumber : user.phoneNumber;
-      user.phoneToken = userUpdate.phoneToken ? userUpdate.phoneToken : user.phoneToken;
-      user.gender = userUpdate.gender ? userUpdate.gender : user.gender;
-      user.facebookId = userUpdate.facebookId ? userUpdate.facebookId : user.facebookId;
-      user.googleId = userUpdate.googleId ? userUpdate.googleId : user.googleId;
-      user.avatar = userUpdate.avatar ? userUpdate.avatar : user.avatar;
-      user.address = userUpdate.address ? userUpdate.address : user.address;
-      user.email = userUpdate.email ? userUpdate.email : user.email;
-      user.isVerified = userUpdate.isVerified ? userUpdate.isVerified : user.isVerified;
-      user.isHost = userUpdate.isHost ? userUpdate.isHost : user.isHost;
-      user.isActive = userUpdate.isActive ? userUpdate.isActive : user.isActive;
-      user.balance = userUpdate.balance ? userUpdate.balance : user.balance;
+      user.firstName = userUpdate.firstName;
+      user.lastName = userUpdate.lastName;
+      user.phoneNumber = userUpdate.phoneNumber;
+      user.phoneToken = userUpdate.phoneToken;
+      user.gender = userUpdate.gender;
+      user.facebookId = userUpdate.facebookId;
+      user.googleId = userUpdate.googleId;
+      user.avatar = userUpdate.avatar;
+      user.address = userUpdate.address;
+      user.email = userUpdate.email;
+      user.isVerified = userUpdate.isVerified;
+      user.isHost = userUpdate.isHost;
+      user.isActive = userUpdate.isActive;
+      user.balance = userUpdate.balance;
       await this.save(user);
     }
     return user;

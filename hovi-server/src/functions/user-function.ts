@@ -68,7 +68,7 @@ export default class UserFunction {
       const userUpdate = user;
       userUpdate.password = body.newPassword;
       const successResponse = await User.repo.updateById(userId, userUpdate);
-      if (successResponse) res.status(200).send("Update password successful!");
+      if (successResponse) res.status(200).send(successResponse.id);
       else next(new HTTP400Error('update password failed.'));
     }
   };
