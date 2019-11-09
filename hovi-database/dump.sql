@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 09/11/2019 13:44:47
+ Date: 09/11/2019 15:14:45
 */
 
 SET NAMES utf8mb4;
@@ -71,7 +71,7 @@ CREATE TABLE `bank_transfer_history`  (
   INDEX `FK_user_bank_transfer_history-receiver_id`(`receiver_user_id`) USING BTREE,
   CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of bank_transfer_history
@@ -80,8 +80,8 @@ INSERT INTO `bank_transfer_history` VALUES (1, 1, 'SGD NHNN VIET NAM', '00000034
 INSERT INTO `bank_transfer_history` VALUES (2, 2, 'SGD NHNN VIET NAM', '00000034005', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC-3', '2019-11-05 09:46:33.304627', '2019-11-05 09:46:33.304627');
 INSERT INTO `bank_transfer_history` VALUES (7, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-05-11 00:00:00.000000', 1500000, 'DATCOC.1', NULL, NULL);
 INSERT INTO `bank_transfer_history` VALUES (8, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-05-11 00:00:00.000000', 1500000, 'DATCOC-100', NULL, NULL);
-INSERT INTO `bank_transfer_history` VALUES (10, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-09-11 00:00:00.000000', 1500000, 'DATCOC.1', NULL, NULL);
-INSERT INTO `bank_transfer_history` VALUES (11, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-09-11 00:00:00.000000', 1500000, 'DATCOC-100', NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (14, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-09-11 00:00:00.000000', 1500000, 'DATCOC.1', NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (15, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-09-11 00:00:00.000000', 1500000, 'DATCOC-100', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for building
@@ -2663,12 +2663,14 @@ CREATE TABLE `transaction`  (
   INDEX `FK_Room_Transaction`(`room_id`) USING BTREE,
   CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of transaction
 -- ----------------------------
 INSERT INTO `transaction` VALUES (1, 1, 1, 1, '2019-10-08 21:14:41.938875', '2019-10-08 21:14:41.938875');
+INSERT INTO `transaction` VALUES (2, 2, 214, 3, '2019-11-09 07:30:21.602885', '2019-11-09 07:30:21.602885');
+INSERT INTO `transaction` VALUES (3, 2, 216, 2, '2019-11-09 07:30:23.519146', '2019-11-09 07:30:23.519146');
 
 -- ----------------------------
 -- Table structure for user
@@ -2713,7 +2715,7 @@ INSERT INTO `user` VALUES (6, 'Son', 'Hoang', '+8484378666519', '$2a$08$Wd8L5dFB
 INSERT INTO `user` VALUES (7, 'Son', 'Hoang', '+84378666519', '$2a$08$4efge.QFugY9.PTlGU3aauRlOk138vl.jfnusfXgsP/BSFKpLcjJO', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES (8, 'A', 'Hihi', '+84367120251', '$2a$08$75fsq.dStbaxwmV.tZGyb.rfIaWpZxvudsdp9Lvagri3QTbiE0eCm', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES (9, 'Cầm', 'Sơn', '+84982604182', '$2a$08$5DV9nILO1yDpX6MnOiCauO8StcB6IQjNT3tiHnwi9HydZNmWOEX.K', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `user` VALUES (10, 'Phạm', 'Anh', '+84778364588', '$2a$08$GqIsI3SCwZHHtFluBX3YmOhngBeo8nSqnQm0./NfhtVAiBrcB2qKi', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (10, 'Phạm', 'Anh', '+84778364588', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-09 08:14:34.620728', '2019-11-09 08:14:34.620728');
 INSERT INTO `user` VALUES (11, 'Dinh', 'Viet', '+84386666428', '$2a$08$99JiW7wjIDrt8qNtCVCmheXTlAIGaWKw.i8CVnlaLjSLY0R1nWyKO', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
