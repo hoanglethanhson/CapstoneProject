@@ -66,10 +66,11 @@ export default class UserFunction {
       next(new HTTP400Error('Wrong current password!'));
     } else {
       const userUpdate = user;
-      userUpdate.password = body.newPassword;
+      userUpdate.password = bcrypt.hashSync(body.newPassword, 8);
       const successResponse = await User.repo.updateById(userId, userUpdate);
       if (successResponse) res.status(200).send(successResponse.id);
       else next(new HTTP400Error('update password failed.'));
+      console.log(res);
     }
   };
 
