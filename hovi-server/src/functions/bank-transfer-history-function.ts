@@ -22,15 +22,15 @@ export default class BankTransferHistoryFunction {
 
     static createBankTransferHistory: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
-        if (!body.bankData || !Array.isArray(body.bankData)) next(new HTTP400Error('Data is not valid'));
+        if (!body.data.bankData || !Array.isArray(body.data.bankData)) next(new HTTP400Error('Data is not valid'));
         let error = {};
 
         let resultArray = [];
         //Define transfer content regex
         const transferRegex = new RegExp("^DATCOC-[0-9]{1,}$");
-        console.log(body.bankData);
-        if (Array.isArray(body.bankData)) {
-            for (const transfer of body.bankData) {
+        console.log(body.data.bankData);
+        if (Array.isArray(body.data.bankData)) {
+            for (const transfer of body.data.bankData) {
                 let isValidate = true;
                 //check if the content match the regex
                 if (!transferRegex.test(transfer.transferContent)) {
