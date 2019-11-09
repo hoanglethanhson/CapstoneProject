@@ -359,9 +359,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     if (host == null) {
       return null;
     }
-    if (host.id = userId) {
-      return null;
-    }
     const images = await this.getImages(roomGroupId);
     let imageLinks = [];
     images.forEach(function(element) {
