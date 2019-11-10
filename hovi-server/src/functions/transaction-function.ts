@@ -49,6 +49,11 @@ export default class TransactionFunction {
                     successResponse = await Transaction.repo.findOne({transactionId: result.transactionId});
                     //res.status(200).send(successResponse);
                 }
+                const room = await Room.repo.findOne(roomId);
+                let updateRoom = room;
+                updateRoom.roomStatus = ConstantValues.ROOM_NOT_AVAILABLE;
+                updateRoom = await Room.repo.updateById(roomId, updateRoom);
+                console.log(updateRoom);
                 const detail = await Transaction.repo.getTransactionRoomDetail(successResponse.transactionId);
                 //console.log(Array.isArray(rooms));
                 res.status(200).send(detail);

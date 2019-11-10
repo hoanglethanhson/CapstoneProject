@@ -22,6 +22,7 @@ import { User } from './user';
 import { RoomType } from './building-type';
 import { TenantReview } from './tenant-review';
 import {Transaction} from "./transaction";
+import {ConstantValues} from "../utils/constant-values";
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -365,10 +366,19 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       let temp = [element.image_url];
       imageLinks = imageLinks.concat(temp);
     });
-    console.log(roomGroupId + ", " + userId);
+    //console.log(roomGroupId + ", " + userId);
     let transactionStatuses = await Transaction.repo.getTransactionStatus(roomGroupId, userId);
+    //console.log(transactionStatuses);
+    let statusValue = ConstantValues.ACCEPT_WAITING;
     if (transactionStatuses.length == 0) {
       transactionStatuses = null;
+    } else {
+      for (const status of transactionStatuses) {
+        //console.log(status);
+        if (status.transaction_status == ConstantValues.HOST_REJECTED) {
+          statusValue = ConstantValues.HOST_REJECTED;
+        }
+      }
     }
     const data = {
       data : {
@@ -376,7 +386,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         images: imageLinks,
         title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
         hostId: host.id,
-        status: transactionStatuses
+        status: statusValue
       }
     };
     return data;
