@@ -125,6 +125,14 @@ export class TransactionRepository extends Repository<Transaction> {
     }
 
     async getTransactionStatus(roomGroupId: number, userId: number) {
+        const query = await getManager()
+            .createQueryBuilder(Transaction, 'transaction')
+            .select(['*'])
+            .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+            .where('room.room_group_id = :room_group_id', { room_group_id: roomGroupId })
+            .andWhere('transaction.user_id = :user_id', {user_id: userId})
+            .getSql();
+        console.log(query);
         return await getManager()
             .createQueryBuilder(Transaction, 'transaction')
             .select(['*'])

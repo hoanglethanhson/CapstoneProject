@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 09/11/2019 15:14:45
+ Date: 10/11/2019 21:29:06
 */
 
 SET NAMES utf8mb4;
@@ -2663,7 +2663,7 @@ CREATE TABLE `transaction`  (
   INDEX `FK_Room_Transaction`(`room_id`) USING BTREE,
   CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of transaction
@@ -2671,6 +2671,7 @@ CREATE TABLE `transaction`  (
 INSERT INTO `transaction` VALUES (1, 1, 1, 1, '2019-10-08 21:14:41.938875', '2019-10-08 21:14:41.938875');
 INSERT INTO `transaction` VALUES (2, 2, 214, 3, '2019-11-09 07:30:21.602885', '2019-11-09 07:30:21.602885');
 INSERT INTO `transaction` VALUES (3, 2, 216, 2, '2019-11-09 07:30:23.519146', '2019-11-09 07:30:23.519146');
+INSERT INTO `transaction` VALUES (12, 16, 7, 1, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for user
@@ -2700,7 +2701,7 @@ CREATE TABLE `user`  (
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
@@ -2717,6 +2718,7 @@ INSERT INTO `user` VALUES (8, 'A', 'Hihi', '+84367120251', '$2a$08$75fsq.dStbaxw
 INSERT INTO `user` VALUES (9, 'Cầm', 'Sơn', '+84982604182', '$2a$08$5DV9nILO1yDpX6MnOiCauO8StcB6IQjNT3tiHnwi9HydZNmWOEX.K', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES (10, 'Phạm', 'Anh', '+84778364588', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-09 08:14:34.620728', '2019-11-09 08:14:34.620728');
 INSERT INTO `user` VALUES (11, 'Dinh', 'Viet', '+84386666428', '$2a$08$99JiW7wjIDrt8qNtCVCmheXTlAIGaWKw.i8CVnlaLjSLY0R1nWyKO', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (16, 'alo', 'alo', '1234', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for user_verification_image

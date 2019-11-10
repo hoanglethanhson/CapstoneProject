@@ -365,6 +365,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       let temp = [element.image_url];
       imageLinks = imageLinks.concat(temp);
     });
+    console.log(roomGroupId + ", " + userId);
     const transactionStatuses = await Transaction.repo.getTransactionStatus(roomGroupId, userId);
     const data = {
       data : {
