@@ -386,6 +386,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         availableRooms: availableRooms,
         images: imageLinks,
         title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
+        buildingTypeId: building.typeId,
         hostId: host.id,
         status: statusValue,
         transactionStatuses: transactionStatuses
