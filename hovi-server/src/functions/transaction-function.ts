@@ -5,6 +5,8 @@ import {Transaction} from "../models/transaction";
 import {IsNumber} from "class-validator";
 import {ConstantValues} from "../utils/constant-values";
 import {Room} from "../models/room";
+import {RoomGroup} from "../models/room-group";
+import {User} from "../models/user";
 
 export default class TransactionFunction {
     static getTransactions: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -68,8 +70,26 @@ export default class TransactionFunction {
     static generateTransferContent: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const transactionId = req.params['transactionId'];
         if (await Transaction.repo.findOne(transactionId)) {
-            const successResponse = "DATCOC-" + transactionId;
-            if (successResponse) res.status(200).send(successResponse);
+            const transaction = await Transaction.repo.findOne(transactionId);
+            const room = await Room.repo.findOne(transaction.roomId);
+            const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+            const user = await User.repo.findOne(transaction.userId);
+            if (user.balance >= roomGroup.rentPrice) {
+                const data = {
+                    isEnough: true
+                };
+                res.status(200).send(data);
+                return data;
+            }
+            const data = {
+                isEnough: false,
+                content: "DATCOC-" + transactionId,
+                moneyAmount: roomGroup.rentPrice - user.balance,
+                accountNumber: ConstantValues.ADMIN_ACCOUNT_NUMBER,
+                bank: ConstantValues.ADMIN_BANK
+            };
+            res.status(200).send(data);
+            return data;
         } else
             next(new HTTP400Error('transactionId not found'));
     };

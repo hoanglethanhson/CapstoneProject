@@ -369,15 +369,16 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     //console.log(roomGroupId + ", " + userId);
     let transactionStatuses = await Transaction.repo.getTransactionStatus(roomGroupId, userId);
     //console.log(transactionStatuses);
-    let statusValue = ConstantValues.ACCEPT_WAITING;
+    let statusValue = null;
     if (transactionStatuses.length == 0) {
       transactionStatuses = null;
     } else {
       for (const status of transactionStatuses) {
         //console.log(status);
-        if (status.transaction_status == ConstantValues.HOST_REJECTED) {
+        /*if (status.transaction_status == ConstantValues.HOST_REJECTED) {
           statusValue = ConstantValues.HOST_REJECTED;
-        }
+        } */
+        statusValue = status.transaction_value;
       }
     }
     const data = {
