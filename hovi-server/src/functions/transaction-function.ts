@@ -92,6 +92,9 @@ export default class TransactionFunction {
                 accountNumber: ConstantValues.ADMIN_ACCOUNT_NUMBER,
                 bank: ConstantValues.ADMIN_BANK
             };
+            let transactionUpdate = transaction;
+            transactionUpdate.transactionStatus = ConstantValues.NOT_ENOUGH_BALANCE;
+            transactionUpdate = await Transaction.repo.updateById(transactionId, transactionUpdate);
             res.status(200).send(data);
             return data;
         } else
