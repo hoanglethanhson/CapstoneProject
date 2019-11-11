@@ -367,7 +367,14 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       imageLinks = imageLinks.concat(temp);
     });
     //console.log(roomGroupId + ", " + userId);
-    let transactionStatuses = await Transaction.repo.getTransactionStatus(roomGroupId, userId);
+    let transactionStatuses
+    if (host.id == userId) {
+      console.log("host");
+      transactionStatuses = await Transaction.repo.getTransactionStatusForHost(roomGroupId);
+    } else {
+      console.log("tenant");
+      transactionStatuses = await Transaction.repo.getTransactionStatus(roomGroupId, userId);
+    }
     //console.log(transactionStatuses);
     let statusValue = null;
     if (transactionStatuses.length == 0) {
