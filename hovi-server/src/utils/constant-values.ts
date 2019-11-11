@@ -3,6 +3,7 @@ export class ConstantValues {
   static readonly DEFAULT_ADDRESS = 'not yet';
   static readonly DEFAULT_FACEBOOK_ID = 'example-facebook-id';
   static readonly DEFAULT_GOOGLE_ID = 'example-google-id';
+  static readonly DEFAULT_AVATAR = 'https://img.icons8.com/pastel-glyph/64/000000/person-male.png';
 
   // DEFINE ROOM STATUS
   static readonly ROOM_WAS_DELETED = -1;

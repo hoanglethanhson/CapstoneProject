@@ -4,6 +4,7 @@ export default [
     {
         path: "/service/",
         method: "get",
+        authentication: true,
         handler: serviceFunction.getServices
     },
     {
