@@ -378,9 +378,10 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         /*if (status.transaction_status == ConstantValues.HOST_REJECTED) {
           statusValue = ConstantValues.HOST_REJECTED;
         } */
-        statusValue = status.transaction_value;
+        statusValue = status.transaction_status;
       }
     }
+    //console.log(statusValue);
     const data = {
       data : {
         availableRooms: availableRooms,
