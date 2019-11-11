@@ -137,6 +137,7 @@ export class TransactionRepository extends Repository<Transaction> {
             .createQueryBuilder(Transaction, 'transaction')
             .select(['*'])
             .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+            .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
             .where('room.room_group_id = :room_group_id', { room_group_id: roomGroupId })
             .andWhere('transaction.user_id = :user_id', {user_id: userId})
             .getRawMany();
