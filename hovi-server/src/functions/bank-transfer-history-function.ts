@@ -5,6 +5,8 @@ import {BankTransferHistory} from "../models/bank-transfer-history";
 import {ConstantValues} from "../utils/constant-values";
 import {Transaction} from "../models/transaction";
 import {User} from "../models/user";
+import {Room} from "../models/room";
+import {RoomGroup} from "../models/room-group";
 
 export default class BankTransferHistoryFunction {
     static getBankTransferHistories: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -78,12 +80,25 @@ export default class BankTransferHistoryFunction {
                     receiverAccountNumber = ConstantValues.ADMIN_ACCOUNT_NUMBER;
                     receiverUserType = ConstantValues.ADMIN;
 
-                    //add fund for user
+                    //handle transfer to transaction status
                     if (userId != -1) {
                         const user = await User.repo.findOne(userId);
+                        const transaction = await Transaction.repo.findOne(transactionId);
+                        const room = await Room.repo.findOne(transaction.roomId);
+                        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+                        let totalBalance = user.balance + moneyAmount;
                         let userUpdate = user;
-                        userUpdate.balance = user.balance + moneyAmount;
-                        userUpdate = await User.repo.updateById(userId, userUpdate);
+                        if (totalBalance >= roomGroup.rentPrice) {
+                            let transactionUpdate = transaction;
+                            transactionUpdate.transactionStatus = ConstantValues.ENOUGH_BALANCE;
+                            transactionUpdate = await Transaction.repo.updateById(transactionId, transactionUpdate);
+
+                            userUpdate.balance = totalBalance - roomGroup.rentPrice;
+                            userUpdate = await User.repo.updateById(userId, userUpdate);
+                        }  else {
+                            userUpdate.balance = totalBalance;
+                            userUpdate = await User.repo.updateById(userId, userUpdate);
+                        }
                     }
 
                 } else {
