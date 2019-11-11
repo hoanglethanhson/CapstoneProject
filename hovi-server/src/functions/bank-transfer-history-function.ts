@@ -4,6 +4,7 @@ import {HTTP400Error} from '../utils/httpErrors';
 import {BankTransferHistory} from "../models/bank-transfer-history";
 import {ConstantValues} from "../utils/constant-values";
 import {Transaction} from "../models/transaction";
+import {User} from "../models/user";
 
 export default class BankTransferHistoryFunction {
     static getBankTransferHistories: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -61,6 +62,10 @@ export default class BankTransferHistoryFunction {
                 let receiverAccountNumber;
                 let receiverUserType;
 
+                let moneyAmount = (transfer.credit != null)? parseFloat(transfer.credit) : parseFloat(transfer.debit);
+                let transferTime = new Date(transfer.transferDate);
+                let transferNote = transfer.transferContent;
+
 
                 if (transfer.credit != null) {
                     senderUserId = userId;
@@ -72,6 +77,15 @@ export default class BankTransferHistoryFunction {
                     receiverBank = ConstantValues.ADMIN_BANK;
                     receiverAccountNumber = ConstantValues.ADMIN_ACCOUNT_NUMBER;
                     receiverUserType = ConstantValues.ADMIN;
+
+                    //add fund for user
+                    if (userId != -1) {
+                        const user = await User.repo.findOne(userId);
+                        let userUpdate = user;
+                        userUpdate.balance = user.balance + moneyAmount;
+                        userUpdate = await User.repo.updateById(userId, userUpdate);
+                    }
+
                 } else {
                     senderUserId =  ConstantValues.ADMIN_USER_ID;
                     senderBank = ConstantValues.ADMIN_BANK;
@@ -83,9 +97,6 @@ export default class BankTransferHistoryFunction {
                     receiverAccountNumber = transfer.account.split("-")[0].trim();
                     receiverUserType = ConstantValues.HOST;
                 }
-                let moneyAmount = (transfer.credit != null)? parseFloat(transfer.credit) : parseInt(transfer.debit);
-                let transferTime = new Date(transfer.transferDate);
-                let transferNote = transfer.transferContent;
 
                 const result = {
                     senderUserId,

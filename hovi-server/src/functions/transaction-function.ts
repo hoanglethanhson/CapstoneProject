@@ -78,6 +78,10 @@ export default class TransactionFunction {
                 const data = {
                     isEnough: true
                 };
+                let userUpdate = user;
+                userUpdate.balance = user.balance - roomGroup.rentPrice;
+                userUpdate = await User.repo.updateById(user.id, userUpdate);
+                console.log(userUpdate);
                 res.status(200).send(data);
                 return data;
             }
