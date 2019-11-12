@@ -303,9 +303,11 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
            buildingTypeId: building.typeId,
            roomGroupId: roomGroup.id,
            direction: roomGroup.direction,
+           floorQuantity: building.floorQuantity,
            wcQuantity: roomGroup.wcQuantity,
            bedroomQuantity: roomGroup.bedroomQuantity,
            availableRooms: availableRooms,
+           minDepositPeriod: roomGroup.minDepositPeriod,
            images: imageLinks,
            title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
            generalAddress: {
@@ -395,6 +397,11 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         images: imageLinks,
         title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
         buildingTypeId: building.typeId,
+        direction: roomGroup.direction,
+        floorQuantity: building.floorQuantity,
+        wcQuantity: roomGroup.wcQuantity,
+        bedroomQuantity: roomGroup.bedroomQuantity,
+        minDepositPeriod: roomGroup.minDepositPeriod,
         hostId: host.id,
         status: statusValue,
         transactionStatuses: transactionStatuses
