@@ -14,41 +14,41 @@ variables:
   SERVER_CACHE_IMAGE: registry.gitlab.com/hovi-team-development/hovi-backend/server
   DATABASE_CACHE_IMAGE: registry.gitlab.com/hovi-team-development/hovi-backend/database
 
-test:
-  stage: test
-  image: thuongnn1997/docker:stable
-  only:
-    - master
-    - production
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-  script:
-    - cd ./gitlab-ci
-    - docker pull $DATABASE_CACHE_IMAGE:latest || true
-    - docker pull $SERVER_CACHE_IMAGE:latest || true
-    - docker-compose up --build --abort-on-container-exit
-  after_script:
-    - docker push $DATABASE_CACHE_IMAGE:latest
-    - docker push $SERVER_CACHE_IMAGE:latest
-  artifacts:
-    name: "test-reports-$CI_PIPELINE_ID-$CI_COMMIT_REF_NAME"
-    when: always
-    paths:
-      - ./hovi-server/coverage
+# test:
+#   stage: test
+#   image: thuongnn1997/docker:stable
+#   only:
+#     - master
+#     - production
+#   before_script:
+#     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+#   script:
+#     - cd ./gitlab-ci
+#     - docker pull $DATABASE_CACHE_IMAGE:latest || true
+#     - docker pull $SERVER_CACHE_IMAGE:latest || true
+#     - docker-compose up --build --abort-on-container-exit
+#   after_script:
+#     - docker push $DATABASE_CACHE_IMAGE:latest
+#     - docker push $SERVER_CACHE_IMAGE:latest
+#   artifacts:
+#     name: "test-reports-$CI_PIPELINE_ID-$CI_COMMIT_REF_NAME"
+#     when: always
+#     paths:
+#       - ./hovi-server/coverage
 
-image_build:
-  stage: image_build
-  image: docker:stable
-  only:
-    - production
-  before_script:
-    - docker info
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-  script:
-    - docker pull $SERVER_CACHE_IMAGE:latest || true
-    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:latest -t hovi-server ./hovi-server
-    - docker tag hovi-server $SERVER_CACHE_IMAGE:prod
-    - docker push $SERVER_CACHE_IMAGE:prod
+# image_build:
+#   stage: image_build
+#   image: docker:stable
+#   only:
+#     - production
+#   before_script:
+#     - docker info
+#     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+#   script:
+#     - docker pull $SERVER_CACHE_IMAGE:latest || true
+#     - docker build --pull --cache-from $SERVER_CACHE_IMAGE:latest -t hovi-server ./hovi-server
+#     - docker tag hovi-server $SERVER_CACHE_IMAGE:prod
+#     - docker push $SERVER_CACHE_IMAGE:prod
 
 deploy_live:
   image:
@@ -59,15 +59,19 @@ deploy_live:
     - production
   when: manual
   script:
+    - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE --project $GCP_PROJECT_ID
     - kubectl version
-    - kubectl apply -f ./k8s/ingress
-    - kubectl apply -f ./k8s/mysql
-    - |
-      if kubectl apply -f ./k8s/server/deployment.yaml | grep -q unchanged; then
-          echo "=> Patching server deployment to force image update."
-          kubectl patch -f ./k8s/server/deployment.yaml -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"ci-last-updated\":\"$(date +'%s')\"}}}}}"
-      else
-          echo "=> Server Deployment apply has changed the object, no need to force image update."
-      fi
-    - kubectl rollout status -f ./k8s/server/deployment.yaml
-    - kubectl get all,ing -l app=${CI_ENVIRONMENT_SLUG}
+    # - kubectl apply -f ./k8s/ingress
+    # - kubectl apply -f ./k8s/mysql
+    # - |
+    #   if kubectl apply -f ./k8s/server/deployment.yaml | grep -q unchanged; then
+    #       echo "=> Patching server deployment to force image update."
+    #       kubectl patch -f ./k8s/server/deployment.yaml -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"ci-last-updated\":\"$(date +'%s')\"}}}}}"
+    #   else
+    #       echo "=> Server Deployment apply has changed the object, no need to force image update."
+    #   fi
+    # - kubectl rollout status -f ./k8s/server/deployment.yaml
+    # - kubectl get all,ing -l app=${CI_ENVIRONMENT_SLUG}
