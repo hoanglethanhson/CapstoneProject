@@ -51,9 +51,7 @@ variables:
 #     - docker push $SERVER_CACHE_IMAGE:prod
 
 deploy_live:
-  image:
-    name: lachlanevenson/k8s-kubectl:latest
-    entrypoint: ["/bin/sh", "-c"]
+  image: dwdraju/gke-kubectl-docker
   stage: deploy
   only:
     - production
