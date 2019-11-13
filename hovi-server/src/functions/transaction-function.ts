@@ -7,6 +7,7 @@ import {ConstantValues} from "../utils/constant-values";
 import {Room} from "../models/room";
 import {RoomGroup} from "../models/room-group";
 import {User} from "../models/user";
+import {Building} from "../models/building";
 
 export default class TransactionFunction {
     static getTransactions: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -53,9 +54,18 @@ export default class TransactionFunction {
                     //res.status(200).send(successResponse);
                 }
                 const room = await Room.repo.findOne(roomId);
-                const isRealTransaction = body.isRealTransaction;
-                //change room status only when the transaction is real (made by user)
-                if (isRealTransaction) {
+                const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+                const building = await Building.repo.findOne(roomGroup.buildingId);
+                if (building.typeId == 3) {
+                    const isRealTransaction = body.isRealTransaction;
+                    //change room status only when the transaction is real (made by user)
+                    if (isRealTransaction) {
+                        let updateRoom = room;
+                        updateRoom.roomStatus = ConstantValues.ROOM_NOT_AVAILABLE;
+                        updateRoom = await Room.repo.updateById(roomId, updateRoom);
+                        console.log(updateRoom);
+                    }
+                } else {
                     let updateRoom = room;
                     updateRoom.roomStatus = ConstantValues.ROOM_NOT_AVAILABLE;
                     updateRoom = await Room.repo.updateById(roomId, updateRoom);
