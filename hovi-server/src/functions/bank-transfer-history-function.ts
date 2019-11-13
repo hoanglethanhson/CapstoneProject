@@ -67,6 +67,7 @@ export default class BankTransferHistoryFunction {
                 let moneyAmount = (transfer.credit != null)? parseFloat(transfer.credit) : parseFloat(transfer.debit);
                 let transferTime = new Date(transfer.transferDate);
                 let transferNote = transfer.transferContent;
+                let transferCode = transfer.transferCode;
 
 
                 if (transfer.credit != null) {
@@ -125,6 +126,7 @@ export default class BankTransferHistoryFunction {
                     moneyAmount,
                     transferTime,
                     transferNote,
+                    transferCode,
                     isValidate: isValidate
                 };
                 resultArray = resultArray.concat(result);

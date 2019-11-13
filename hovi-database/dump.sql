@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 12/11/2019 21:32:53
+ Date: 14/11/2019 00:44:33
 */
 
 SET NAMES utf8mb4;
@@ -64,6 +64,7 @@ CREATE TABLE `bank_transfer_history`  (
   `transfer_time` timestamp(6) NULL DEFAULT NULL COMMENT 'Time of transferation',
   `money_amount` double(10, 0) NULL DEFAULT NULL COMMENT 'Money amount of the transfer',
   `transfer_note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Note of transfer',
+  `transfer_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Code of the transfer',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`transfer_id`) USING BTREE,
@@ -76,14 +77,14 @@ CREATE TABLE `bank_transfer_history`  (
 -- ----------------------------
 -- Records of bank_transfer_history
 -- ----------------------------
-INSERT INTO `bank_transfer_history` VALUES (1, 1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC-1', '2019-11-05 09:46:25.934443', '2019-11-05 09:46:25.934443');
-INSERT INTO `bank_transfer_history` VALUES (2, 2, 'SGD NHNN VIET NAM', '00000034005', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC-3', '2019-11-05 09:46:33.304627', '2019-11-05 09:46:33.304627');
-INSERT INTO `bank_transfer_history` VALUES (7, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-05-11 00:00:00.000000', 1500000, 'DATCOC.1', NULL, NULL);
-INSERT INTO `bank_transfer_history` VALUES (8, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-05-11 00:00:00.000000', 1500000, 'DATCOC-100', NULL, NULL);
-INSERT INTO `bank_transfer_history` VALUES (14, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-09-11 00:00:00.000000', 1500000, 'DATCOC.1', NULL, NULL);
-INSERT INTO `bank_transfer_history` VALUES (15, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-09-11 00:00:00.000000', 1500000, 'DATCOC-100', NULL, NULL);
-INSERT INTO `bank_transfer_history` VALUES (16, 4, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-12-11 00:00:00.000000', 5000000, 'DATCOC-17', NULL, NULL);
-INSERT INTO `bank_transfer_history` VALUES (17, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-12-11 00:00:00.000000', 5000000, 'DATCOC.17', NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (1, 1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC-1', NULL, '2019-11-05 09:46:25.934443', '2019-11-05 09:46:25.934443');
+INSERT INTO `bank_transfer_history` VALUES (2, 2, 'SGD NHNN VIET NAM', '00000034005', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC-3', NULL, '2019-11-05 09:46:33.304627', '2019-11-05 09:46:33.304627');
+INSERT INTO `bank_transfer_history` VALUES (7, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-05-11 00:00:00.000000', 1500000, 'DATCOC.1', NULL, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (8, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-05-11 00:00:00.000000', 1500000, 'DATCOC-100', NULL, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (14, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-09-11 00:00:00.000000', 1500000, 'DATCOC.1', NULL, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (15, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-09-11 00:00:00.000000', 1500000, 'DATCOC-100', NULL, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (16, 4, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-12-11 00:00:00.000000', 5000000, 'DATCOC-17', NULL, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (17, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-12-11 00:00:00.000000', 5000000, 'DATCOC.17', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for building
