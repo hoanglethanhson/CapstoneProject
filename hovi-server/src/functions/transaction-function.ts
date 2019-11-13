@@ -148,6 +148,22 @@ export default class TransactionFunction {
         else next(new HTTP400Error('transactionId not found'));
     };
 
+    static checkInConfirmedTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const transactionId = req.params['transactionId'];
+        const transaction = await Transaction.repo.findOne(transactionId);
+
+        let transactionUpdate = transaction;
+        transactionUpdate.transactionStatus = ConstantValues.HOST_DEPOSIT_TRANSFERRED;
+        transactionUpdate = await Transaction.repo.updateById(transactionId, transaction);
+
+        let successResponse = {
+            transactionUpdate: transactionUpdate,
+        }
+
+        if (successResponse) res.status(200).send(successResponse);
+        else next(new HTTP400Error('transactionId not found'));
+    };
+
 
     static deleteTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const transactionId = req.params['transactionId'];
