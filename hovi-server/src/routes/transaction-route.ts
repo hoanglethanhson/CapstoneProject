@@ -26,6 +26,12 @@ export default [
         handler: TransactionFunction.updateTransaction
     },
     {
+        path: "/transactionReject/:transactionId",
+        method: "put",
+        authentication: true,
+        handler: TransactionFunction.rejectTransaction
+    },
+    {
         path: "/transaction/:transactionId",
         method: "delete",
         authentication: true,

@@ -126,6 +126,28 @@ export default class TransactionFunction {
         else next(new HTTP400Error('transactionId not found'));
     };
 
+    static rejectTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const transactionId = req.params['transactionId'];
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+
+        let transactionUpdate = transaction;
+        transactionUpdate.transactionStatus = ConstantValues.HOST_REJECTED;
+        transactionUpdate = await Transaction.repo.updateById(transactionId, transaction);
+
+        let roomUpdate = room;
+        roomUpdate.roomStatus = ConstantValues.ROOM_AVAILABLE;
+        roomUpdate = await Room.repo.updateById(room.roomId, roomUpdate);
+
+        let successResponse = {
+            transactionUpdate: transactionUpdate,
+            roomUpdate: roomUpdate
+        }
+
+        if (successResponse) res.status(200).send(successResponse);
+        else next(new HTTP400Error('transactionId not found'));
+    };
+
 
     static deleteTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const transactionId = req.params['transactionId'];
