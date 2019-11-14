@@ -4,33 +4,9 @@ import {User} from "../../src/models/user";
 import {RoomType} from "../../src/models/building-type";
 
 describe('[model] building', () => {
-    let user1: User;
-    let buildingType1: RoomType;
+
     beforeAll(async () => {
         await DatabaseManager.init();
-        user1 = await User.repo.save(User.repo.create({
-            id: 1,
-            firstName: 'first_name',
-            lastName: 'last_name',
-            phoneNumber: 'phone_number',
-            password: 'password',
-            phoneToken: 'phone_token',
-            roleAdmin: 'role_admin',
-            gender: true,
-            facebookId: 'facebook_id',
-            googleId: 'google_id',
-            email: 'email',
-            avatar: 'avatar',
-            address: 'address',
-            isVerified: true,
-            isHost: true,
-            isActive: true
-        }));
-
-        buildingType1 = await RoomType.repo.save(RoomType.repo.create({
-            id: 1,
-            type: 'building_type'
-        }));
     });
 
     afterAll(async () => {
@@ -41,23 +17,10 @@ describe('[model] building', () => {
 
     beforeEach(async () => {
         await DatabaseManager.clearDataBuildingTest();
+        building1 = new Building();
+        building1.id = 1;
 
-
-        building1 = await Building.repo.save(Building.repo.create({
-            id: 1,
-            buildingName: 'building_create',
-            typeId: buildingType1.id,
-            province: 'province',
-            district: 'district',
-            ward: 'ward',
-            detailedAddress: 'detailed_address',
-            addressDescription: 'address_description',
-            location: 'location',
-            floorQuantity: 1,
-            hostId: user1.id,
-            isVerified: true,
-            isCompleted: 1
-        }));
+        building1 = await Building.repo.save(building1);
     });
 
 

@@ -6,18 +6,9 @@ import {RoomType} from "../../src/models/building-type";
 import {Building} from "../../src/models/building";
 
 describe('[model] roomGroup', () => {
-    let user1 = new User();
-    let buildingType1 = new RoomType();
-    let building1 = new Building();
 
     beforeAll(async () => {
         await DatabaseManager.init();
-        user1.id = 1;
-        buildingType1.id = 1;
-        building1.id = 1;
-        user1 = await User.repo.save(user1);
-        buildingType1 = await RoomType.repo.save(buildingType1);
-        building1 = await Building.repo.save(building1);
     });
 
     afterAll(async () => {
@@ -27,27 +18,9 @@ describe('[model] roomGroup', () => {
     let roomGroup1: RoomGroup;
     beforeEach(async () => {
         await DatabaseManager.clearDataRoomGroupTest();
-
-        roomGroup1 = await RoomGroup.repo.save(RoomGroup.repo.create({
-            id: 1,
-            buildingId: building1.id,
-            gender: true,
-            rentPrice: 1,
-            minDepositPeriod: 1,
-            area: 1,
-            bedroomQuantity: 1,
-            bathroomQuantity: 1,
-            wcQuantity: 1,
-            direction: 'direction',
-            isAvailable: true,
-            isVerified: true,
-            depositPrice: 1,
-            description: 'description',
-            capacity: 1,
-            viewAmount: 1,
-            phoneViewAmount: 1,
-            isSponsored: true
-        }));
+        roomGroup1 = new RoomGroup();
+        roomGroup1.id = 1;
+        roomGroup1 = await RoomGroup.repo.save(roomGroup1);
     });
 
     it('should return null if roomGroup is not found', async () => {

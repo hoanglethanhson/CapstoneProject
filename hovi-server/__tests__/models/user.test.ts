@@ -14,24 +14,10 @@ describe('[model] user', () => {
     let user1: User;
     beforeEach(async () => {
         await DatabaseManager.clearDataUserTest();
-        user1 = await User.repo.save(User.repo.create({
-            id: 1,
-            firstName: 'first_name',
-            lastName: 'last_name',
-            phoneNumber: 'phone_number',
-            password: 'password',
-            phoneToken: 'phone_token',
-            roleAdmin: 'role_admin',
-            gender: true,
-            facebookId: 'facebook_id',
-            googleId: 'google_id',
-            email: 'email',
-            avatar: 'avatar',
-            address: 'address',
-            isVerified: true,
-            isHost: true,
-            isActive: true
-        }));
+        user1 = new User();
+        user1.id = 1;
+        user1.phoneNumber = 'phone number';
+        user1 = await User.repo.save(user1);
     });
 
 

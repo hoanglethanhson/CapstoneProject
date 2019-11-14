@@ -3,6 +3,7 @@ import {DatabaseManager} from '../../src/models';
 import {RoomType} from '../../src/models/building-type';
 import {User} from "../../src/models/user";
 
+
 describe('[model] buildingType', () => {
     beforeAll(async () => {
         await DatabaseManager.init();

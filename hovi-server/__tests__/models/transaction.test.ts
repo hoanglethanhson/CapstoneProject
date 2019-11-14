@@ -10,10 +10,6 @@ describe('[model] transaction', () => {
     let room1 = new Room();
     beforeAll(async () => {
         await DatabaseManager.init();
-        user1.id = 1;
-        room1.roomId = 1;
-        user1 = await User.repo.save(user1);
-        room1 = await Room.repo.save(room1);
     });
 
     afterAll(async () => {
@@ -23,12 +19,11 @@ describe('[model] transaction', () => {
     let transaction1: Transaction;
     beforeEach(async () => {
         await DatabaseManager.clearDataTransactionTest();
-        transaction1 = await Transaction.repo.save(Transaction.repo.create({
-            transactionId: 1,
-            userId: user1.id,
-            roomId: room1.roomId,
-            transactionStatus: 1
-        }));
+        transaction1 = new Transaction();
+        transaction1.transactionId = 1;
+        transaction1.userId = 1;
+        transaction1.roomId = 1;
+        transaction1 = await Transaction.repo.save(transaction1);
     });
 
 
@@ -51,8 +46,8 @@ describe('[model] transaction', () => {
 
     it('should return right object after it was inserted', async () => {
         const duplicatedTransaction = new Transaction();
-        duplicatedTransaction.userId = user1.id;
-        duplicatedTransaction.roomId = room1.roomId;
+        duplicatedTransaction.userId = 1;
+        duplicatedTransaction.roomId = 1;
         duplicatedTransaction.transactionId = 100;
 
         await Transaction.repo.save(duplicatedTransaction);
@@ -64,8 +59,8 @@ describe('[model] transaction', () => {
     it('should return right object after it was updated', async () => {
         const duplicatedTransaction = new Transaction();
         duplicatedTransaction.transactionId = 100;
-        duplicatedTransaction.userId = user1.id;
-        duplicatedTransaction.roomId = room1.roomId;
+        duplicatedTransaction.userId = 1;
+        duplicatedTransaction.roomId = 1;
 
         await Transaction.repo.save(duplicatedTransaction);
 
@@ -80,8 +75,8 @@ describe('[model] transaction', () => {
     it('should return null object after it was deleted', async () => {
         const duplicatedTransaction = new Transaction();
         duplicatedTransaction.transactionId = 100;
-        duplicatedTransaction.userId = user1.id;
-        duplicatedTransaction.roomId = room1.roomId;
+        duplicatedTransaction.userId = 1;
+        duplicatedTransaction.roomId = 1;
 
         await Transaction.repo.save(duplicatedTransaction);
         await Transaction.repo.delete(duplicatedTransaction.transactionId);

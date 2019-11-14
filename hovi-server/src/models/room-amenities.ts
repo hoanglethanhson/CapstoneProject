@@ -65,10 +65,10 @@ export class RoomAmenitiesRepository extends Repository<RoomAmenities> {
   async updateById(roomGroupId: any, amenitiesId: any, roomAmenitiesUpdate: RoomAmenities) {
     let roomAmenities = await this.getOneRecord(roomGroupId, amenitiesId);
     if (roomAmenities) {
-      roomAmenities.roomGroupId = roomAmenitiesUpdate.roomGroupId ? roomAmenitiesUpdate.roomGroupId : roomAmenities.roomGroupId;
-      roomAmenities.amenitiesId = roomAmenitiesUpdate.amenitiesId ? roomAmenitiesUpdate.amenitiesId : roomAmenities.amenitiesId;
-      roomAmenities.createAt = roomAmenitiesUpdate.createAt ? roomAmenitiesUpdate.createAt : roomAmenities.createAt;
-      roomAmenities.updateAt = roomAmenitiesUpdate.updateAt ? roomAmenitiesUpdate.updateAt : roomAmenities.updateAt;
+      roomAmenities.roomGroupId = roomAmenitiesUpdate.roomGroupId;
+      roomAmenities.amenitiesId = roomAmenitiesUpdate.amenitiesId;
+      roomAmenities.createAt = roomAmenitiesUpdate.createAt ;
+      roomAmenities.updateAt = roomAmenitiesUpdate.updateAt ;
       await this.save(roomAmenities);
     }
     return roomAmenities;
