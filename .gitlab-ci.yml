@@ -57,8 +57,8 @@ deploy_live:
     - production
   when: manual
   script:
-    — echo "$GCLOUD_SERVICE_KEY" > key.json
-    — gcloud auth activate-service-account --key-file=key.json
+    - echo "$GCLOUD_SERVICE_KEY" > key.json
+    - gcloud auth activate-service-account --key-file=key.json
     - gcloud config set project $GCP_PROJECT_ID
     - gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE --project $GCP_PROJECT_ID
     - kubectl version
