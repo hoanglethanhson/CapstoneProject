@@ -53,27 +53,42 @@ COMMIT;
 -- Table structure for bank_transfer_history
 -- ----------------------------
 DROP TABLE IF EXISTS `bank_transfer_history`;
-CREATE TABLE `bank_transfer_history` (
+CREATE TABLE `bank_transfer_history`  (
   `transfer_id` int(4) NOT NULL AUTO_INCREMENT COMMENT 'ID of the bank transferation',
-  `sender_user_id` int(5) DEFAULT NULL COMMENT 'Sender user id',
-  `sender_bank` varchar(255) DEFAULT NULL COMMENT 'Bank of sender',
-  `sender_account_number` varchar(255) DEFAULT NULL COMMENT 'Sender account number',
-  `sender_user_type` tinyint(1) DEFAULT NULL COMMENT 'Sender user type',
-  `receiver_user_id` int(5) DEFAULT NULL COMMENT 'Receiver user id',
-  `receiver_bank` varchar(255) DEFAULT NULL COMMENT 'Bank of receiver',
-  `receiver_account_number` varchar(255) DEFAULT NULL COMMENT 'Receiver account number',
-  `receiver_user_type` tinyint(1) DEFAULT NULL COMMENT 'Receiver user type',
+  `sender_user_id` int(5) NULL DEFAULT NULL COMMENT 'Sender user id',
+  `sender_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of sender',
+  `sender_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Sender account number',
+  `sender_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Sender user type',
+  `receiver_user_id` int(5) NULL DEFAULT NULL COMMENT 'Receiver user id',
+  `receiver_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of receiver',
+  `receiver_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Receiver account number',
+  `receiver_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Receiver user type',
   `transfer_time` timestamp(6) NULL DEFAULT NULL COMMENT 'Time of transferation',
-  `money_amount` double(10,0) DEFAULT NULL COMMENT 'Money amount of the transfer',
-  `transfer_note` varchar(255) DEFAULT NULL COMMENT 'Note of transfer',
-  `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
+  `money_amount` double(10, 0) NULL DEFAULT NULL COMMENT 'Money amount of the transfer',
+  `transfer_note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Note of transfer',
+  `transfer_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Code of the transfer',
+  `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`transfer_id`) USING BTREE,
-  KEY `FK_user_bank_transfer_history-sender_id` (`sender_user_id`) USING BTREE,
-  KEY `FK_user_bank_transfer_history-receiver_id` (`receiver_user_id`) USING BTREE,
-  CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`),
-  CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_user_bank_transfer_history-sender_id`(`sender_user_id`) USING BTREE,
+  INDEX `FK_user_bank_transfer_history-receiver_id`(`receiver_user_id`) USING BTREE,
+  CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of bank_transfer_history
+-- ----------------------------
+INSERT INTO `bank_transfer_history` VALUES (1, 1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC-1', NULL, '2019-11-05 09:46:25.934443', '2019-11-05 09:46:25.934443');
+INSERT INTO `bank_transfer_history` VALUES (2, 2, 'SGD NHNN VIET NAM', '00000034005', 1, 5, 'TPBank', '02725034001', 3, '2019-03-11 00:00:00.000000', 1500000, 'DATCOC-3', NULL, '2019-11-05 09:46:33.304627', '2019-11-05 09:46:33.304627');
+INSERT INTO `bank_transfer_history` VALUES (7, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-05-11 00:00:00.000000', 1500000, 'DATCOC.1', NULL, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (8, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-05-11 00:00:00.000000', 1500000, 'DATCOC-100', NULL, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (14, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-09-11 00:00:00.000000', 1500000, 'DATCOC.1', NULL, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (15, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-09-11 00:00:00.000000', 1500000, 'DATCOC-100', NULL, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (16, 4, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-12-11 00:00:00.000000', 5000000, 'DATCOC-17', NULL, NULL, NULL);
+INSERT INTO `bank_transfer_history` VALUES (17, -1, 'SGD NHNN VIET NAM', '00000034002', 1, 5, 'TPBank', '02725034001', 3, '2019-12-11 00:00:00.000000', 5000000, 'DATCOC.17', NULL, NULL, NULL);
+
+
 
 -- ----------------------------
 -- Table structure for building
