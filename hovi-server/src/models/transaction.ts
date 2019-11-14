@@ -58,18 +58,12 @@ export class Transaction extends BaseEntity {
 
     @CreateDateColumn({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: Transaction.schema.createAt
     })
     createAt: Date;
 
     @UpdateDateColumn({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: Transaction.schema.updateAt
     })
     updateAt: Date;

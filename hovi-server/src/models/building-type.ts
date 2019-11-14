@@ -42,18 +42,12 @@ export class RoomType extends BaseEntity {
 
     @Column({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: RoomType.schema.create
     })
     create: Date;
 
     @Column({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: RoomType.schema.update
     })
     update: Date;

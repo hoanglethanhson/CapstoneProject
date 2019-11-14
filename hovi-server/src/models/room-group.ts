@@ -11,16 +11,16 @@ import {
   PrimaryColumn,
   Repository,
 } from 'typeorm';
-import { buildingTitle } from '../utils';
-import { Building } from './building';
-import { Room } from './room';
-import { RoomAmenities } from './room-amenities';
-import { Length } from 'class-validator';
-import { RoomImage } from './room-image';
-import { BuildingService } from './building-service';
-import { User } from './user';
-import { RoomType } from './building-type';
-import { TenantReview } from './tenant-review';
+import {buildingTitle} from '../utils';
+import {Building} from './building';
+import {Room} from './room';
+import {RoomAmenities} from './room-amenities';
+import {IsNumber, Length, Min, IsIn} from 'class-validator';
+import {RoomImage} from './room-image';
+import {BuildingService} from './building-service';
+import {User} from './user';
+import {TenantReview} from './tenant-review';
+import {ConstantValues} from '../utils/constant-values';
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -34,7 +34,6 @@ export class RoomGroup extends BaseEntity {
     area: 'area',
     bedroomQuantity: 'bedroom_quantity',
     bathroomQuantity: 'bathroom_quantity',
-    wcQuantity: 'wc_quantity',
     direction: 'direction',
     isAvailable: 'is_available',
     isVerified: 'is_verified',
@@ -74,6 +73,8 @@ export class RoomGroup extends BaseEntity {
     unique: false,
     name: RoomGroup.schema.rentPrice,
   })
+  @IsNumber()
+  @Min(0)
   rentPrice: number;
 
   @Column({
@@ -81,6 +82,8 @@ export class RoomGroup extends BaseEntity {
     unique: false,
     name: RoomGroup.schema.minDepositPeriod,
   })
+  @IsNumber()
+  @Min(0)
   minDepositPeriod: number;
 
   @Column({
@@ -88,32 +91,32 @@ export class RoomGroup extends BaseEntity {
     unique: false,
     name: RoomGroup.schema.area,
   })
+  @IsNumber()
+  @Min(0)
   area: number;
 
   @Column({
     type: 'int',
     name: RoomGroup.schema.bedroomQuantity,
   })
+  @IsNumber()
+  @Min(1)
   bedroomQuantity: number;
 
   @Column({
     type: 'int',
     name: RoomGroup.schema.bathroomQuantity,
   })
+  @IsNumber()
+  @Min(1)
   bathroomQuantity: number;
-
-  @Column({
-    type: 'int',
-    name: RoomGroup.schema.wcQuantity,
-  })
-  wcQuantity: number;
 
   @Column({
     type: 'varchar',
     length: 255,
     name: RoomGroup.schema.direction,
   })
-  @Length(0, 255)
+  @IsIn(ConstantValues.DIRECTION)
   direction: string;
 
   @Column({
@@ -133,6 +136,8 @@ export class RoomGroup extends BaseEntity {
     type: 'double',
     name: RoomGroup.schema.depositPrice,
   })
+  @IsNumber()
+  @Min(0)
   depositPrice: number;
 
   @Column({
@@ -145,6 +150,8 @@ export class RoomGroup extends BaseEntity {
     type: 'int',
     name: RoomGroup.schema.capacity,
   })
+  @IsNumber()
+  @Min(1)
   capacity: number;
 
   @Column({
@@ -152,6 +159,8 @@ export class RoomGroup extends BaseEntity {
     unique: false,
     name: RoomGroup.schema.viewAmount,
   })
+  @IsNumber()
+  @Min(0)
   viewAmount: number;
 
   @Column({
@@ -159,6 +168,8 @@ export class RoomGroup extends BaseEntity {
     unique: false,
     name: RoomGroup.schema.phoneViewAmount,
   })
+  @IsNumber()
+  @Min(0)
   phoneViewAmount: number;
 
   @Column({
@@ -170,18 +181,12 @@ export class RoomGroup extends BaseEntity {
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: RoomGroup.schema.createdAt,
   })
   createdAt: Date;
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: RoomGroup.schema.updatedAt,
   })
   updatedAt: Date;
@@ -219,7 +224,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
       roomGroup.bedroomQuantity = roomGroupUpdate.bedroomQuantity ? roomGroupUpdate.bedroomQuantity : roomGroup.bedroomQuantity;
       roomGroup.bathroomQuantity = roomGroupUpdate.bathroomQuantity ? roomGroupUpdate.bathroomQuantity : roomGroup.bathroomQuantity;
-      roomGroup.wcQuantity = roomGroupUpdate.wcQuantity ? roomGroupUpdate.wcQuantity : roomGroup.wcQuantity;
       roomGroup.direction = roomGroupUpdate.direction ? roomGroupUpdate.direction : roomGroup.direction;
       roomGroup.isAvailable = roomGroupUpdate.isAvailable ? roomGroupUpdate.isAvailable : roomGroup.isAvailable;
       roomGroup.isVerified = roomGroupUpdate.isVerified ? roomGroupUpdate.isVerified : roomGroup.isVerified;
@@ -257,8 +261,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     if (building == null) {
       return null;
     }
-    const buildingTypeArray = await RoomType.repo.getBuildingType(building.typeId);
-    const buildingType = buildingTypeArray[0].building_type;
     const availableRooms = await Room.repo.getAvailableRoomsInGroup(roomGroupId);
     const amenities = await RoomAmenities.repo.getAmenitiesDetailRoomGroup(roomGroupId);
     const amenitiesNot = await RoomAmenities.repo.getAmenitiesDetailNotInRoomGroup(roomGroupId);
@@ -295,50 +297,48 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
      tenantAvatars = tenantAvatars.concat(tenant.avatar);
      tenantComments = tenantComments.concat(review.tenantReview_comment);
    }
-    const data = {
-       data : {
-           buildingTypeId: building.typeId,
-           roomGroupId: roomGroup.id,
-           direction: roomGroup.direction,
-           wcQuantity: roomGroup.wcQuantity,
-           bedroomQuantity: roomGroup.bedroomQuantity,
-           availableRooms: availableRooms,
-           images: imageLinks,
-           title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
-           generalAddress: {
-               province: building.province,
-               district: building.district,
-               ward: building.ward,
-           },
-           status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
-           area: roomGroup.area,
-           capacity: roomGroup.capacity,
-           gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
-           amenities: totalAmenities,
-           description: roomGroup.description,
-           roomCost: {
-               price: roomGroup.rentPrice,
-               deposit: roomGroup.depositPrice,
-           },
-           services: services,
-           hostId: host.id,
-           hostAvatar: host.avatar,
-           hostPhone: host.phoneNumber,
-           hostName: host.firstName + " " + host.lastName,
-           rating: {
-               number_of_reviews: rating[0].number_of_reviews,
-               accuracy_rate: rating[0].accuracy_rate,
-               host_rate: rating[0].host_rate,
-               security_rate: rating[0].security_rate,
-           },
-           reviewList: {
-               tenantAvatars,
-               tenantIds,
-               tenantComments
-           }
+    return {
+     data: {
+       buildingTypeId: building.typeId,
+       roomGroupId: roomGroup.id,
+       direction: roomGroup.direction,
+       bedroomQuantity: roomGroup.bedroomQuantity,
+       availableRooms: availableRooms,
+       images: imageLinks,
+       title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
+       generalAddress: {
+         province: building.province,
+         district: building.district,
+         ward: building.ward,
+       },
+       status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
+       area: roomGroup.area,
+       capacity: roomGroup.capacity,
+       gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
+       amenities: totalAmenities,
+       description: roomGroup.description,
+       roomCost: {
+         price: roomGroup.rentPrice,
+         deposit: roomGroup.depositPrice,
+       },
+       services: services,
+       hostId: host.id,
+       hostAvatar: host.avatar,
+       hostPhone: host.phoneNumber,
+       hostName: host.firstName + " " + host.lastName,
+       rating: {
+         number_of_reviews: rating[0].number_of_reviews,
+         accuracy_rate: rating[0].accuracy_rate,
+         host_rate: rating[0].host_rate,
+         security_rate: rating[0].security_rate,
+       },
+       reviewList: {
+         tenantAvatars,
+         tenantIds,
+         tenantComments
        }
-    };
-   return data;
+     }
+   };
   }
 
 }
