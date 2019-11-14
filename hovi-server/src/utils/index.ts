@@ -66,7 +66,7 @@ export const validateByModel = async (modelClass: any, body: any) => {
       },
       {},
     );
-    return new HTTP400Error(JSON.stringify(detailErrors));
+    return new HTTP400Error(detailErrors);
   }
 };
 
@@ -80,4 +80,8 @@ export const getCurrentDate = () => {
 
 export const isObject = (value) => {
   return value && typeof value === 'object' && value.constructor === Object;
+};
+
+export const buildingTitle = (buildingName: string, province: string, district: string, ward: string) => {
+  return `${buildingName} - ${JSON.parse(ward)[0]}, ${JSON.parse(district)[0]}, ${JSON.parse(province)[0]}`;
 };

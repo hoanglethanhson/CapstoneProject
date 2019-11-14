@@ -29,7 +29,6 @@ export class Building extends BaseEntity {
     floorQuantity: 'floor_quantity',
     hostId: 'host_id',
     isVerified: 'is_verified',
-    isCompleted: 'is_completed',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   };
@@ -66,7 +65,6 @@ export class Building extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    default: 'default value',
     name: Building.schema.province,
   })
   @IsNotEmpty()
@@ -76,7 +74,6 @@ export class Building extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    default: 'default value',
     name: Building.schema.district,
   })
   @IsNotEmpty()
@@ -86,7 +83,6 @@ export class Building extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    default: 'default value',
     name: Building.schema.ward,
   })
   @IsNotEmpty()
@@ -96,7 +92,6 @@ export class Building extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    default: 'default value',
     name: Building.schema.detailedAddress,
   })
   @IsNotEmpty()
@@ -106,22 +101,22 @@ export class Building extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    default: 'default value',
     name: Building.schema.addressDescription,
   })
   addressDescription: string;
 
   @Column({
     type: 'text',
-    default: 'default value',
     name: Building.schema.location,
   })
+  @IsNotEmpty()
   location: string;
 
   @Column({
     type: 'int',
     name: Building.schema.floorQuantity,
   })
+  @IsNotEmpty()
   floorQuantity: number;
 
   @Column({
@@ -131,25 +126,13 @@ export class Building extends BaseEntity {
   isVerified: boolean;
 
   @Column({
-    type: 'int',
-    name: Building.schema.isCompleted,
-  })
-  isCompleted: number;
-
-  @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: Building.schema.createdAt,
   })
   createdAt: Date;
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: Building.schema.updatedAt,
   })
   updatedAt: Date;
@@ -207,14 +190,5 @@ export class BuildingRepository extends Repository<Building> {
       .leftJoinAndSelect('roomAmenities.amenities', 'amenities')
       .andWhere('building.id = :buildingId', { buildingId })
       .getOne();
-  }
-
-  async updateStatus(buildingId: number, isComplete: number) {
-    //update isComplete by buildingId
-    const building = await Building.repo.findOne(buildingId);
-    //set isComplete and save
-    building.isCompleted = isComplete;
-    await this.save(building);
-    return building;
   }
 }

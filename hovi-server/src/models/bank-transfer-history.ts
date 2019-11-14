@@ -17,10 +17,9 @@ import {MaxLength} from "class-validator";
 
 @Entity(BankTransferHistory.tableName)
 export class BankTransferHistory extends BaseEntity {
-    static readonly tableName = 'transaction';
+    static readonly tableName = 'bank_transfer_history';
     static readonly schema = {
         transferId: 'transfer_id',
-        transactionId: 'transaction_id',
         senderUserId: 'sender_user_id',
         senderBank: 'sender_bank',
         senderAccountNumber: 'sender_account_number',
@@ -31,6 +30,7 @@ export class BankTransferHistory extends BaseEntity {
         receiverUserType: 'receiver_user_type',
         transferTime: 'transfer_time',
         moneyAmount: 'money_amount',
+        transferNote: 'transfer_note',
         createAt: 'created_at',
         updateAt: 'updated_at'
     };
@@ -42,12 +42,6 @@ export class BankTransferHistory extends BaseEntity {
         name: BankTransferHistory.schema.transferId
     })
     transferId: number;
-
-    @ManyToOne(type => Transaction, transaction => transaction.bankTransferHistories)
-    @JoinColumn({name: BankTransferHistory.schema.transactionId})
-    transaction: Transaction;
-    @Column({name: BankTransferHistory.schema.transactionId})
-    transactionId: number;
 
 
     @ManyToOne(type => User, user => user.bankTransferHistorySenders)
@@ -121,20 +115,22 @@ export class BankTransferHistory extends BaseEntity {
     })
     moneyAmount: string;
 
+    @Column({
+        type: 'varchar',
+        length: 255,
+        name: BankTransferHistory.schema.transferNote,
+    })
+    @MaxLength(255)
+    transferNote: string;
+
     @CreateDateColumn({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: BankTransferHistory.schema.createAt
     })
     createAt: Date;
 
     @UpdateDateColumn({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: BankTransferHistory.schema.updateAt
     })
     updateAt: Date;
@@ -150,7 +146,6 @@ export class BankTransferHistoryRepository extends Repository<BankTransferHistor
     async updateById(bankTransferHistoryId: any,bankTransferHistoryUpdate: BankTransferHistory) {
         let bankTransferHistory = await this.findOne(bankTransferHistoryId);
         if (bankTransferHistory) {
-            bankTransferHistory.transactionId = bankTransferHistoryUpdate.transactionId ? bankTransferHistoryUpdate.transactionId : bankTransferHistory.transactionId;
             bankTransferHistory.senderUserId = bankTransferHistoryUpdate.senderUserId ? bankTransferHistoryUpdate.senderUserId : bankTransferHistory.senderUserId;
             bankTransferHistory.senderBank = bankTransferHistoryUpdate.senderBank ? bankTransferHistoryUpdate.senderBank : bankTransferHistory.senderBank;
             bankTransferHistory.senderAccountNumber = bankTransferHistoryUpdate.senderAccountNumber ? bankTransferHistoryUpdate.senderAccountNumber : bankTransferHistory.senderAccountNumber;
@@ -161,11 +156,13 @@ export class BankTransferHistoryRepository extends Repository<BankTransferHistor
             bankTransferHistory.receiverUserType = bankTransferHistoryUpdate.receiverUserType ? bankTransferHistoryUpdate.receiverUserType : bankTransferHistory.receiverUserType;
             bankTransferHistory.transferTime = bankTransferHistoryUpdate.transferTime ? bankTransferHistoryUpdate.transferTime : bankTransferHistory.transferTime;
             bankTransferHistory.moneyAmount = bankTransferHistoryUpdate.moneyAmount ? bankTransferHistoryUpdate.moneyAmount : bankTransferHistory.moneyAmount;
+            bankTransferHistory.transferNote = bankTransferHistoryUpdate.transferNote ? bankTransferHistoryUpdate.transferNote : bankTransferHistory.transferNote;
             bankTransferHistory.createAt = bankTransferHistoryUpdate.createAt ? bankTransferHistoryUpdate.createAt : bankTransferHistory.createAt;
             bankTransferHistory.updateAt = bankTransferHistoryUpdate.updateAt ? bankTransferHistoryUpdate.updateAt : bankTransferHistory.updateAt;
             await this.save(bankTransferHistory);
         }
         return bankTransferHistory;
     }
+
 
 }

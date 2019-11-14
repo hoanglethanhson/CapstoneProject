@@ -54,18 +54,12 @@ export class Feedback extends BaseEntity {
 
     @Column({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: Feedback.schema.createAt
     })
     createAt: Date;
 
     @Column({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: Feedback.schema.updateAt
     })
     updateAt: Date;

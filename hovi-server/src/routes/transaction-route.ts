@@ -14,7 +14,7 @@ export default [
         handler: TransactionFunction.getTransaction
     },
     {
-        path: "/transaction/",
+        path: "/transaction/:roomId",
         method: "post",
         authentication: true,
         handler: TransactionFunction.createTransaction
@@ -30,5 +30,11 @@ export default [
         method: "delete",
         authentication: true,
         handler: TransactionFunction.deleteTransaction
+    },
+    {
+        path: "/transactionGen/:transactionId",
+        method: "get",
+        authentication: true,
+        handler: TransactionFunction.generateTransferContent
     },
 ];

@@ -13,6 +13,7 @@ import {RoomAmenities} from "./room-amenities";
 import {Transaction} from "./transaction";
 import {Feedback} from "./feedback";
 import {TenantReview} from "./tenant-review";
+import {BankTransferHistory} from "./bank-transfer-history";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -40,7 +41,8 @@ export class DatabaseManager {
                 RoomAmenities,
                 Transaction,
                 Feedback,
-                TenantReview
+                TenantReview,
+                BankTransferHistory
             ],
             maxQueryExecutionTime: 1000
         });
