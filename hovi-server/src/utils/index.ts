@@ -66,7 +66,7 @@ export const validateByModel = async (modelClass: any, body: any) => {
       },
       {},
     );
-    return new HTTP400Error(JSON.stringify(detailErrors));
+    return new HTTP400Error(detailErrors);
   }
 };
 

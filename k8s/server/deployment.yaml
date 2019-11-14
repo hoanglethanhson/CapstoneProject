@@ -5,7 +5,7 @@ metadata:
     run: hovi-server
   name: hovi-server
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       run: hovi-server
@@ -19,23 +19,11 @@ spec:
       containers:
         - name: hovi-server
           image: registry.gitlab.com/hovi-team-development/hovi-backend/server:prod
-          env:
-            # Use secret in real usage
-            - name: MYSQL_ROOT_PASSWORD
-              value: password
-            - name: MYSQL_DATABASE
-              value: HoviDB
-            - name: MYSQL_USER
-              value: hovi_user
-            - name: MYSQL_PASSWORD
-              value: hovi_password
-            - name: MYSQL_HOST
-              value: mysql.default.svc.cluster.local
           imagePullPolicy: Always
           args:
             - npm
             - run
-            - start
+            - start:prod
           ports:
             - containerPort: 8080
               protocol: TCP

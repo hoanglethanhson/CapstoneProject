@@ -7,7 +7,7 @@ spec:
     - port: 3306
   selector:
     app: mysql
-  type: LoadBalancer
+  type: NodePort
 ---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
@@ -26,6 +26,8 @@ spec:
     spec:
       containers:
         - image: mysql:5.6
+          args:
+            - "--ignore-db-dir=lost+found"
           name: mysql
           env:
             # Use secret in real usage
@@ -50,7 +52,7 @@ spec:
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
-            claimName: mysql-pv-claim
+            claimName: mysql-volumeclaim
         - name: mysql-cnf
           configMap:
             name: mysql-cnf-config
