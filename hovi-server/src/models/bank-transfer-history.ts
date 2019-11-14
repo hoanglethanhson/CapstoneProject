@@ -134,18 +134,12 @@ export class BankTransferHistory extends BaseEntity {
 
     @CreateDateColumn({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: BankTransferHistory.schema.createAt
     })
     createAt: Date;
 
     @UpdateDateColumn({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: BankTransferHistory.schema.updateAt
     })
     updateAt: Date;

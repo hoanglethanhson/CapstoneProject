@@ -68,18 +68,12 @@ export class Amenities extends BaseEntity {
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: Amenities.schema.create,
   })
   create: Date;
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: Amenities.schema.update,
   })
   update: Date;

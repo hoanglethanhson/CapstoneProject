@@ -1,16 +1,15 @@
 import {
   BaseEntity,
-  Unique,
   Column,
   Entity,
   EntityRepository, getCustomRepository,
   Repository,
   PrimaryColumn, ManyToOne, JoinColumn, getRepository,
 } from 'typeorm';
+import {IsUrl} from 'class-validator';
 import { RoomGroup } from './room-group';
 
 @Entity(RoomImage.tableName)
-@Unique(['imageUrl'])
 export class RoomImage extends BaseEntity {
   static readonly tableName = 'room_image';
   static readonly schema = {
@@ -40,23 +39,18 @@ export class RoomImage extends BaseEntity {
     unique: true,
     name: RoomImage.schema.imageUrl,
   })
+  @IsUrl()
   imageUrl: string;
 
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: RoomImage.schema.createAt,
   })
   createAt: Date;
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: RoomImage.schema.updateAt,
   })
   updateAt: Date;
