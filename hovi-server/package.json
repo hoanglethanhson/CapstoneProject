@@ -16,6 +16,7 @@
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node ./build/src/server.js\"",
     "start": "tsc && node ./build/src/server.js",
+    "start:prod": "tsc && NODE_ENV=production node ./build/src/server.js",
     "build": "tsc",
     "test": "tsc && jest --coverage --verbose",
     "test:watch": "jest --watch --runInBand"

@@ -14,41 +14,41 @@ variables:
   SERVER_CACHE_IMAGE: registry.gitlab.com/hovi-team-development/hovi-backend/server
   DATABASE_CACHE_IMAGE: registry.gitlab.com/hovi-team-development/hovi-backend/database
 
-#test:
-#  stage: test
-#  image: thuongnn1997/docker:stable
-#  only:
-#    - master
-#    - production
-#  before_script:
-#    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-#  script:
-#    - cd ./gitlab-ci
-#    - docker pull $DATABASE_CACHE_IMAGE:latest || true
-#    - docker pull $SERVER_CACHE_IMAGE:latest || true
-#    - docker-compose up --build --abort-on-container-exit
-#  after_script:
-#    - docker push $DATABASE_CACHE_IMAGE:latest
-#    - docker push $SERVER_CACHE_IMAGE:latest
-#  artifacts:
-#    name: "test-reports-$CI_PIPELINE_ID-$CI_COMMIT_REF_NAME"
-#    when: always
-#    paths:
-#      - ./hovi-server/coverage
-#
-#image_build:
-#  stage: image_build
-#  image: docker:stable
-#  only:
-#    - production
-#  before_script:
-#    - docker info
-#    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-#  script:
-#    - docker pull $SERVER_CACHE_IMAGE:latest || true
-#    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:latest -t hovi-server ./hovi-server
-#    - docker tag hovi-server $SERVER_CACHE_IMAGE:prod
-#    - docker push $SERVER_CACHE_IMAGE:prod
+test:
+  stage: test
+  image: thuongnn1997/docker:stable
+  only:
+    - master
+    - production
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  script:
+    - cd ./gitlab-ci
+    - docker pull $DATABASE_CACHE_IMAGE:latest || true
+    - docker pull $SERVER_CACHE_IMAGE:latest || true
+    - docker-compose up --build --abort-on-container-exit
+  after_script:
+    - docker push $DATABASE_CACHE_IMAGE:latest
+    - docker push $SERVER_CACHE_IMAGE:latest
+  artifacts:
+    name: "test-reports-$CI_PIPELINE_ID-$CI_COMMIT_REF_NAME"
+    when: always
+    paths:
+      - ./hovi-server/coverage
+
+image_build:
+  stage: image_build
+  image: docker:stable
+  only:
+    - production
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  script:
+    - docker pull $SERVER_CACHE_IMAGE:latest || true
+    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:latest -t hovi-server ./hovi-server
+    - docker tag hovi-server $SERVER_CACHE_IMAGE:prod
+    - docker push $SERVER_CACHE_IMAGE:prod
 
 deploy_live:
   image: dwdraju/gke-kubectl-docker
