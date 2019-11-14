@@ -1,3 +1,16 @@
+# this pvc will be used to store downloaded init.sql file
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: init-script
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 50Mi
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -24,6 +37,16 @@ spec:
       labels:
         app: mysql
     spec:
+      initContainers:  # this init container download init.sql file using "curl -o <downloaded file name with path> <download url>" command.
+        - name: init-script-downloader
+          image: appropriate/curl
+          args:
+            - "-o"
+            - "/tmp/data/init.sql" # we are saving downloaded file as init.sql in /tmp/data directory
+            - "https://gitlab.com/hovi-team-development/hovi-backend/raw/master/hovi-database/dump.sql" # download url
+          volumeMounts:
+            - name: init-script # mount the volume where downloaded file will be saved
+              mountPath: /tmp/data
       containers:
         - image: mysql:5.6
           args:
@@ -47,7 +70,7 @@ spec:
               mountPath: /var/lib/mysql
             - name: mysql-cnf
               mountPath: /etc/mysql/conf.d
-            - name: mysql-initdb
+            - name: init-script
               mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: mysql-persistent-storage
@@ -56,6 +79,6 @@ spec:
         - name: mysql-cnf
           configMap:
             name: mysql-cnf-config
-        - name: mysql-initdb
-          configMap:
-            name: mysql-initdb-config
+        - name: init-script # this volume holds downloaded init.sql file.
+          persistentVolumeClaim:
+            claimName: init-script
