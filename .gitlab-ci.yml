@@ -71,5 +71,3 @@ deploy_live:
       else
           echo "=> Server Deployment apply has changed the object, no need to force image update."
       fi
-    - kubectl rollout status -f ./k8s/server/deployment.yaml
-    - kubectl get all,ing -l app=${CI_ENVIRONMENT_SLUG}
