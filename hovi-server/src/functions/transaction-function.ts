@@ -39,7 +39,7 @@ export default class TransactionFunction {
                 if (transaction[0]) {
                     //console.log(transaction[0]);
                     let newTransaction = transaction[0];
-                    newTransaction.transactionStatus = ConstantValues.ACCEPT_WAITING;
+                    newTransaction.transactionStatus = ConstantValues.DUMMY_STATUS;
                     //console.log(newTransaction);
                     successResponse = await Transaction.repo.updateById(transaction[0].transactionId, newTransaction);
                     //res.status(200).send(successResponse);
@@ -48,12 +48,12 @@ export default class TransactionFunction {
                     let newTransaction = new Transaction();
                     newTransaction.userId = userId;
                     newTransaction.roomId = parseInt(roomId);
-                    newTransaction.transactionStatus = ConstantValues.ACCEPT_WAITING;
+                    newTransaction.transactionStatus = ConstantValues.DUMMY_STATUS;
                     const result = await Transaction.repo.save(newTransaction);
                     successResponse = await Transaction.repo.findOne({transactionId: result.transactionId});
                     //res.status(200).send(successResponse);
                 }
-                const room = await Room.repo.findOne(roomId);
+                /*const room = await Room.repo.findOne(roomId);
                 const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
                 const building = await Building.repo.findOne(roomGroup.buildingId);
                 if (building.typeId == 3) {
@@ -70,7 +70,7 @@ export default class TransactionFunction {
                     updateRoom.roomStatus = ConstantValues.ROOM_NOT_AVAILABLE;
                     updateRoom = await Room.repo.updateById(roomId, updateRoom);
                     console.log(updateRoom);
-                }
+                }*/
                 const detail = await Transaction.repo.getTransactionRoomDetail(successResponse.transactionId);
                 //console.log(Array.isArray(rooms));
                 res.status(200).send(detail);
@@ -121,6 +121,22 @@ export default class TransactionFunction {
         const body = req.body || {};
         const transactionId = req.params['transactionId'];
         const successResponse = await Transaction.repo.updateById(transactionId, body);
+
+        if (successResponse) res.status(200).send(successResponse);
+        else next(new HTTP400Error('transactionId not found'));
+    };
+
+    static updateTransactionAndLockRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const body = req.body || {};
+        const transactionId = req.params['transactionId'];
+        const successResponse = await Transaction.repo.updateById(transactionId, body);
+
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+
+        let updateRoom = room;
+        updateRoom.roomStatus = ConstantValues.ROOM_NOT_AVAILABLE;
+        updateRoom = await Room.repo.updateById(room.roomId, updateRoom);
 
         if (successResponse) res.status(200).send(successResponse);
         else next(new HTTP400Error('transactionId not found'));
