@@ -57,18 +57,12 @@ export class BuildingService extends BaseEntity {
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: BuildingService.schema.createAt,
   })
   createAt: Date;
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: BuildingService.schema.updateAt,
   })
   updateAt: Date;

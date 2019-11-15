@@ -81,18 +81,12 @@ export class TenantReview extends BaseEntity {
 
     @CreateDateColumn({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: TenantReview.schema.createAt
     })
     createAt: Date;
 
     @UpdateDateColumn({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: TenantReview.schema.updateAt
     })
     updateAt: Date;
