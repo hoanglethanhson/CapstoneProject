@@ -49,6 +49,30 @@ export class DatabaseManager {
         });
     }
 
+    static async clearData() {
+        if (!DatabaseManager.connection) return;
+        const connection = DatabaseManager.connection;
+        const deleteQuery = connection.createQueryBuilder().delete();
+        await deleteQuery.from(BuildingService).execute();
+        await deleteQuery.from(RoomAmenities).execute();
+
+        await deleteQuery.from(Service).execute();
+        await deleteQuery.from(Amenities).execute();
+
+        await deleteQuery.from(RoomImage).execute();
+        await deleteQuery.from(Transaction).execute();
+        await deleteQuery.from(Feedback).execute();
+        await deleteQuery.from(TenantReview).execute();
+        await deleteQuery.from(BankTransferHistory).execute();
+
+        await deleteQuery.from(Room).execute();
+        await deleteQuery.from(RoomGroup).execute();
+        await deleteQuery.from(Building).execute();
+        await deleteQuery.from(RoomType).execute();
+
+        await deleteQuery.from(User).execute();
+    }
+
 
     static async prepareDelete() {
         await getManager().query('SET foreign_key_checks = 0;');

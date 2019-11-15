@@ -13,7 +13,7 @@ describe('[model] service', () => {
 
     let service1: Service;
     beforeEach(async () => {
-        await DatabaseManager.clearDataServiceTest();
+        await DatabaseManager.clearData();
         service1 = new Service();
         service1.id = 1;
         service1.name = 'name';

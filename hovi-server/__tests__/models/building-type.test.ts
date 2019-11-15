@@ -15,7 +15,7 @@ describe('[model] buildingType', () => {
 
     let buildingType1: RoomType;
     beforeEach(async () => {
-        await DatabaseManager.clearDataRoomTypeTest();
+        await DatabaseManager.clearData();
         buildingType1 = await RoomType.repo.save(RoomType.repo.create({
             id: 1,
             type: 'building_type'

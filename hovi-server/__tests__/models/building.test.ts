@@ -16,7 +16,7 @@ describe('[model] building', () => {
     let building1: Building;
 
     beforeEach(async () => {
-        await DatabaseManager.clearDataBuildingTest();
+        await DatabaseManager.clearData();
         building1 = new Building();
         building1.id = 1;
 

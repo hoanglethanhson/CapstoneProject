@@ -13,7 +13,7 @@ describe('[model] user', () => {
 
     let user1: User;
     beforeEach(async () => {
-        await DatabaseManager.clearDataUserTest();
+        await DatabaseManager.clearData();
         user1 = new User();
         user1.id = 1;
         user1.phoneNumber = 'phone number';

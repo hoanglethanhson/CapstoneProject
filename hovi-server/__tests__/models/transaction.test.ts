@@ -18,7 +18,7 @@ describe('[model] transaction', () => {
 
     let transaction1: Transaction;
     beforeEach(async () => {
-        await DatabaseManager.clearDataTransactionTest();
+        await DatabaseManager.clearData();
         transaction1 = new Transaction();
         transaction1.transactionId = 1;
         transaction1.userId = 1;

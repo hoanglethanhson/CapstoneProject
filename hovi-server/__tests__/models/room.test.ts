@@ -20,7 +20,7 @@ describe('[model] room', () => {
 
     let room1: Room;
     beforeEach(async () => {
-        await DatabaseManager.clearDataRoomTest();
+        await DatabaseManager.clearData();
 
         room1 = await Room.repo.save(Room.repo.create({
             roomId: 1,

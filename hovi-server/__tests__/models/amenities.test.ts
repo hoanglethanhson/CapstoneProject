@@ -13,7 +13,7 @@ describe('[model] amenities', () => {
 
     let amenities1: Amenities;
     beforeEach(async () => {
-        await DatabaseManager.clearDataAmenitiesTest();
+        await DatabaseManager.clearData();
         amenities1 = new Amenities();
         amenities1.id = 1;
         amenities1.usableName = 'name';

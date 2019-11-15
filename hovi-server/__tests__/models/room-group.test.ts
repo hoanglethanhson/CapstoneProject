@@ -17,7 +17,7 @@ describe('[model] roomGroup', () => {
 
     let roomGroup1: RoomGroup;
     beforeEach(async () => {
-        await DatabaseManager.clearDataRoomGroupTest();
+        await DatabaseManager.clearData();
         roomGroup1 = new RoomGroup();
         roomGroup1.id = 1;
         roomGroup1 = await RoomGroup.repo.save(roomGroup1);

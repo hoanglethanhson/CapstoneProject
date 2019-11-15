@@ -13,7 +13,7 @@ describe('[model] bankTransferHistory', () => {
 
     let bankTransferHistory1: BankTransferHistory;
     beforeEach(async () => {
-        await DatabaseManager.clearDataBankTransferHistoryTest();
+        await DatabaseManager.clearData();
         bankTransferHistory1 = new BankTransferHistory();
         bankTransferHistory1.transferId = 1;
         bankTransferHistory1.transferCode = "1234"
