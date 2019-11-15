@@ -11,6 +11,7 @@ import {
   PrimaryColumn,
   Repository,
 } from 'typeorm';
+
 import {buildingTitle} from '../utils';
 import {Building} from './building';
 import {Room} from './room';
@@ -21,6 +22,9 @@ import {BuildingService} from './building-service';
 import {User} from './user';
 import {TenantReview} from './tenant-review';
 import {ConstantValues} from '../utils/constant-values';
+import {RoomType} from "./building-type";
+import {Transaction} from "./transaction";
+
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -34,6 +38,7 @@ export class RoomGroup extends BaseEntity {
     area: 'area',
     bedroomQuantity: 'bedroom_quantity',
     bathroomQuantity: 'bathroom_quantity',
+    wcQuantity: 'wc_quantity',
     direction: 'direction',
     isAvailable: 'is_available',
     isVerified: 'is_verified',
@@ -110,6 +115,14 @@ export class RoomGroup extends BaseEntity {
   @IsNumber()
   @Min(1)
   bathroomQuantity: number;
+
+  @Column({
+    type: 'int',
+    name: RoomGroup.schema.wcQuantity,
+  })
+  @IsNumber()
+  @Min(1)
+  wcQuantity: number;
 
   @Column({
     type: 'varchar',
@@ -224,6 +237,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
       roomGroup.bedroomQuantity = roomGroupUpdate.bedroomQuantity ? roomGroupUpdate.bedroomQuantity : roomGroup.bedroomQuantity;
       roomGroup.bathroomQuantity = roomGroupUpdate.bathroomQuantity ? roomGroupUpdate.bathroomQuantity : roomGroup.bathroomQuantity;
+      roomGroup.wcQuantity = roomGroupUpdate.wcQuantity ? roomGroupUpdate.wcQuantity : roomGroup.wcQuantity;
       roomGroup.direction = roomGroupUpdate.direction ? roomGroupUpdate.direction : roomGroup.direction;
       roomGroup.isAvailable = roomGroupUpdate.isAvailable ? roomGroupUpdate.isAvailable : roomGroup.isAvailable;
       roomGroup.isVerified = roomGroupUpdate.isVerified ? roomGroupUpdate.isVerified : roomGroup.isVerified;
@@ -246,17 +260,18 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
 
   async getImages(roomGroupId: any) {
     return await getManager()
-      .createQueryBuilder(RoomImage, 'room_image')
-      .select(['room_image.image_url'])
-      .innerJoin(RoomGroup, 'room_group', 'room_image.room_group_id = room_group.room_group_id')
-      .where('room_image.room_group_id = :room_group_id', { room_group_id: roomGroupId })
-      .getRawMany();
+        .createQueryBuilder(RoomImage, 'room_image')
+        .select(['room_image.image_url'])
+        .innerJoin(RoomGroup, 'room_group', 'room_image.room_group_id = room_group.room_group_id')
+        .where('room_image.room_group_id = :room_group_id', { room_group_id: roomGroupId })
+        .getRawMany();
   }
 
   async getRoomGroupDetail(roomGroupId: any, roomGroup: RoomGroup) {
     if (Number.isInteger(roomGroupId)) {
       return null;
     }
+
     const building = await Building.repo.findOne(roomGroup.buildingId);
     if (building == null) {
       return null;
@@ -289,56 +304,122 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     let tenantIds = [];
     let tenantAvatars = [];
     let tenantComments = [];
-   for (const review of reviewList) {
-     console.log(review);
-     console.log(review.user_id);
-     let tenant = await User.repo.findOne(review.user_id);
-     tenantIds = tenantIds.concat(tenant.id);
-     tenantAvatars = tenantAvatars.concat(tenant.avatar);
-     tenantComments = tenantComments.concat(review.tenantReview_comment);
-   }
+    for (const review of reviewList) {
+      console.log(review);
+      console.log(review.user_id);
+      let tenant = await User.repo.findOne(review.user_id);
+      tenantIds = tenantIds.concat(tenant.id);
+      tenantAvatars = tenantAvatars.concat(tenant.avatar);
+      tenantComments = tenantComments.concat(review.tenantReview_comment);
+    }
+
     return {
-     data: {
-       buildingTypeId: building.typeId,
-       roomGroupId: roomGroup.id,
-       direction: roomGroup.direction,
-       bedroomQuantity: roomGroup.bedroomQuantity,
-       availableRooms: availableRooms,
-       images: imageLinks,
-       title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
-       generalAddress: {
-         province: building.province,
-         district: building.district,
-         ward: building.ward,
-       },
-       status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
-       area: roomGroup.area,
-       capacity: roomGroup.capacity,
-       gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
-       amenities: totalAmenities,
-       description: roomGroup.description,
-       roomCost: {
-         price: roomGroup.rentPrice,
-         deposit: roomGroup.depositPrice,
-       },
-       services: services,
-       hostId: host.id,
-       hostAvatar: host.avatar,
-       hostPhone: host.phoneNumber,
-       hostName: host.firstName + " " + host.lastName,
-       rating: {
-         number_of_reviews: rating[0].number_of_reviews,
-         accuracy_rate: rating[0].accuracy_rate,
-         host_rate: rating[0].host_rate,
-         security_rate: rating[0].security_rate,
-       },
-       reviewList: {
-         tenantAvatars,
-         tenantIds,
-         tenantComments
-       }
-     }
-   };
+      data: {
+        buildingTypeId: building.typeId,
+        roomGroupId: roomGroup.id,
+        direction: roomGroup.direction,
+        bedroomQuantity: roomGroup.bedroomQuantity,
+        wcQuantity: roomGroup.wcQuantity,
+        availableRooms: availableRooms,
+        images: imageLinks,
+        title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
+        generalAddress: {
+          province: building.province,
+          district: building.district,
+          ward: building.ward,
+        },
+        status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
+        area: roomGroup.area,
+        capacity: roomGroup.capacity,
+        gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
+        amenities: totalAmenities,
+        description: roomGroup.description,
+        roomCost: {
+          price: roomGroup.rentPrice,
+          deposit: roomGroup.depositPrice,
+        },
+        services: services,
+        hostId: host.id,
+        hostAvatar: host.avatar,
+        hostPhone: host.phoneNumber,
+        hostName: host.firstName + " " + host.lastName,
+        rating: {
+          number_of_reviews: rating[0].number_of_reviews,
+          accuracy_rate: rating[0].accuracy_rate,
+          host_rate: rating[0].host_rate,
+          security_rate: rating[0].security_rate,
+        },
+        reviewList: {
+          tenantAvatars,
+          tenantIds,
+          tenantComments
+        }
+      }
+    };
+  }
+
+  async getRoomGroupTransactionDetail(roomGroupId: any, userId: any) {
+    if (Number.isInteger(roomGroupId)) {
+      return null;
+    }
+    const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+    const building = await Building.repo.findOne(roomGroup.buildingId);
+    if (building == null) {
+      return null;
+    }
+    const buildingTypeArray = await RoomType.repo.getBuildingType(building.typeId);
+    const availableRooms = await Room.repo.getAvailableRoomsInGroup(roomGroupId);
+    //const phone = await User.repo.getHostPhone(building.hostId);
+    const host = await User.repo.findOne(building.hostId);
+    if (host == null) {
+      return null;
+    }
+    const images = await this.getImages(roomGroupId);
+    let imageLinks = [];
+    images.forEach(function(element) {
+      let temp = [element.image_url];
+      imageLinks = imageLinks.concat(temp);
+    });
+    //console.log(roomGroupId + ", " + userId);
+    let transactionStatuses
+    if (host.id == userId) {
+      console.log("host");
+      transactionStatuses = await Transaction.repo.getTransactionStatusForHost(roomGroupId);
+    } else {
+      console.log("tenant");
+      transactionStatuses = await Transaction.repo.getTransactionStatus(roomGroupId, userId);
+    }
+    //console.log(transactionStatuses);
+    let statusValue = null;
+    if (transactionStatuses.length == 0) {
+      transactionStatuses = null;
+    } else {
+      for (const status of transactionStatuses) {
+        //console.log(status);
+        /*if (status.transaction_status == ConstantValues.HOST_REJECTED) {
+          statusValue = ConstantValues.HOST_REJECTED;
+        } */
+        statusValue = status.transaction_status;
+      }
+    }
+    //console.log(statusValue);
+    const data = {
+      data : {
+        availableRooms: availableRooms,
+        images: imageLinks,
+        title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
+        buildingTypeId: building.typeId,
+        direction: roomGroup.direction,
+        floorQuantity: building.floorQuantity,
+        wcQuantity: roomGroup.wcQuantity,
+        bedroomQuantity: roomGroup.bedroomQuantity,
+        minDepositPeriod: roomGroup.minDepositPeriod,
+        hostId: host.id,
+        status: statusValue,
+        transactionStatuses: transactionStatuses
+      }
+    };
+    return data;
   }
 
 }
