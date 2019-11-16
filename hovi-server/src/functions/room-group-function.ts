@@ -4,6 +4,7 @@ import {HTTP400Error} from '../utils/httpErrors';
 import {RoomGroup} from '../models/room-group';
 import {Room} from '../models/room';
 import {ConstantValues} from '../utils/constant-values';
+import {Transaction} from "../models/transaction";
 
 export default class RoomGroupFunction {
     static getRoomGroups: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -74,12 +75,14 @@ export default class RoomGroupFunction {
     };
 
     static getRoomGroupTransactionDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const roomGroupId = req.params['roomGroupId'];
+        const transactionId = req.params['transactionId'];
         const userId = req['currentUserId'];
-        const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
 
         if (!roomGroup) next(new HTTP400Error('roomGroupId not found.'));
-        const roomGroupDetail = await RoomGroup.repo.getRoomGroupTransactionDetail(roomGroupId, userId);
+        const roomGroupDetail = await RoomGroup.repo.getRoomGroupTransactionDetail(roomGroup.id, userId);
 
         if (roomGroupDetail) res.status(200).send(roomGroupDetail);
         else next(new HTTP400Error('error get details.'));

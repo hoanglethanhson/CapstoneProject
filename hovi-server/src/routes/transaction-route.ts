@@ -26,6 +26,12 @@ export default [
         handler: TransactionFunction.updateTransaction
     },
     {
+        path: "/transactionLockRoom/:transactionId",
+        method: "put",
+        authentication: true,
+        handler: TransactionFunction.updateTransactionAndLockRoom
+    },
+    {
         path: "/transactionReject/:transactionId",
         method: "put",
         authentication: true,

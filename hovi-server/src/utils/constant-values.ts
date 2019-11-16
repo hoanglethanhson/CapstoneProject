@@ -19,6 +19,7 @@ export class ConstantValues {
     static readonly ADMIN = 3;
 
     //DEFINE TRANSACTION STATUS
+    static readonly DUMMY_STATUS = 0;
     static readonly ACCEPT_WAITING = 1;
     static readonly HOST_REJECTED = -1;
     static readonly NOT_ENOUGH_BALANCE = -2;
