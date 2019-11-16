@@ -38,29 +38,44 @@ export default class TransactionFunction {
                 let newTransaction;
                 const transaction = await Transaction.repo.getTransaction(userId, roomId);
                 if (transaction[0]) {
-                    //console.log(transaction[0]);
+                    console.log("if branch");
+                    console.log(transaction[0]);
                     newTransaction = transaction[0];
                     newTransaction.transactionStatus = ConstantValues.DUMMY_STATUS;
                     //console.log(newTransaction);
                     successResponse = await Transaction.repo.updateById(transaction[0].transactionId, newTransaction);
-                    //res.status(200).send(successResponse);
+                    res.status(200).send(successResponse);
                 } else {
-                    //console.log("else branch");
+                    console.log("else branch");
                     newTransaction = new Transaction();
-                    newTransaction.userId = userId;
+                    newTransaction.userId =  parseInt(userId);
                     newTransaction.roomId = parseInt(roomId);
                     newTransaction.transactionStatus = ConstantValues.DUMMY_STATUS;
                     const result = await Transaction.repo.save(newTransaction);
-                    successResponse = await Transaction.repo.findOne({transactionId: result.transactionId});
+                    //successResponse = await Transaction.repo.findOne({transactionId: result.transactionId});
                     //res.status(200).send(successResponse);
                 }
-                const detail = await Transaction.repo.getTransactionRoomDetail(successResponse);
-                res.status(200).send(detail);
+                //const detail = await Transaction.repo.getTransactionRoomDetail(successResponse);
+                if (newTransaction) {
+                    res.status(200).send(newTransaction);
+                }
+
 
             } else {
                 next(new HTTP400Error('roomId not found.'));
             }
         }
+        /*const userId = req['currentUserId'];
+        //const userId = 7;
+        const roomId = req.params['roomId'];
+        let transaction = new Transaction();
+        transaction.roomId = parseInt(roomId);
+        transaction.userId = parseInt(userId);
+        transaction.transactionStatus = ConstantValues.DUMMY_STATUS;
+        const result = await Transaction.repo.save(transaction);
+        if (result) {
+            res.status(200).send(result);
+        }*/
 
     };
 
