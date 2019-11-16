@@ -129,8 +129,11 @@ export default class TransactionFunction {
         const successResponse = await Transaction.repo.updateById(transactionId, body);
 
         const transaction = await Transaction.repo.findOne(transactionId);
-        const room = await Room.repo.findOne(transaction.roomId);
+        let transactionUpdate = transaction;
+        transactionUpdate.transactionStatus = ConstantValues.ACCEPT_WAITING;
+        transactionUpdate = await Transaction.repo.updateById(transaction.transactionId, transactionUpdate);
 
+        const room = await Room.repo.findOne(transaction.roomId);
         let updateRoom = room;
         updateRoom.roomStatus = ConstantValues.ROOM_NOT_AVAILABLE;
         updateRoom = await Room.repo.updateById(room.roomId, updateRoom);
