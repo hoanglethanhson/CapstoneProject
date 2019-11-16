@@ -385,32 +385,18 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       imageLinks = imageLinks.concat(temp);
     });
     //console.log(roomGroupId + ", " + userId);
-    let transactionStatuses;
+    let transactionStatus;
     if (host.id == userId) {
       console.log("host");
-      transactionStatuses = await Transaction.repo.getTransactionStatusForHost(roomGroupId);
+      transactionStatus = await Transaction.repo.getTransactionStatusForHost(roomGroupId, transacionId);
+      console.log(transactionStatus);
     } else {
       console.log("tenant");
-      transactionStatuses = await Transaction.repo.getTransactionRoomGroupDetail(transacionId);
-      console.log(transactionStatuses);
+      transactionStatus = await Transaction.repo.getTransactionRoomGroupDetail(transacionId);
+      console.log(transactionStatus);
     }
-    let transactionStatus = null;
-    if (transactionStatuses) {
-      transactionStatus = transactionStatuses[0];
-    }
+    const transaction = await Transaction.repo.findOne(transacionId);
     //console.log(transactionStatuses);
-    let statusValue = null;
-    if (transactionStatuses.length == 0) {
-      transactionStatuses = null;
-    } else {
-      for (const status of transactionStatuses) {
-        //console.log(status);
-        /*if (status.transaction_status == ConstantValues.HOST_REJECTED) {
-          statusValue = ConstantValues.HOST_REJECTED;
-        } */
-        statusValue = status.transaction_status;
-      }
-    }
     //console.log(statusValue);
     const data = {
       data : {
@@ -425,8 +411,8 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         bathroomQuantity: roomGroup.bathroomQuantity,
         minDepositPeriod: roomGroup.minDepositPeriod,
         hostId: host.id,
-        status: statusValue,
-        transactionStatuses: transactionStatuses
+        status: transaction.transactionStatus,
+        transactionStatus: transactionStatus
       }
     };
     //console.log("data: " + data);

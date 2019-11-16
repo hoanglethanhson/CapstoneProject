@@ -116,7 +116,7 @@ export class TransactionRepository extends Repository<Transaction> {
             .innerJoin(User, 'user', 'user.user_id = building.host_id')
             .where('transaction.transaction_id = :transactionId', { transactionId: transactionId })
             //.andWhere('room.room_id = :roomId', {roomId: transaction.roomId})
-            .getRawMany();
+            .getRawOne();
     }
 
     async getTransactionStatus(roomGroupId: number, userId: number, transactionId: number) {
@@ -139,7 +139,7 @@ export class TransactionRepository extends Repository<Transaction> {
             .getRawMany();
     }
 
-    async getTransactionStatusForHost(roomGroupId: number) {
+    async getTransactionStatusForHost(roomGroupId: number, transactionId: number) {
         const query = await getManager()
             .createQueryBuilder(Transaction, 'transaction')
             .select(['*'])
@@ -147,6 +147,7 @@ export class TransactionRepository extends Repository<Transaction> {
             .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
             .where('room.room_group_id = :room_group_id', { room_group_id: roomGroupId })
             .andWhere('transaction.transaction_status <> :status', {status: ConstantValues.HOST_REJECTED})
+            .andWhere('transaction.transaction_id = :transactionId', {transactionId: transactionId})
             .getSql();
         console.log(query);
         return await getManager()
@@ -156,7 +157,7 @@ export class TransactionRepository extends Repository<Transaction> {
             .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
             .where('room.room_group_id = :room_group_id', { room_group_id: roomGroupId })
             .andWhere('transaction.transaction_status <> :status', {status: ConstantValues.HOST_REJECTED})
-            .getRawMany();
+            .getRawOne();
     }
 
 }
