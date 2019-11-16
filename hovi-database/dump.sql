@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 16/11/2019 20:30:00
+ Date: 16/11/2019 23:11:07
 */
 
 SET NAMES utf8mb4;
@@ -2667,7 +2667,7 @@ CREATE TABLE `transaction`  (
   INDEX `FK_Room_Transaction`(`room_id`) USING BTREE,
   CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of transaction
@@ -2682,6 +2682,9 @@ INSERT INTO `transaction` VALUES (15, 5, 15, -1, NULL, NULL, NULL);
 INSERT INTO `transaction` VALUES (16, 3, 9, 2, NULL, '2019-11-11 14:18:26.199203', '2019-11-11 14:18:26.000000');
 INSERT INTO `transaction` VALUES (17, 4, 20, 2, NULL, '2019-11-11 17:33:13.847169', '2019-11-11 17:33:13.000000');
 INSERT INTO `transaction` VALUES (18, 3, 22, 0, NULL, NULL, NULL);
+INSERT INTO `transaction` VALUES (22, 3, 11, 0, NULL, NULL, NULL);
+INSERT INTO `transaction` VALUES (23, 3, 12, 0, NULL, NULL, NULL);
+INSERT INTO `transaction` VALUES (24, 3, 70, 0, NULL, '2019-11-16 21:34:40.689522', '2019-11-16 21:34:40.689522');
 
 -- ----------------------------
 -- Table structure for user
@@ -2727,7 +2730,7 @@ INSERT INTO `user` VALUES (7, 'Son', 'Hoang', '+84378666519', '$2a$08$4efge.QFug
 INSERT INTO `user` VALUES (8, 'A', 'Hihi', '+84367120251', '$2a$08$75fsq.dStbaxwmV.tZGyb.rfIaWpZxvudsdp9Lvagri3QTbiE0eCm', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES (9, 'Cầm', 'Sơn', '+84982604182', '$2a$08$5DV9nILO1yDpX6MnOiCauO8StcB6IQjNT3tiHnwi9HydZNmWOEX.K', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES (10, 'Phạm', 'Anh', '+84778364588', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-09 08:14:34.620728', '2019-11-09 08:14:34.620728');
-INSERT INTO `user` VALUES (11, 'Dinh', 'Viet', '+84386666428', '$2a$08$99JiW7wjIDrt8qNtCVCmheXTlAIGaWKw.i8CVnlaLjSLY0R1nWyKO', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (11, 'Dinh', 'Viet', '+84386666428', '$2a$08$pxnIXujvT3B0stefDO27JeuLLkp/cJUtFjOcoS8adwCFwdUqD8KLa', NULL, NULL, NULL, 'example-facebook-id', 'example-google-id', 'example@homohouse.vn', NULL, 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-16 23:10:47.353670', '2019-11-16 23:10:47.353670');
 INSERT INTO `user` VALUES (16, 'alo', 'alo', '1234', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------

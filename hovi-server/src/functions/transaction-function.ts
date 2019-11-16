@@ -138,7 +138,7 @@ export default class TransactionFunction {
         updateRoom.roomStatus = ConstantValues.ROOM_NOT_AVAILABLE;
         updateRoom = await Room.repo.updateById(room.roomId, updateRoom);
 
-        if (successResponse) res.status(200).send(successResponse);
+        if (successResponse) res.status(200).send(transactionUpdate);
         else next(new HTTP400Error('transactionId not found'));
     };
 

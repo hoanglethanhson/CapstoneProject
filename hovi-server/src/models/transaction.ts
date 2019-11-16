@@ -101,7 +101,7 @@ export class TransactionRepository extends Repository<Transaction> {
         return await this.find({userId: userId, roomId: roomId});
     }
 
-    async getTransactionRoomDetail(transactionId: any) {
+    async getTransactionRoomGroupDetail(transactionId: any) {
         let transaction = await this.findOne(transactionId);
         if (transaction == null) {
             return null;
@@ -115,17 +115,18 @@ export class TransactionRepository extends Repository<Transaction> {
             .innerJoin(Building, 'building', 'building.building_id = room_group.building_id')
             .innerJoin(User, 'user', 'user.user_id = building.host_id')
             .where('transaction.transaction_id = :transactionId', { transactionId: transactionId })
-            .andWhere('room.room_id = :roomId', {roomId: transaction.roomId})
+            //.andWhere('room.room_id = :roomId', {roomId: transaction.roomId})
             .getRawMany();
     }
 
-    async getTransactionStatus(roomGroupId: number, userId: number) {
+    async getTransactionStatus(roomGroupId: number, userId: number, transactionId: number) {
         const query = await getManager()
             .createQueryBuilder(Transaction, 'transaction')
             .select(['*'])
             .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
             .where('room.room_group_id = :room_group_id', { room_group_id: roomGroupId })
             .andWhere('transaction.user_id = :user_id', {user_id: userId})
+            .andWhere('transaction.transaction_id = :transactionId', {transactionId: transactionId})
             .getSql();
         //console.log(query);
         return await getManager()

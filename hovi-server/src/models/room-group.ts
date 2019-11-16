@@ -361,13 +361,12 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     };
   }
 
-  async getRoomGroupTransactionDetail(roomGroupId: any, userId: any) {
+  async getRoomGroupTransactionDetail(roomGroupId: any, userId: any, transacionId: any) {
 
     /*if (Number.isInteger(roomGroupId)) {
       console.log("got null");
       return null;
     }*/
-    console.log("got");
     const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
     const building = await Building.repo.findOne(roomGroup.buildingId);
     if (building == null) {
@@ -379,7 +378,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     if (host == null) {
       return null;
     }
-    console.log("host exist");
     const images = await this.getImages(roomGroupId);
     let imageLinks = [];
     images.forEach(function(element) {
@@ -393,7 +391,12 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       transactionStatuses = await Transaction.repo.getTransactionStatusForHost(roomGroupId);
     } else {
       console.log("tenant");
-      transactionStatuses = await Transaction.repo.getTransactionStatus(roomGroupId, userId);
+      transactionStatuses = await Transaction.repo.getTransactionRoomGroupDetail(transacionId);
+      console.log(transactionStatuses);
+    }
+    let transactionStatus = null;
+    if (transactionStatuses) {
+      transactionStatus = transactionStatuses[0];
     }
     //console.log(transactionStatuses);
     let statusValue = null;
@@ -426,7 +429,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         transactionStatuses: transactionStatuses
       }
     };
-    console.log("data: " + data);
+    //console.log("data: " + data);
     return data;
   }
 
