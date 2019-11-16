@@ -80,9 +80,11 @@ export default class RoomGroupFunction {
         const transaction = await Transaction.repo.findOne(transactionId);
         const room = await Room.repo.findOne(transaction.roomId);
         const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        //console.log(roomGroup);
 
         if (!roomGroup) next(new HTTP400Error('roomGroupId not found.'));
         const roomGroupDetail = await RoomGroup.repo.getRoomGroupTransactionDetail(roomGroup.id, userId);
+        //console.log(roomGroupDetail);
 
         if (roomGroupDetail) res.status(200).send(roomGroupDetail);
         else next(new HTTP400Error('error get details.'));

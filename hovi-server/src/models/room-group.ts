@@ -362,21 +362,24 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
   }
 
   async getRoomGroupTransactionDetail(roomGroupId: any, userId: any) {
-    if (Number.isInteger(roomGroupId)) {
+
+    /*if (Number.isInteger(roomGroupId)) {
+      console.log("got null");
       return null;
-    }
+    }*/
+    console.log("got");
     const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
     const building = await Building.repo.findOne(roomGroup.buildingId);
     if (building == null) {
       return null;
     }
-    const buildingTypeArray = await RoomType.repo.getBuildingType(building.typeId);
     const availableRooms = await Room.repo.getAvailableRoomsInGroup(roomGroupId);
     //const phone = await User.repo.getHostPhone(building.hostId);
     const host = await User.repo.findOne(building.hostId);
     if (host == null) {
       return null;
     }
+    console.log("host exist");
     const images = await this.getImages(roomGroupId);
     let imageLinks = [];
     images.forEach(function(element) {
@@ -384,7 +387,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       imageLinks = imageLinks.concat(temp);
     });
     //console.log(roomGroupId + ", " + userId);
-    let transactionStatuses
+    let transactionStatuses;
     if (host.id == userId) {
       console.log("host");
       transactionStatuses = await Transaction.repo.getTransactionStatusForHost(roomGroupId);
@@ -423,6 +426,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         transactionStatuses: transactionStatuses
       }
     };
+    console.log("data: " + data);
     return data;
   }
 
