@@ -3,15 +3,15 @@
 
  Source Server         : CP_DB
  Source Server Type    : MySQL
- Source Server Version : 50727
+ Source Server Version : 50728
  Source Host           : localhost:3307
  Source Schema         : HoviDB
 
  Target Server Type    : MySQL
- Target Server Version : 50727
+ Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 14/11/2019 00:44:33
+ Date: 16/11/2019 12:34:21
 */
 
 SET NAMES utf8mb4;
@@ -2658,6 +2658,7 @@ CREATE TABLE `transaction`  (
   `transaction_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the transaction',
   `user_id` int(5) NOT NULL COMMENT 'ID of the user who make the transaction',
   `room_id` int(5) NOT NULL COMMENT 'ID of room in the transaction',
+  `start_date` timestamp(6) NULL DEFAULT NULL COMMENT 'Start date of the transaction',
   `transaction_status` tinyint(1) NULL DEFAULT NULL COMMENT 'Status code of the transaction',
   `created_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
@@ -2671,15 +2672,15 @@ CREATE TABLE `transaction`  (
 -- ----------------------------
 -- Records of transaction
 -- ----------------------------
-INSERT INTO `transaction` VALUES (1, 1, 1, 1, '2019-10-08 21:14:41.938875', '2019-10-08 21:14:41.938875');
-INSERT INTO `transaction` VALUES (2, 2, 214, 3, '2019-11-09 07:30:21.602885', '2019-11-09 07:30:21.602885');
-INSERT INTO `transaction` VALUES (3, 2, 216, 2, '2019-11-09 07:30:23.519146', '2019-11-09 07:30:23.519146');
-INSERT INTO `transaction` VALUES (12, 4, 7, 1, '2019-11-11 10:46:24.183653', '2019-11-11 10:46:24.183653');
-INSERT INTO `transaction` VALUES (13, 2, 13, 2, NULL, NULL);
-INSERT INTO `transaction` VALUES (14, 3, 14, 1, NULL, NULL);
-INSERT INTO `transaction` VALUES (15, 5, 15, -1, NULL, NULL);
-INSERT INTO `transaction` VALUES (16, 3, 9, 2, '2019-11-11 14:18:26.199203', '2019-11-11 14:18:26.000000');
-INSERT INTO `transaction` VALUES (17, 4, 20, 2, '2019-11-11 17:33:13.847169', '2019-11-11 17:33:13.000000');
+INSERT INTO `transaction` VALUES (1, 1, 1, NULL, 1, '2019-10-08 21:14:41.938875', '2019-10-08 21:14:41.938875');
+INSERT INTO `transaction` VALUES (2, 2, 214, NULL, 3, '2019-11-09 07:30:21.602885', '2019-11-09 07:30:21.602885');
+INSERT INTO `transaction` VALUES (3, 2, 216, NULL, 2, '2019-11-09 07:30:23.519146', '2019-11-09 07:30:23.519146');
+INSERT INTO `transaction` VALUES (12, 4, 7, NULL, 1, '2019-11-11 10:46:24.183653', '2019-11-11 10:46:24.183653');
+INSERT INTO `transaction` VALUES (13, 2, 13, NULL, 2, NULL, NULL);
+INSERT INTO `transaction` VALUES (14, 3, 14, NULL, 1, NULL, NULL);
+INSERT INTO `transaction` VALUES (15, 5, 15, NULL, -1, NULL, NULL);
+INSERT INTO `transaction` VALUES (16, 3, 9, NULL, 2, '2019-11-11 14:18:26.199203', '2019-11-11 14:18:26.000000');
+INSERT INTO `transaction` VALUES (17, 4, 20, NULL, 2, '2019-11-11 17:33:13.847169', '2019-11-11 17:33:13.000000');
 
 -- ----------------------------
 -- Table structure for user

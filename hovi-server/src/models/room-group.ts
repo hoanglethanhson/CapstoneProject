@@ -331,7 +331,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
         area: roomGroup.area,
         capacity: roomGroup.capacity,
-        gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
+        gender: roomGroup.gender,
         amenities: totalAmenities,
         description: roomGroup.description,
         roomCost: {
