@@ -27,6 +27,7 @@ export class Transaction extends BaseEntity {
         userId: 'user_id',
         roomId: 'room_id',
         transactionStatus: 'transaction_status',
+        startDate: 'start_date',
         createAt: 'created_at',
         updateAt: 'updated_at'
     };
@@ -59,6 +60,12 @@ export class Transaction extends BaseEntity {
     })
     transactionStatus: number;
 
+    @Column({
+        type: "timestamp",
+        name: Transaction.schema.startDate
+    })
+    startDate: Date;
+
     @CreateDateColumn({
         type: "timestamp",
         name: Transaction.schema.createAt
@@ -84,6 +91,7 @@ export class TransactionRepository extends Repository<Transaction> {
             transaction.userId = transactionUpdate.userId ;
             transaction.roomId = transactionUpdate.roomId;
             transaction.transactionStatus = transactionUpdate.transactionStatus ;
+            transaction.startDate = transactionUpdate.startDate;
             transaction.createAt = transactionUpdate.createAt;
             transaction.updateAt = transactionUpdate.updateAt;
             await this.save(transaction);
