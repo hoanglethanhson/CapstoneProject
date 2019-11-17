@@ -272,4 +272,22 @@ export class UserRepository extends Repository<User> {
             ]
         };
     }
+
+    async getUserSetting(userId: any) {
+        const user = await this.findOne({id: userId});
+        if (user == null) {
+            return null;
+        }
+        const result = {
+            user_avatar: user.avatar,
+            user_phone_number: user.phoneNumber,
+            user_first_name: user.firstName,
+            user_last_name: user.lastName,
+            gender: user.gender,
+            email: user.email,
+            address: user.address,
+        }
+        return result;
+    }
+
 }
