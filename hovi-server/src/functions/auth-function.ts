@@ -35,6 +35,7 @@ export default class AuthFunction {
     static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
 
+        body['roleAdmin'] = '';
         body['email'] = ConstantValues.DEFAULT_EMAIL;
         body['address'] = ConstantValues.DEFAULT_ADDRESS;
         body['avatar'] = ConstantValues.DEFAULT_AVATAR;
