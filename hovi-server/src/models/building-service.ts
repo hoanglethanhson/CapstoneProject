@@ -57,18 +57,12 @@ export class BuildingService extends BaseEntity {
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: BuildingService.schema.createAt,
   })
   createAt: Date;
 
   @Column({
     type: 'timestamp',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     name: BuildingService.schema.updateAt,
   })
   updateAt: Date;
@@ -136,7 +130,7 @@ export class BuildingServiceRepository extends Repository<BuildingService> {
   async getServiceDetailBuilding(buildingId: any) {
     return await getManager()
       .createQueryBuilder(BuildingService, 'building_service')
-      .select(['service.service_id', 'service.icon_id', 'service.service_name', 'building_service.service_price, service.description'])
+      .select(['service.service_id', 'service.icon_id', 'service.service_name', 'building_service.service_price, building_service.note'])
       .innerJoin(Building, 'building', 'building.building_id = building_service.building_id')
       .innerJoin(Service, 'service', 'service.service_id = building_service.service_id')
       .where('building_service.building_id = :building_id', { building_id: buildingId })

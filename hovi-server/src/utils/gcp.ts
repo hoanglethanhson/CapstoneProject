@@ -20,7 +20,7 @@ export default class {
     return { url: `https://storage.googleapis.com/${this.bucketName}/${fileName}` };
   }
 
-  uploadFileToGoogleStoragePromise(file: any, roomGroupId: number, uniqueId: any) {
+  uploadToGoogleStorage(file: any, roomGroupId: number, uniqueId: any) {
     return new Promise((resolve, reject) => {
       const gcsFileName = `room-image-${roomGroupId}-${uniqueId}`;
       const bucketFile = this.bucket.file(gcsFileName);

@@ -12,6 +12,7 @@ import RoomAmenitiesRoutes from './room-amenities-route';
 import TransactionRoutes from './transaction-route';
 import FeedBackRoutes from './feedback-route';
 import TenantReviewRoutes from "./tenant-review-route";
+import BankTransferHistoryRoutes from "./bank-transfer-history-route";
 import ESRoute from "./es-route"
 
 export default [
@@ -29,5 +30,6 @@ export default [
   ...TransactionRoutes,
   ...FeedBackRoutes,
   ...TenantReviewRoutes,
+  ...BankTransferHistoryRoutes,
   ...ESRoute
 ];

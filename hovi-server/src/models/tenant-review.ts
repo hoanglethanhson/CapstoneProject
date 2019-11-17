@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import {User} from "./user";
 import {RoomGroup} from "./room-group";
+import {ConstantValues} from "../utils/constant-values";
 
 @Entity(TenantReview.tableName)
 export class TenantReview extends BaseEntity {
@@ -80,18 +81,12 @@ export class TenantReview extends BaseEntity {
 
     @CreateDateColumn({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: TenantReview.schema.createAt
     })
     createAt: Date;
 
     @UpdateDateColumn({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: TenantReview.schema.updateAt
     })
     updateAt: Date;
@@ -124,5 +119,12 @@ export class TenantReviewRepository extends Repository<TenantReview> {
         return await this.manager.query("SELECT COUNT(*) as \'number_of_reviews\', AVG(accuracy_star) as \'accuracy_rate\', AVG(host_star) as \'host_rate'\, " +
             "AVG(security_star) as \'security_rate\' FROM `tenant_review` WHERE room_group_id = ?",
             [roomGroupId]);
+    }
+
+    async getReviewComment(roomGroupId: number) {
+        return await this.createQueryBuilder('tenantReview')
+            .select(['tenantReview.user_id', 'tenantReview.comment'])
+            .where('tenantReview.room_group_id = :roomGroupId', { roomGroupId })
+            .getRawMany();
     }
 }
