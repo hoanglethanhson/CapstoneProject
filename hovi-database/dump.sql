@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 18/11/2019 22:09:31
+ Date: 19/11/2019 01:21:31
 */
 
 SET NAMES utf8mb4;
@@ -586,14 +586,16 @@ CREATE TABLE `host_review`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `reported_room`;
 CREATE TABLE `reported_room`  (
+  `report_id` int(5) NOT NULL COMMENT 'Id of the report',
   `user_id` int(5) NOT NULL COMMENT 'ID of user who sends the report',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of reported room group',
   `report_content` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the report',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
-  PRIMARY KEY (`user_id`, `room_group_id`) USING BTREE,
+  PRIMARY KEY (`report_id`) USING BTREE,
   INDEX `FK_room_report`(`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_room_report` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  INDEX `FK_user_report`(`user_id`) USING BTREE,
+  CONSTRAINT `FK_roomGroup_report` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_report` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
