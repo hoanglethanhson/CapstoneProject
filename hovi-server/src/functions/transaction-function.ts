@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction, Handler} from "express";
 import {validateByModel} from '../utils';
-import {HTTP400Error, HTTP409Error} from '../utils/httpErrors';
+import {HTTP303Error, HTTP400Error, HTTP409Error} from '../utils/httpErrors';
 import {Transaction} from "../models/transaction";
 import {IsNumber} from "class-validator";
 import {ConstantValues} from "../utils/constant-values";
@@ -38,7 +38,7 @@ export default class TransactionFunction {
                 const building = await Building.repo.findOne(roomGroup.buildingId);
                 const hostId = building.hostId;
                 if (hostId == parseInt(userId)) {
-                    next(new HTTP409Error("Current user is host of the room group"));
+                    next(new HTTP303Error("Current user is host of the room group"));
                 } else {
                     let successResponse;
                     let newTransaction;

@@ -1,5 +1,11 @@
 import HttpException from './HttpException';
 
+export class HTTP303Error extends HttpException {
+  constructor(message: any | string = 'User is host') {
+    super(303, message);
+  }
+}
+
 export class HTTP400Error extends HttpException {
   constructor(message: any | string = 'Bad Request') {
     super(400, message);
