@@ -8,6 +8,7 @@ export default class AmenitiesFunction {
         const amenities = await Amenities.repo.find();
         if (amenities.length != 0) res.status(200).send(amenities);
         else next(new HTTP400Error('0 record.'));
+
     };
 
     static getAmenitiesOne: Handler = async (req: Request, res: Response, next: NextFunction) => {
