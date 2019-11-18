@@ -378,6 +378,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     let transactionStatus = await Transaction.repo.getTransactionRoomGroupDetail(transactionId);
 
     const transaction = await Transaction.repo.findOne(transactionId);
+    const user = await User.repo.findOne(userId);
     //console.log(transactionStatuses);
     //console.log(statusValue);
     const data = {
@@ -392,6 +393,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         bathroomQuantity: roomGroup.bathroomQuantity,
         minDepositPeriod: roomGroup.minDepositPeriod,
         hostId: host.id,
+        userIdCard: user.idCardFront,
         status: transaction.transactionStatus,
         transactionStatus: transactionStatus
       }
