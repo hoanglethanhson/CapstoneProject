@@ -18,6 +18,7 @@ import {Feedback} from './feedback';
 import {TenantReview} from "./tenant-review";
 import {ConstantValues} from "../utils/constant-values";
 import {BankTransferHistory} from "./bank-transfer-history";
+import {ReportedRoom} from "./reported-room";
 
 @Entity(User.tableName)
 @Unique(['phoneNumber'])
@@ -228,6 +229,10 @@ export class User extends BaseEntity {
     @OneToMany(type => BankTransferHistory, bankTransferHistory => bankTransferHistory.receiver)
     @JoinColumn({name: User.schema.id})
     bankTransferHistoryReceivers: BankTransferHistory[];
+
+    @OneToMany(type => ReportedRoom, reportedRoom => reportedRoom.user)
+    @JoinColumn({name: User.schema.id})
+    reportedRooms: ReportedRoom[];
 
     checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
         return bcrypt.compareSync(unencryptedPassword, this.password);

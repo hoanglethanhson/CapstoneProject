@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction, Handler} from 'express';
 import {isObject} from '../utils';
-import {HTTP303Error, HTTP400Error} from '../utils/httpErrors';
+import {HTTP303Error, HTTP400Error, HTTP401Error} from '../utils/httpErrors';
 import {RoomGroup} from '../models/room-group';
 import {Room} from '../models/room';
 import {ConstantValues} from '../utils/constant-values';
@@ -84,8 +84,8 @@ export default class RoomGroupFunction {
         if (!roomGroup) next(new HTTP400Error('roomGroupId not found.')); else {
             const building = await Building.repo.findOne(roomGroup.buildingId);
             const hostId = building.hostId;
-            if (hostId == parseInt(userId)) {
-                next(new HTTP303Error("Current user is host of the room group"));
+            if ((hostId != parseInt(userId)) && (transaction.userId != parseInt(userId))) {
+                next(new HTTP401Error("User is not in this message."));
             } else {
                 const roomGroupDetail = await RoomGroup.repo.getRoomGroupTransactionDetail(roomGroup.id, userId, transactionId);
                 if (roomGroupDetail) res.status(200).send(roomGroupDetail);
