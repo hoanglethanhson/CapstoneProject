@@ -3,30 +3,30 @@ import reportedRoomFunction from "../functions/reported-room-function";
 export default [
     {
         path: "/reportedRoom/",
-        authentication: false,
+        authentication: true,
         method: "get",
         handler: reportedRoomFunction.getReportedRooms
     },
     {
-        path: "/reportedRoom/:reportedRoomId",
-        authentication: false,
+        path: "/reportedRoom/:reportId",
+        authentication: true,
         method: "get",
         handler: reportedRoomFunction.getReportedRoom
     },
     {
         path: "/reportedRoom/",
-        authentication: false,
+        authentication: true,
         method: "post",
         handler: reportedRoomFunction.createReportedRoom
     },
     {
-        path: "/reportedRoom/:reportedRoomId",
+        path: "/reportedRoom/:reportId",
         authentication: true,
         method: "put",
         handler: reportedRoomFunction.updateReportedRoom
     },
     {
-        path: "/reportedRoom/:reportedRoomId",
+        path: "/reportedRoom/:reportId",
         method: "delete",
         authentication: true,
         handler: reportedRoomFunction.deleteReportedRoom

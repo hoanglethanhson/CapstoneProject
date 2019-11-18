@@ -12,7 +12,7 @@ export default class ReportedRoomFunction {
     };
 
     static getReportedRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const reportedRoomId = req.params['reportedRoomId'];
+        const reportedRoomId = req.params['reportId'];
         const reportedRoom = await ReportedRoom.repo.findOne(reportedRoomId);
 
         if (reportedRoom) res.status(200).send(reportedRoom);

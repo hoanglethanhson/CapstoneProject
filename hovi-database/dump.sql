@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 19/11/2019 01:21:31
+ Date: 19/11/2019 01:36:23
 */
 
 SET NAMES utf8mb4;
@@ -586,7 +586,7 @@ CREATE TABLE `host_review`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `reported_room`;
 CREATE TABLE `reported_room`  (
-  `report_id` int(5) NOT NULL COMMENT 'Id of the report',
+  `report_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'Id of the report',
   `user_id` int(5) NOT NULL COMMENT 'ID of user who sends the report',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of reported room group',
   `report_content` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the report',
@@ -597,7 +597,13 @@ CREATE TABLE `reported_room`  (
   INDEX `FK_user_report`(`user_id`) USING BTREE,
   CONSTRAINT `FK_roomGroup_report` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_user_report` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of reported_room
+-- ----------------------------
+INSERT INTO `reported_room` VALUES (1, 1, 10, 'bad', '2019-11-19 01:34:31.599288', '2019-11-19 01:35:02.000000');
+INSERT INTO `reported_room` VALUES (2, 1, 10, 'bad', '2019-11-19 01:35:40.858273', NULL);
 
 -- ----------------------------
 -- Table structure for room
