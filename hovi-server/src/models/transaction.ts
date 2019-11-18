@@ -121,7 +121,7 @@ export class TransactionRepository extends Repository<Transaction> {
             .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
             .innerJoin(RoomGroup, 'room_group', 'room.room_group_id = room_group.room_group_id')
             .innerJoin(Building, 'building', 'building.building_id = room_group.building_id')
-            .innerJoin(User, 'user', 'user.user_id = building.host_id')
+            .innerJoin(User, 'user', 'user.user_id = transaction.user_id')
             .where('transaction.transaction_id = :transactionId', { transactionId: transactionId })
             .getRawOne();
     }
