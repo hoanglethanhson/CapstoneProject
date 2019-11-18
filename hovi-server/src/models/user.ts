@@ -34,6 +34,9 @@ export class User extends BaseEntity {
         email: 'email',
         avatar: 'avatar',
         address: 'address',
+        idCardFront: 'id_card_front',
+        idCardBack: 'id_card_back',
+        selfieImage: 'selfie_image',
         isPhoneNumberVerified: 'is_phone_number_verified',
         isSelfieVerified: 'is_selfie_verified',
         isGovernmentIdVerified: 'is_government_id_verified',
@@ -127,6 +130,24 @@ export class User extends BaseEntity {
     })
     @MaxLength(255)
     address: string;
+
+    @Column({
+        type: 'text',
+        name: User.schema.idCardFront,
+    })
+    idCardFront: string;
+
+    @Column({
+        type: 'text',
+        name: User.schema.idCardBack,
+    })
+    idCardBack: string;
+
+    @Column({
+        type: 'text',
+        name: User.schema.selfieImage,
+    })
+    selfieImage: string;
 
     @Column({
         type: 'boolean',
@@ -228,6 +249,12 @@ export class UserRepository extends Repository<User> {
             user.gender = userUpdate.gender ? userUpdate.gender : user.gender;
             user.avatar = userUpdate.avatar ? userUpdate.avatar : user.avatar;
             user.address = userUpdate.address ? userUpdate.address : user.address;
+            user.idCardFront = userUpdate.idCardFront ? userUpdate.idCardFront : user.idCardFront;
+            user.idCardBack = userUpdate.idCardBack ? userUpdate.idCardBack : user.idCardBack;
+            user.selfieImage = userUpdate.selfieImage ? userUpdate.selfieImage : user.selfieImage;
+            user.isPhoneNumberVerified = userUpdate.isPhoneNumberVerified ? userUpdate.isPhoneNumberVerified : user.isPhoneNumberVerified;
+            user.isGovernmentIdVerified = userUpdate.isGovernmentIdVerified ? userUpdate.isGovernmentIdVerified : user.isGovernmentIdVerified;
+            user.isSelfieVerified = userUpdate.isSelfieVerified ? userUpdate.isSelfieVerified : user.isSelfieVerified;
             user.email = userUpdate.email ? userUpdate.email : user.email;
             user.isVerified = userUpdate.isVerified ? userUpdate.isVerified : user.isVerified;
             user.isHost = userUpdate.isHost ? userUpdate.isHost : user.isHost;

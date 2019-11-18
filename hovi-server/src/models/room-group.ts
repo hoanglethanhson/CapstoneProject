@@ -351,7 +351,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     };
   }
 
-  async getRoomGroupTransactionDetail(roomGroupId: any, userId: any, transacionId: any) {
+  async getRoomGroupTransactionDetail(roomGroupId: any, userId: any, transactionId: any) {
 
     /*if (Number.isInteger(roomGroupId)) {
       console.log("got null");
@@ -378,14 +378,14 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     let transactionStatus;
     if (host.id == userId) {
       console.log("host");
-      transactionStatus = await Transaction.repo.getTransactionStatusForHost(roomGroupId, transacionId);
+      transactionStatus = await Transaction.repo.getTransactionStatusForHost(roomGroupId, transactionId);
       console.log(transactionStatus);
     } else {
       console.log("tenant");
-      transactionStatus = await Transaction.repo.getTransactionRoomGroupDetail(transacionId);
+      transactionStatus = await Transaction.repo.getTransactionRoomGroupDetail(transactionId);
       console.log(transactionStatus);
     }
-    const transaction = await Transaction.repo.findOne(transacionId);
+    const transaction = await Transaction.repo.findOne(transactionId);
     //console.log(transactionStatuses);
     //console.log(statusValue);
     const data = {
