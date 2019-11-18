@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction, Handler} from "express";
 import {validateByModel} from '../utils';
-import {HTTP400Error} from '../utils/httpErrors';
+import {HTTP400Error, HTTP409Error} from '../utils/httpErrors';
 import {Transaction} from "../models/transaction";
 import {IsNumber} from "class-validator";
 import {ConstantValues} from "../utils/constant-values";
@@ -25,7 +25,6 @@ export default class TransactionFunction {
     };
 
     static createTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const body = req.body || {};
         const userId = req['currentUserId'];
         //const userId = 7;
         const roomId = req.params['roomId'];
@@ -34,49 +33,43 @@ export default class TransactionFunction {
             next(new HTTP400Error('roomId not found.'));
         } else {
             if (await Room.repo.findOne(roomId)) {
-                let successResponse;
-                let newTransaction;
-                const transaction = await Transaction.repo.getTransaction(userId, roomId);
-                if (transaction[0]) {
-                    console.log("if branch");
-                    console.log(transaction[0]);
-                    newTransaction = transaction[0];
-                    newTransaction.transactionStatus = ConstantValues.DUMMY_STATUS;
-                    //console.log(newTransaction);
-                    successResponse = await Transaction.repo.updateById(transaction[0].transactionId, newTransaction);
-                    res.status(200).send(successResponse);
+                const room = await Room.repo.findOne(roomId);
+                const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+                const building = await Building.repo.findOne(roomGroup.buildingId);
+                const hostId = building.hostId;
+                if (hostId == parseInt(userId)) {
+                    next(new HTTP409Error("Current user is host of the room group"));
                 } else {
-                    console.log("else branch");
-                    newTransaction = new Transaction();
-                    newTransaction.userId =  parseInt(userId);
-                    newTransaction.roomId = parseInt(roomId);
-                    newTransaction.transactionStatus = ConstantValues.DUMMY_STATUS;
-                    const result = await Transaction.repo.save(newTransaction);
-                    //successResponse = await Transaction.repo.findOne({transactionId: result.transactionId});
-                    //res.status(200).send(successResponse);
+                    let successResponse;
+                    let newTransaction;
+                    const transaction = await Transaction.repo.getTransaction(userId, roomId);
+                    if (transaction[0]) {
+                        console.log("if branch");
+                        console.log(transaction[0]);
+                        newTransaction = transaction[0];
+                        newTransaction.transactionStatus = ConstantValues.DUMMY_STATUS;
+                        //console.log(newTransaction);
+                        successResponse = await Transaction.repo.updateById(transaction[0].transactionId, newTransaction);
+                        res.status(200).send(successResponse);
+                    } else {
+                        console.log("else branch");
+                        newTransaction = new Transaction();
+                        newTransaction.userId =  parseInt(userId);
+                        newTransaction.roomId = parseInt(roomId);
+                        newTransaction.transactionStatus = ConstantValues.DUMMY_STATUS;
+                        const result = await Transaction.repo.save(newTransaction);
+                        //successResponse = await Transaction.repo.findOne({transactionId: result.transactionId});
+                        //res.status(200).send(successResponse);
+                    }
+                    //const detail = await Transaction.repo.getTransactionRoomDetail(successResponse);
+                    if (newTransaction) {
+                        res.status(200).send(newTransaction);
+                    }
                 }
-                //const detail = await Transaction.repo.getTransactionRoomDetail(successResponse);
-                if (newTransaction) {
-                    res.status(200).send(newTransaction);
-                }
-
-
             } else {
                 next(new HTTP400Error('roomId not found.'));
             }
         }
-        /*const userId = req['currentUserId'];
-        //const userId = 7;
-        const roomId = req.params['roomId'];
-        let transaction = new Transaction();
-        transaction.roomId = parseInt(roomId);
-        transaction.userId = parseInt(userId);
-        transaction.transactionStatus = ConstantValues.DUMMY_STATUS;
-        const result = await Transaction.repo.save(transaction);
-        if (result) {
-            res.status(200).send(result);
-        }*/
-
     };
 
     static generateTransferContent: Handler = async (req: Request, res: Response, next: NextFunction) => {
