@@ -38,7 +38,6 @@ export class RoomGroup extends BaseEntity {
     area: 'area',
     bedroomQuantity: 'bedroom_quantity',
     bathroomQuantity: 'bathroom_quantity',
-    wcQuantity: 'wc_quantity',
     direction: 'direction',
     isAvailable: 'is_available',
     isVerified: 'is_verified',
@@ -116,13 +115,6 @@ export class RoomGroup extends BaseEntity {
   @Min(1)
   bathroomQuantity: number;
 
-  @Column({
-    type: 'int',
-    name: RoomGroup.schema.wcQuantity,
-  })
-  @IsNumber()
-  @Min(1)
-  wcQuantity: number;
 
   @Column({
     type: 'varchar',
@@ -237,7 +229,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
       roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
       roomGroup.bedroomQuantity = roomGroupUpdate.bedroomQuantity ? roomGroupUpdate.bedroomQuantity : roomGroup.bedroomQuantity;
       roomGroup.bathroomQuantity = roomGroupUpdate.bathroomQuantity ? roomGroupUpdate.bathroomQuantity : roomGroup.bathroomQuantity;
-      roomGroup.wcQuantity = roomGroupUpdate.wcQuantity ? roomGroupUpdate.wcQuantity : roomGroup.wcQuantity;
       roomGroup.direction = roomGroupUpdate.direction ? roomGroupUpdate.direction : roomGroup.direction;
       roomGroup.isAvailable = roomGroupUpdate.isAvailable ? roomGroupUpdate.isAvailable : roomGroup.isAvailable;
       roomGroup.isVerified = roomGroupUpdate.isVerified ? roomGroupUpdate.isVerified : roomGroup.isVerified;
@@ -320,7 +311,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         direction: roomGroup.direction,
         bedroomQuantity: roomGroup.bedroomQuantity,
         bathroomQuantity: roomGroup.bathroomQuantity,
-        wcQuantity: roomGroup.wcQuantity,
         minDepositPeriod: roomGroup.minDepositPeriod,
         floorQuantity: building.floorQuantity,
         availableRooms: availableRooms,
@@ -406,7 +396,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         buildingTypeId: building.typeId,
         direction: roomGroup.direction,
         floorQuantity: building.floorQuantity,
-        wcQuantity: roomGroup.wcQuantity,
         bedroomQuantity: roomGroup.bedroomQuantity,
         bathroomQuantity: roomGroup.bathroomQuantity,
         minDepositPeriod: roomGroup.minDepositPeriod,

@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 17/11/2019 13:22:31
+ Date: 18/11/2019 19:55:42
 */
 
 SET NAMES utf8mb4;
@@ -2647,10 +2647,10 @@ CREATE TABLE `transaction`  (
   `transaction_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the transaction',
   `user_id` int(5) NOT NULL COMMENT 'ID of the user who make the transaction',
   `room_id` int(5) NOT NULL COMMENT 'ID of room in the transaction',
+  `start_date` timestamp(6) NULL DEFAULT NULL COMMENT 'Start date of the transaction',
   `transaction_status` tinyint(1) NULL DEFAULT NULL COMMENT 'Status code of the transaction',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
-  `start_date` timestamp(6) NULL DEFAULT NULL COMMENT 'Start date of the transaction',
   PRIMARY KEY (`transaction_id`) USING BTREE,
   INDEX `FK_User_Transaction`(`user_id`) USING BTREE,
   INDEX `FK_Room_Transaction`(`room_id`) USING BTREE,

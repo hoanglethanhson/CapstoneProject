@@ -86,12 +86,12 @@ export default class TransactionFunction {
             const room = await Room.repo.findOne(transaction.roomId);
             const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
             const user = await User.repo.findOne(transaction.userId);
-            if (user.balance >= roomGroup.rentPrice) {
+            if (user.balance >= roomGroup.depositPrice) {
                 const data = {
                     isEnough: true
                 };
                 let userUpdate = user;
-                userUpdate.balance = user.balance - roomGroup.rentPrice;
+                userUpdate.balance = user.balance - roomGroup.depositPrice;
                 userUpdate = await User.repo.updateById(user.id, userUpdate);
                 console.log(userUpdate);
                 res.status(200).send(data);
@@ -100,7 +100,7 @@ export default class TransactionFunction {
             const data = {
                 isEnough: false,
                 content: "DATCOC-" + transactionId,
-                moneyAmount: roomGroup.rentPrice - user.balance,
+                moneyAmount: roomGroup.depositPrice - user.balance,
                 accountNumber: ConstantValues.ADMIN_ACCOUNT_NUMBER,
                 bank: ConstantValues.ADMIN_BANK
             };
