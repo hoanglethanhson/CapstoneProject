@@ -89,12 +89,12 @@ export default class BankTransferHistoryFunction {
                         const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
                         let totalBalance = user.balance + moneyAmount;
                         let userUpdate = user;
-                        if (totalBalance >= roomGroup.rentPrice) {
+                        if (totalBalance >= roomGroup.depositPrice) {
                             let transactionUpdate = transaction;
                             transactionUpdate.transactionStatus = ConstantValues.ENOUGH_BALANCE;
                             transactionUpdate = await Transaction.repo.updateById(transactionId, transactionUpdate);
 
-                            userUpdate.balance = totalBalance - roomGroup.rentPrice;
+                            userUpdate.balance = totalBalance - roomGroup.depositPrice;
                             userUpdate = await User.repo.updateById(userId, userUpdate);
                         }  else {
                             userUpdate.balance = totalBalance;
