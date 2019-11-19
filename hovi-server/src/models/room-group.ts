@@ -398,6 +398,8 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         bathroomQuantity: roomGroup.bathroomQuantity,
         minDepositPeriod: roomGroup.minDepositPeriod,
         hostId: host.id,
+        hostName: host.firstName + " " + host.lastName,
+        userName: user.firstName + " " + user.lastName,
         userIdCard: user.idCardFront,
         status: transaction.transactionStatus,
         transactionStatus: transactionStatus
