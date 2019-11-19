@@ -15,6 +15,7 @@ import TenantReviewRoutes from "./tenant-review-route";
 import BankTransferHistoryRoutes from "./bank-transfer-history-route";
 import ESRoute from "./es-route"
 import ReportedRoomRoutes from "./reported-room-route"
+import AdminBankAccountRoutes from "./admin-bank-account-route";
 
 export default [
   ...AuthRoutes,
@@ -33,5 +34,6 @@ export default [
   ...TenantReviewRoutes,
   ...BankTransferHistoryRoutes,
   ...ReportedRoomRoutes,
+  ...AdminBankAccountRoutes,
   ...ESRoute
 ];
