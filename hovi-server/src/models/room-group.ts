@@ -383,7 +383,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     let transactionStatus = await Transaction.repo.getTransactionRoomGroupDetail(transactionId);
 
     const transaction = await Transaction.repo.findOne(transactionId);
-    const user = await User.repo.findOne(userId);
+    const user = await User.repo.findOne(transaction.userId);
     //console.log(transactionStatuses);
     //console.log(statusValue);
     const data = {
