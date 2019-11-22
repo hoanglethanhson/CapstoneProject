@@ -2,20 +2,35 @@ import {Request, Response, NextFunction, Handler} from "express";
 import {validateByModel} from '../utils';
 import {HTTP400Error} from '../utils/httpErrors';
 import {ReportedRoom} from "../models/reported-room";
+import {User} from "../models/user";
 
 export default class ReportedRoomFunction {
     static getReportedRooms: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const reportedRooms = await ReportedRoom.repo.find();
+        let result = [];
+        for (const reportedRoom of reportedRooms) {
+            const user = await User.repo.findOne(reportedRoom);
+            const element = {
+                reportedRoom,
+                user
+            }
+            result.push(element);
+        }
 
-        if (reportedRooms.length != 0) res.status(200).send(reportedRooms);
+        if (result.length != 0) res.status(200).send(result);
         else next(new HTTP400Error('0 record.'));
     };
 
     static getReportedRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const reportedRoomId = req.params['reportId'];
         const reportedRoom = await ReportedRoom.repo.findOne(reportedRoomId);
+        const user = await User.repo.findOne(reportedRoom)
+        const result = {
+            reportedRoom,
+            user
+        }
 
-        if (reportedRoom) res.status(200).send(reportedRoom);
+        if (result) res.status(200).send(result);
         else next(new HTTP400Error('reportedRoomId not found.'));
     };
 

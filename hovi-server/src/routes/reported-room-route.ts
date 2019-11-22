@@ -3,13 +3,13 @@ import reportedRoomFunction from "../functions/reported-room-function";
 export default [
     {
         path: "/reportedRoom/",
-        authentication: true,
+        authentication: false,
         method: "get",
         handler: reportedRoomFunction.getReportedRooms
     },
     {
         path: "/reportedRoom/:reportId",
-        authentication: true,
+        authentication: false,
         method: "get",
         handler: reportedRoomFunction.getReportedRoom
     },
