@@ -7,12 +7,12 @@ export default [
         authentication: true,
         handler: TransactionFunction.getTransactions
     },
-    {
+   /* {
         path: "/transaction/:transactionId",
         method: "get",
         authentication: true,
         handler: TransactionFunction.getTransaction
-    },
+    },*/
     {
         path: "/transaction/:roomId",
         method: "post",
@@ -24,6 +24,24 @@ export default [
         method: "put",
         authentication: true,
         handler: TransactionFunction.updateTransaction
+    },
+    {
+        path: "/transactionLockRoom/:transactionId",
+        method: "put",
+        authentication: true,
+        handler: TransactionFunction.updateTransactionAndLockRoom
+    },
+    {
+        path: "/transactionReject/:transactionId",
+        method: "put",
+        authentication: true,
+        handler: TransactionFunction.rejectTransaction
+    },
+    {
+        path: "/transactionCheckin/:transactionId",
+        method: "put",
+        authentication: true,
+        handler: TransactionFunction.checkInConfirmedTransaction
     },
     {
         path: "/transaction/:transactionId",

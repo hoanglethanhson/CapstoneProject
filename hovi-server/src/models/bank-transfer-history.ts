@@ -31,6 +31,7 @@ export class BankTransferHistory extends BaseEntity {
         transferTime: 'transfer_time',
         moneyAmount: 'money_amount',
         transferNote: 'transfer_note',
+        transferCode: 'transfer_code',
         createAt: 'created_at',
         updateAt: 'updated_at'
     };
@@ -123,6 +124,14 @@ export class BankTransferHistory extends BaseEntity {
     @MaxLength(255)
     transferNote: string;
 
+    @Column({
+        type: 'varchar',
+        length: 255,
+        name: BankTransferHistory.schema.transferCode,
+    })
+    @MaxLength(255)
+    transferCode: string;
+
     @CreateDateColumn({
         type: "timestamp",
         name: BankTransferHistory.schema.createAt
@@ -157,6 +166,7 @@ export class BankTransferHistoryRepository extends Repository<BankTransferHistor
             bankTransferHistory.transferTime = bankTransferHistoryUpdate.transferTime ? bankTransferHistoryUpdate.transferTime : bankTransferHistory.transferTime;
             bankTransferHistory.moneyAmount = bankTransferHistoryUpdate.moneyAmount ? bankTransferHistoryUpdate.moneyAmount : bankTransferHistory.moneyAmount;
             bankTransferHistory.transferNote = bankTransferHistoryUpdate.transferNote ? bankTransferHistoryUpdate.transferNote : bankTransferHistory.transferNote;
+            bankTransferHistory.transferCode = bankTransferHistoryUpdate.transferCode ? bankTransferHistoryUpdate.transferCode : bankTransferHistory.transferCode;
             bankTransferHistory.createAt = bankTransferHistoryUpdate.createAt ? bankTransferHistoryUpdate.createAt : bankTransferHistory.createAt;
             bankTransferHistory.updateAt = bankTransferHistoryUpdate.updateAt ? bankTransferHistoryUpdate.updateAt : bankTransferHistory.updateAt;
             await this.save(bankTransferHistory);
