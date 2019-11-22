@@ -8,6 +8,7 @@ import {Room} from "../models/room";
 import {RoomGroup} from "../models/room-group";
 import {User} from "../models/user";
 import {Building} from "../models/building";
+import {AdminBankAccount} from "../models/admin-bank-account";
 
 export default class TransactionFunction {
     static getTransactions: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -76,6 +77,10 @@ export default class TransactionFunction {
         const transactionId = req.params['transactionId'];
         if (await Transaction.repo.findOne(transactionId)) {
             const transaction = await Transaction.repo.findOne(transactionId);
+            const userId = req['currentUserId'];
+            if (transaction.userId != parseInt(userId)) {
+                next(new HTTP303Error('Not your transaction.'));
+            }
             const room = await Room.repo.findOne(transaction.roomId);
             const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
             const user = await User.repo.findOne(transaction.userId);
@@ -95,18 +100,24 @@ export default class TransactionFunction {
                 res.status(200).send(transactionUpdate);
                 return transactionUpdate;
             }
-            const data = {
-                isEnough: false,
-                content: "DATCOC-" + transactionId,
-                moneyAmount: roomGroup.depositPrice - user.balance,
-                accountNumber: ConstantValues.ADMIN_ACCOUNT_NUMBER,
-                bank: ConstantValues.ADMIN_BANK
-            };
+            const adminBankAccounts = await AdminBankAccount.repo.find();
+            let dataArray = [];
+            for (const account of adminBankAccounts) {
+                const content = {
+                    isEnough: false,
+                    content: "DATCOC-" + transactionId,
+                    moneyAmount: roomGroup.depositPrice - user.balance,
+                    accountNumber: account.accountNumber,
+                    bank: account.bank,
+                    holderName: account.holderName
+                };
+                dataArray.push(content);
+            }
             let transactionUpdate = transaction;
             transactionUpdate.transactionStatus = ConstantValues.NOT_ENOUGH_BALANCE;
             transactionUpdate = await Transaction.repo.updateById(transactionId, transactionUpdate);
-            res.status(200).send(data);
-            return data;
+            res.status(200).send(dataArray);
+            return dataArray;
         } else
             next(new HTTP400Error('transactionId not found'));
     };
