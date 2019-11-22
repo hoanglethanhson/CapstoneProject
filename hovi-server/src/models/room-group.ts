@@ -11,6 +11,7 @@ import {
   PrimaryColumn,
   Repository,
 } from 'typeorm';
+
 import {buildingTitle} from '../utils';
 import {Building} from './building';
 import {Room} from './room';
@@ -21,6 +22,10 @@ import {BuildingService} from './building-service';
 import {User} from './user';
 import {TenantReview} from './tenant-review';
 import {ConstantValues} from '../utils/constant-values';
+import {RoomType} from "./building-type";
+import {Transaction} from "./transaction";
+import {ReportedRoom} from "./reported-room";
+
 
 @Entity(RoomGroup.tableName)
 export class RoomGroup extends BaseEntity {
@@ -110,6 +115,7 @@ export class RoomGroup extends BaseEntity {
   @IsNumber()
   @Min(1)
   bathroomQuantity: number;
+
 
   @Column({
     type: 'varchar',
@@ -207,6 +213,10 @@ export class RoomGroup extends BaseEntity {
   @JoinColumn({ name: RoomGroup.schema.id })
   tenantReviews: TenantReview[];
 
+  @OneToMany(type => ReportedRoom, reportedRoom => reportedRoom.roomGroup)
+  @JoinColumn({ name: RoomGroup.schema.id })
+  reportedRooms: ReportedRoom[];
+
 
   static get repo(): RoomGroupRepository {
     return getCustomRepository(RoomGroupRepository);
@@ -246,17 +256,18 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
 
   async getImages(roomGroupId: any) {
     return await getManager()
-      .createQueryBuilder(RoomImage, 'room_image')
-      .select(['room_image.image_url'])
-      .innerJoin(RoomGroup, 'room_group', 'room_image.room_group_id = room_group.room_group_id')
-      .where('room_image.room_group_id = :room_group_id', { room_group_id: roomGroupId })
-      .getRawMany();
+        .createQueryBuilder(RoomImage, 'room_image')
+        .select(['room_image.image_url'])
+        .innerJoin(RoomGroup, 'room_group', 'room_image.room_group_id = room_group.room_group_id')
+        .where('room_image.room_group_id = :room_group_id', { room_group_id: roomGroupId })
+        .getRawMany();
   }
 
   async getRoomGroupDetail(roomGroupId: any, roomGroup: RoomGroup) {
     if (Number.isInteger(roomGroupId)) {
       return null;
     }
+
     const building = await Building.repo.findOne(roomGroup.buildingId);
     if (building == null) {
       return null;
@@ -289,56 +300,114 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     let tenantIds = [];
     let tenantAvatars = [];
     let tenantComments = [];
-   for (const review of reviewList) {
-     console.log(review);
-     console.log(review.user_id);
-     let tenant = await User.repo.findOne(review.user_id);
-     tenantIds = tenantIds.concat(tenant.id);
-     tenantAvatars = tenantAvatars.concat(tenant.avatar);
-     tenantComments = tenantComments.concat(review.tenantReview_comment);
-   }
+    for (const review of reviewList) {
+      console.log(review);
+      console.log(review.user_id);
+      let tenant = await User.repo.findOne(review.user_id);
+      tenantIds = tenantIds.concat(tenant.id);
+      tenantAvatars = tenantAvatars.concat(tenant.avatar);
+      tenantComments = tenantComments.concat(review.tenantReview_comment);
+    }
+
     return {
-     data: {
-       buildingTypeId: building.typeId,
-       roomGroupId: roomGroup.id,
-       direction: roomGroup.direction,
-       bedroomQuantity: roomGroup.bedroomQuantity,
-       availableRooms: availableRooms,
-       images: imageLinks,
-       title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
-       generalAddress: {
-         province: building.province,
-         district: building.district,
-         ward: building.ward,
-       },
-       status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
-       area: roomGroup.area,
-       capacity: roomGroup.capacity,
-       gender: (roomGroup.gender == true) ? 'Nam' : 'Nữ',
-       amenities: totalAmenities,
-       description: roomGroup.description,
-       roomCost: {
-         price: roomGroup.rentPrice,
-         deposit: roomGroup.depositPrice,
-       },
-       services: services,
-       hostId: host.id,
-       hostAvatar: host.avatar,
-       hostPhone: host.phoneNumber,
-       hostName: host.firstName + " " + host.lastName,
-       rating: {
-         number_of_reviews: rating[0].number_of_reviews,
-         accuracy_rate: rating[0].accuracy_rate,
-         host_rate: rating[0].host_rate,
-         security_rate: rating[0].security_rate,
-       },
-       reviewList: {
-         tenantAvatars,
-         tenantIds,
-         tenantComments
-       }
-     }
-   };
+      data: {
+        buildingTypeId: building.typeId,
+        roomGroupId: roomGroup.id,
+        direction: roomGroup.direction,
+        bedroomQuantity: roomGroup.bedroomQuantity,
+        bathroomQuantity: roomGroup.bathroomQuantity,
+        minDepositPeriod: roomGroup.minDepositPeriod,
+        floorQuantity: building.floorQuantity,
+        availableRooms: availableRooms,
+        images: imageLinks,
+        title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
+        generalAddress: {
+          province: building.province,
+          district: building.district,
+          ward: building.ward,
+        },
+        status: (availableRooms.length > 0) ? 'Còn phòng' : 'Không còn phòng',
+        area: roomGroup.area,
+        capacity: roomGroup.capacity,
+        gender: roomGroup.gender,
+        amenities: totalAmenities,
+        description: roomGroup.description,
+        roomCost: {
+          price: roomGroup.rentPrice,
+          deposit: roomGroup.depositPrice,
+        },
+        services: services,
+        hostId: host.id,
+        hostAvatar: host.avatar,
+        hostPhone: host.phoneNumber,
+        hostName: host.firstName + " " + host.lastName,
+        rating: {
+          number_of_reviews: rating[0].number_of_reviews,
+          accuracy_rate: rating[0].accuracy_rate,
+          host_rate: rating[0].host_rate,
+          security_rate: rating[0].security_rate,
+        },
+        reviewList: {
+          tenantAvatars,
+          tenantIds,
+          tenantComments
+        }
+      }
+    };
+  }
+
+  async getRoomGroupTransactionDetail(roomGroupId: any, userId: any, transactionId: any) {
+
+    /*if (Number.isInteger(roomGroupId)) {
+      console.log("got null");
+      return null;
+    }*/
+    const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+    const building = await Building.repo.findOne(roomGroup.buildingId);
+    if (building == null) {
+      return null;
+    }
+    const availableRooms = await Room.repo.getAvailableRoomsInGroup(roomGroupId);
+    //const phone = await User.repo.getHostPhone(building.hostId);
+    const host = await User.repo.findOne(building.hostId);
+    if (host == null) {
+      return null;
+    }
+    const images = await this.getImages(roomGroupId);
+    let imageLinks = [];
+    images.forEach(function(element) {
+      let temp = [element.image_url];
+      imageLinks = imageLinks.concat(temp);
+    });
+    //console.log(roomGroupId + ", " + userId);
+    let transactionStatus = await Transaction.repo.getTransactionRoomGroupDetail(transactionId);
+
+    const transaction = await Transaction.repo.findOne(transactionId);
+    const user = await User.repo.findOne(transaction.userId);
+    //console.log(transactionStatuses);
+    //console.log(statusValue);
+    const data = {
+      data : {
+        availableRooms: availableRooms,
+        images: imageLinks,
+        title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
+        buildingTypeId: building.typeId,
+        direction: roomGroup.direction,
+        floorQuantity: building.floorQuantity,
+        bedroomQuantity: roomGroup.bedroomQuantity,
+        bathroomQuantity: roomGroup.bathroomQuantity,
+        minDepositPeriod: roomGroup.minDepositPeriod,
+        host: host,
+        hostName: host.firstName + " " + host.lastName,
+        user: user,
+        userName: user.firstName + " " + user.lastName,
+        userIdCard: user.idCardFront,
+        status: transaction.transactionStatus,
+        transactionStatus: transactionStatus
+      }
+    };
+    //console.log("data: " + data);
+    return data;
   }
 
 }

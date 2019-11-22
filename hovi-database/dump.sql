@@ -1,41 +1,59 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : HoviDB
+ Source Server         : CP_DB
  Source Server Type    : MySQL
- Source Server Version : 50727
+ Source Server Version : 50728
  Source Host           : localhost:3307
  Source Schema         : HoviDB
 
  Target Server Type    : MySQL
- Target Server Version : 50727
+ Target Server Version : 50728
  File Encoding         : 65001
-
- Date: 14/11/2019 12:18:56
+ Date: 19/11/2019 18:10:38
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
+-- Table structure for admin_bank_account
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_bank_account`;
+CREATE TABLE `admin_bank_account`  (
+  `account_id` int(3) NOT NULL AUTO_INCREMENT COMMENT 'Id of the account',
+  `bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank name of the account',
+  `account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Account number of the account',
+  `holder_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Name of the account holder',
+  `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
+  `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
+  PRIMARY KEY (`account_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of admin_bank_account
+-- ----------------------------
+INSERT INTO `admin_bank_account` VALUES (1, 'TPBank', '02725034001', 'NGUYEN VAN HOANG', '2019-11-19 18:10:10.953832', '2019-11-19 18:10:21.756397');
+INSERT INTO `admin_bank_account` VALUES (2, 'BIDV', '35110000383727', 'HOANG LE THANH SON', '2019-11-19 18:10:10.953832', '2019-11-19 18:10:26.275560');
+
+-- ----------------------------
 -- Table structure for amenities
 -- ----------------------------
 DROP TABLE IF EXISTS `amenities`;
-CREATE TABLE `amenities` (
+CREATE TABLE `amenities`  (
   `amenities_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of amenities',
-  `icon_id` varchar(50) DEFAULT NULL COMMENT 'id of icon show UI',
-  `usable_name` varchar(255) DEFAULT NULL COMMENT 'Name of amenities when usable',
-  `unusable_name` varchar(255) DEFAULT NULL COMMENT 'Name of amenities when unusable',
-  `description` text COMMENT 'Description for amenities',
+  `icon_id` varchar(50) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'id of icon show UI',
+  `usable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when usable',
+  `unusable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when unusable',
+  `description` text CHARACTER SET utf8mb4  NULL COMMENT 'Description for amenities',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`amenities_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of amenities
 -- ----------------------------
-BEGIN;
 INSERT INTO `amenities` VALUES (1, '1', 'Không chung chủ', 'Chung chủ', 'tự do khu nhà ở', '2019-10-23 12:18:55.952131', '2019-10-23 12:18:55.952131');
 INSERT INTO `amenities` VALUES (2, '2', 'Khép kín', 'Chung phòng tắm', 'Khu vực ở có khép kín hay k?', '2019-10-23 12:18:56.705670', '2019-10-23 12:18:56.705670');
 INSERT INTO `amenities` VALUES (3, '3', 'Ban công', '', 'Ban công phòng', '2019-10-23 12:18:57.511849', '2019-10-23 12:18:57.511849');
@@ -47,64 +65,63 @@ INSERT INTO `amenities` VALUES (8, '8', 'Bình nóng lạnh', '', NULL, '2019-10
 INSERT INTO `amenities` VALUES (9, '9', 'Giường', '', NULL, '2019-10-23 12:19:02.765866', '2019-10-23 12:19:02.765866');
 INSERT INTO `amenities` VALUES (10, '10', 'Tủ', '', NULL, '2019-10-23 12:19:04.547522', '2019-10-23 12:19:04.547522');
 INSERT INTO `amenities` VALUES (11, '11', 'Bàn ghế', '', NULL, '2019-10-23 12:19:05.396939', '2019-10-23 12:19:05.396939');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for bank_transfer_history
 -- ----------------------------
 DROP TABLE IF EXISTS `bank_transfer_history`;
-CREATE TABLE `bank_transfer_history` (
+CREATE TABLE `bank_transfer_history`  (
   `transfer_id` int(4) NOT NULL AUTO_INCREMENT COMMENT 'ID of the bank transferation',
-  `sender_user_id` int(5) DEFAULT NULL COMMENT 'Sender user id',
-  `sender_bank` varchar(255) DEFAULT NULL COMMENT 'Bank of sender',
-  `sender_account_number` varchar(255) DEFAULT NULL COMMENT 'Sender account number',
-  `sender_user_type` tinyint(1) DEFAULT NULL COMMENT 'Sender user type',
-  `receiver_user_id` int(5) DEFAULT NULL COMMENT 'Receiver user id',
-  `receiver_bank` varchar(255) DEFAULT NULL COMMENT 'Bank of receiver',
-  `receiver_account_number` varchar(255) DEFAULT NULL COMMENT 'Receiver account number',
-  `receiver_user_type` tinyint(1) DEFAULT NULL COMMENT 'Receiver user type',
+  `sender_user_id` int(5) NULL DEFAULT NULL COMMENT 'Sender user id',
+  `sender_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of sender',
+  `sender_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Sender account number',
+  `sender_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Sender user type',
+  `receiver_user_id` int(5) NULL DEFAULT NULL COMMENT 'Receiver user id',
+  `receiver_bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank of receiver',
+  `receiver_account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Receiver account number',
+  `receiver_user_type` tinyint(1) NULL DEFAULT NULL COMMENT 'Receiver user type',
   `transfer_time` timestamp(6) NULL DEFAULT NULL COMMENT 'Time of transferation',
-  `money_amount` double(10,0) DEFAULT NULL COMMENT 'Money amount of the transfer',
-  `transfer_note` varchar(255) DEFAULT NULL COMMENT 'Note of transfer',
+  `money_amount` double(10, 0) NULL DEFAULT NULL COMMENT 'Money amount of the transfer',
+  `transfer_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Code of transfer',
+  `transfer_note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Note of transfer',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`transfer_id`) USING BTREE,
-  KEY `FK_user_bank_transfer_history-sender_id` (`sender_user_id`) USING BTREE,
-  KEY `FK_user_bank_transfer_history-receiver_id` (`receiver_user_id`) USING BTREE,
-  CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`),
-  CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_user_bank_transfer_history-sender_id`(`sender_user_id`) USING BTREE,
+  INDEX `FK_user_bank_transfer_history-receiver_id`(`receiver_user_id`) USING BTREE,
+  CONSTRAINT `FK_user_bank_transfer_history-receiver_id` FOREIGN KEY (`receiver_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_bank_transfer_history-sender_id` FOREIGN KEY (`sender_user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for building
 -- ----------------------------
 DROP TABLE IF EXISTS `building`;
-CREATE TABLE `building` (
+CREATE TABLE `building`  (
   `building_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of building',
-  `building_name` varchar(255) DEFAULT NULL COMMENT 'name of the building',
-  `building_type_id` int(2) DEFAULT NULL COMMENT 'ID of building type',
-  `host_id` int(11) DEFAULT NULL COMMENT 'ID of host of building',
-  `province` varchar(255) DEFAULT 'default value' COMMENT 'Province of the building',
-  `district` varchar(255) DEFAULT NULL COMMENT 'District of the building',
-  `ward` varchar(255) DEFAULT NULL COMMENT 'Ward of the building',
-  `detailed_address` varchar(255) DEFAULT NULL COMMENT 'Detailed address of the building',
-  `address_description` varchar(255) DEFAULT NULL,
-  `location` varchar(255) DEFAULT NULL COMMENT 'Location of the building',
-  `floor_quantity` int(2) DEFAULT '1' COMMENT 'Number of floors in the building',
-  `is_verified` bit(1) DEFAULT NULL COMMENT 'Building is verified or not',
+  `building_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'name of the building',
+  `building_type_id` int(2) NULL DEFAULT NULL COMMENT 'ID of building type',
+  `host_id` int(11) NULL DEFAULT NULL COMMENT 'ID of host of building',
+  `province` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT 'default value' COMMENT 'Province of the building',
+  `district` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'District of the building',
+  `ward` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Ward of the building',
+  `detailed_address` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Detailed address of the building',
+  `address_description` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL,
+  `location` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Location of the building',
+  `floor_quantity` int(2) NULL DEFAULT 1 COMMENT 'Number of floors in the building',
+  `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'Building is verified or not',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`building_id`) USING BTREE,
-  KEY `FK_room_type_building` (`building_type_id`) USING BTREE,
-  KEY `FK_user_building` (`host_id`) USING BTREE,
-  CONSTRAINT `FK_type_building` FOREIGN KEY (`building_type_id`) REFERENCES `building_type` (`type_id`),
-  CONSTRAINT `FK_user_building` FOREIGN KEY (`host_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_room_type_building`(`building_type_id`) USING BTREE,
+  INDEX `FK_user_building`(`host_id`) USING BTREE,
+  CONSTRAINT `FK_type_building` FOREIGN KEY (`building_type_id`) REFERENCES `building_type` (`type_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_building` FOREIGN KEY (`host_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 114 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of building
 -- ----------------------------
-BEGIN;
 INSERT INTO `building` VALUES (7, 'Chung cư An Nam', 1, 1, '[\"Hà Nội\",2]', '[\"Bắc Từ Liêm\",27]', '[\"Xuân Đỉnh\",7572]', '12 giai phong', '', '20.9714041,105.8409441', 23, NULL, NULL, '2019-11-13 08:34:40.081491');
 INSERT INTO `building` VALUES (8, 'Chung cư Vincom City', 1, 1, '[\"Hà Nội\",1]', '[\"Nam Từ Liêm\",18]', '[\"Mỹ Đình 2\",2021]', '12 mỹ đình', '', '21.0295126,105.7790821', 16, NULL, NULL, '2019-11-13 08:34:40.081491');
 INSERT INTO `building` VALUES (9, 'Nhà trọ Thái Luyện', 3, 1, '[\"Hà Nội\",1]', '[\"Cầu Giấy\",4]', '[\"Mai Dịch\",264]', '12 nguyen phong sac', '', '21.044239,105.790373', 2, NULL, NULL, '2019-11-13 08:34:40.081491');
@@ -211,29 +228,27 @@ INSERT INTO `building` VALUES (110, 'Nhà trọ Hoàng Yến', 3, 1, '[\"Hà N�
 INSERT INTO `building` VALUES (111, 'Căn hộ tòa 12A Mỹ Đình', 1, 1, '[\"Hà Nội\",1]', '[\"Nam Từ Liêm\",18]', '[\"Mỹ Đình 1\",2020]', '1', '', '21.0226555,105.7704955', 34, NULL, '2019-11-13 14:57:21.529479', NULL);
 INSERT INTO `building` VALUES (112, 'Nguyên căn mặt phố', 2, 1, '[\"Hà Nội\",1]', '[\"Hai Bà Trưng\",11]', '[\"Phố Huế\",1085]', '12', '', '21.0090571,105.8607507', 3, NULL, '2019-11-13 18:27:27.256472', NULL);
 INSERT INTO `building` VALUES (113, 'Chung cư Jjajang ramen', 1, 1, '[\"Hà Nội\",1]', '[\"Đống Đa\",8]', '[\"Khương Thượng\",599]', '12', '', '21.0180725,105.8299495', 34, NULL, '2019-11-14 04:54:44.599414', NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for building_service
 -- ----------------------------
 DROP TABLE IF EXISTS `building_service`;
-CREATE TABLE `building_service` (
+CREATE TABLE `building_service`  (
   `building_id` int(5) NOT NULL COMMENT 'ID of the building',
   `service_id` int(5) NOT NULL COMMENT 'ID of the service in the building',
-  `service_price` double(10,0) DEFAULT NULL COMMENT 'Price of service',
-  `note` text COMMENT 'Note for building service',
+  `service_price` double(10, 0) NULL DEFAULT NULL COMMENT 'Price of service',
+  `note` text CHARACTER SET utf8mb4  NULL COMMENT 'Note for building service',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
-  PRIMARY KEY (`building_id`,`service_id`) USING BTREE,
-  KEY `FK_service` (`service_id`) USING BTREE,
-  CONSTRAINT `FK_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`),
-  CONSTRAINT `FK_service` FOREIGN KEY (`service_id`) REFERENCES `service` (`service_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  PRIMARY KEY (`building_id`, `service_id`) USING BTREE,
+  INDEX `FK_service`(`service_id`) USING BTREE,
+  CONSTRAINT `FK_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_service` FOREIGN KEY (`service_id`) REFERENCES `service` (`service_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of building_service
 -- ----------------------------
-BEGIN;
 INSERT INTO `building_service` VALUES (8, 1, 200000, 'Giá 1 tháng', NULL, NULL);
 INSERT INTO `building_service` VALUES (8, 2, 90000, 'Sẵn có 50 số điện + phụ trội thêm 90k', NULL, NULL);
 INSERT INTO `building_service` VALUES (8, 3, NULL, 'Theo giá nhà nước', NULL, NULL);
@@ -531,99 +546,103 @@ INSERT INTO `building_service` VALUES (112, 1, NULL, 'Tự lắp đặt', '2019-
 INSERT INTO `building_service` VALUES (112, 2, NULL, 'Giá theo khu vực', '2019-11-13 18:27:27.385703', NULL);
 INSERT INTO `building_service` VALUES (112, 3, NULL, 'Giá theo khu vực', '2019-11-13 18:27:27.369118', NULL);
 INSERT INTO `building_service` VALUES (113, 1, 200000, NULL, '2019-11-14 04:54:44.767204', NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for building_type
 -- ----------------------------
 DROP TABLE IF EXISTS `building_type`;
-CREATE TABLE `building_type` (
+CREATE TABLE `building_type`  (
   `type_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the room type',
-  `building_type` varchar(255) DEFAULT NULL COMMENT 'Name of the type',
+  `building_type` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of the type',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time ',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`type_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of building_type
 -- ----------------------------
-BEGIN;
 INSERT INTO `building_type` VALUES (1, 'Căn hộ chung cư', '2019-10-17 04:26:20.980356', '2019-10-17 04:26:20.980356');
 INSERT INTO `building_type` VALUES (2, 'Nhà nguyên căn', '2019-10-17 04:26:19.703176', '2019-10-17 04:26:19.703176');
 INSERT INTO `building_type` VALUES (3, 'Khu nhà trọ', '2019-10-17 04:26:14.933942', '2019-10-17 04:26:14.933942');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for feedback
 -- ----------------------------
 DROP TABLE IF EXISTS `feedback`;
-CREATE TABLE `feedback` (
+CREATE TABLE `feedback`  (
   `feedback_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the feedback',
-  `user_id` int(5) DEFAULT NULL COMMENT 'ID of user who sends the feedback',
-  `email` varchar(255) DEFAULT NULL COMMENT 'Email of the user who sends feedback',
-  `content` text NOT NULL COMMENT 'Content of the feedback',
+  `user_id` int(5) NULL DEFAULT NULL COMMENT 'ID of user who sends the feedback',
+  `email` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Email of the user who sends feedback',
+  `content` text CHARACTER SET utf8mb4  NOT NULL COMMENT 'Content of the feedback',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`feedback_id`) USING BTREE,
-  KEY `FK_user_feedback` (`user_id`) USING BTREE,
-  CONSTRAINT `FK_user_feedback` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_user_feedback`(`user_id`) USING BTREE,
+  CONSTRAINT `FK_user_feedback` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for host_review
 -- ----------------------------
 DROP TABLE IF EXISTS `host_review`;
-CREATE TABLE `host_review` (
+CREATE TABLE `host_review`  (
   `review_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the review',
-  `host_id` int(5) DEFAULT NULL COMMENT 'ID of the host who sends the review',
-  `tenant_id` int(5) DEFAULT NULL COMMENT 'ID of targeted tenant of the review',
-  `comment` text COMMENT 'Content of the comment',
+  `host_id` int(5) NULL DEFAULT NULL COMMENT 'ID of the host who sends the review',
+  `tenant_id` int(5) NULL DEFAULT NULL COMMENT 'ID of targeted tenant of the review',
+  `comment` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the comment',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`review_id`) USING BTREE,
-  KEY `FK_user_host` (`host_id`) USING BTREE,
-  KEY `FK_user_tenant` (`tenant_id`) USING BTREE,
-  CONSTRAINT `FK_user_host` FOREIGN KEY (`host_id`) REFERENCES `user` (`user_id`),
-  CONSTRAINT `FK_user_tenant` FOREIGN KEY (`tenant_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_user_host`(`host_id`) USING BTREE,
+  INDEX `FK_user_tenant`(`tenant_id`) USING BTREE,
+  CONSTRAINT `FK_user_host` FOREIGN KEY (`host_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_tenant` FOREIGN KEY (`tenant_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for reported_room
 -- ----------------------------
 DROP TABLE IF EXISTS `reported_room`;
-CREATE TABLE `reported_room` (
+CREATE TABLE `reported_room`  (
+  `report_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'Id of the report',
   `user_id` int(5) NOT NULL COMMENT 'ID of user who sends the report',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of reported room group',
-  `report_content` text COMMENT 'Content of the report',
+  `report_content` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the report',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
-  PRIMARY KEY (`user_id`,`room_group_id`) USING BTREE,
-  KEY `FK_room_report` (`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_room_report` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`),
-  CONSTRAINT `FK_user_report` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  PRIMARY KEY (`report_id`) USING BTREE,
+  INDEX `FK_room_report`(`room_group_id`) USING BTREE,
+  INDEX `FK_user_report`(`user_id`) USING BTREE,
+  CONSTRAINT `FK_roomGroup_report` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_report` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of reported_room
+-- ----------------------------
+INSERT INTO `reported_room` VALUES (1, 1, 10, 'bad', '2019-11-19 01:34:31.599288', '2019-11-19 01:35:02.000000');
+INSERT INTO `reported_room` VALUES (2, 1, 10, 'bad', '2019-11-19 01:35:40.858273', NULL);
 
 -- ----------------------------
 -- Table structure for room
 -- ----------------------------
 DROP TABLE IF EXISTS `room`;
-CREATE TABLE `room` (
+CREATE TABLE `room`  (
   `room_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the room',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of group that room belongs to',
-  `room_name` text COMMENT 'name of the room',
-  `room_status` tinyint(2) DEFAULT NULL COMMENT 'Room status code',
+  `room_name` text CHARACTER SET utf8mb4  NULL COMMENT 'name of the room',
+  `room_status` tinyint(2) NULL DEFAULT NULL COMMENT 'Room status code',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`room_id`) USING BTREE,
-  KEY `FK_room_group` (`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_room_group` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=305 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_room_group`(`room_group_id`) USING BTREE,
+  CONSTRAINT `FK_room_group` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 305 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room
 -- ----------------------------
-BEGIN;
 INSERT INTO `room` VALUES (9, 10, 'Thuê cả nhà', 1, NULL, NULL);
 INSERT INTO `room` VALUES (10, 1, '201', 1, NULL, NULL);
 INSERT INTO `room` VALUES (11, 1, '202', 1, NULL, NULL);
@@ -920,27 +939,25 @@ INSERT INTO `room` VALUES (301, 136, '303', 1, '2019-11-13 14:50:10.565921', NUL
 INSERT INTO `room` VALUES (302, 137, 'Thuê cả nhà', 1, '2019-11-13 14:57:21.638310', NULL);
 INSERT INTO `room` VALUES (303, 138, 'Thuê cả nhà', 1, '2019-11-13 18:27:27.433896', NULL);
 INSERT INTO `room` VALUES (304, 139, 'Thuê cả nhà', 1, '2019-11-14 04:54:44.813682', NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for room_amenities
 -- ----------------------------
 DROP TABLE IF EXISTS `room_amenities`;
-CREATE TABLE `room_amenities` (
+CREATE TABLE `room_amenities`  (
   `room_group_id` int(5) NOT NULL COMMENT 'ID of the room group',
   `amenities_id` int(5) NOT NULL COMMENT 'ID of amenities in the room group',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
-  PRIMARY KEY (`room_group_id`,`amenities_id`) USING BTREE,
-  KEY `FK_Amenities-Room_Amenities` (`amenities_id`) USING BTREE,
-  CONSTRAINT `FK_Amenities-Room_Amenities` FOREIGN KEY (`amenities_id`) REFERENCES `amenities` (`amenities_id`),
-  CONSTRAINT `FK_Room-Room_Amenities` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  PRIMARY KEY (`room_group_id`, `amenities_id`) USING BTREE,
+  INDEX `FK_Amenities-Room_Amenities`(`amenities_id`) USING BTREE,
+  CONSTRAINT `FK_Amenities-Room_Amenities` FOREIGN KEY (`amenities_id`) REFERENCES `amenities` (`amenities_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_Room-Room_Amenities` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_amenities
 -- ----------------------------
-BEGIN;
 INSERT INTO `room_amenities` VALUES (1, 1, NULL, NULL);
 INSERT INTO `room_amenities` VALUES (1, 2, NULL, NULL);
 INSERT INTO `room_amenities` VALUES (1, 3, NULL, NULL);
@@ -2019,41 +2036,39 @@ INSERT INTO `room_amenities` VALUES (139, 8, '2019-11-14 04:54:44.931329', NULL)
 INSERT INTO `room_amenities` VALUES (139, 9, '2019-11-14 04:54:44.958108', NULL);
 INSERT INTO `room_amenities` VALUES (139, 10, '2019-11-14 04:54:44.941985', NULL);
 INSERT INTO `room_amenities` VALUES (139, 11, '2019-11-14 04:54:44.948088', NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for room_group
 -- ----------------------------
 DROP TABLE IF EXISTS `room_group`;
-CREATE TABLE `room_group` (
+CREATE TABLE `room_group`  (
   `room_group_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the room group',
-  `building_id` int(5) DEFAULT NULL COMMENT 'ID of the building that the group belongs to',
-  `gender` bit(1) DEFAULT NULL COMMENT 'Gender in the group',
-  `rent_price` double(10,0) DEFAULT NULL COMMENT 'Rent price of the room group',
-  `min_deposit_period` int(5) DEFAULT NULL COMMENT 'minimun months of deposit',
-  `area` double(10,0) DEFAULT NULL COMMENT 'Area of the room group',
-  `bedroom_quantity` int(5) DEFAULT '1' COMMENT 'Number of  bedrooms in the building',
-  `bathroom_quantity` int(5) DEFAULT '1' COMMENT 'Number of bathrooms in the building',
-  `direction` varchar(255) DEFAULT NULL COMMENT 'direction of the room',
-  `is_available` bit(1) DEFAULT b'1' COMMENT 'The group is available or not',
-  `is_verified` bit(1) DEFAULT NULL COMMENT 'Room group is verified or not',
-  `deposit_price` double(10,0) DEFAULT NULL COMMENT 'Deposit price of the room group',
-  `description` text COMMENT 'Description of the room group',
-  `capacity` int(10) DEFAULT NULL COMMENT 'Capacity of the room group',
-  `view_amount` int(10) DEFAULT NULL COMMENT 'View amount of the room group',
-  `phone_view_amount` int(10) DEFAULT NULL COMMENT 'View via phone amount of the room group',
-  `is_sponsored` bit(1) DEFAULT b'0' COMMENT 'The room group is sponsored or not',
+  `building_id` int(5) NULL DEFAULT NULL COMMENT 'ID of the building that the group belongs to',
+  `gender` bit(1) NULL DEFAULT NULL COMMENT 'Gender in the group',
+  `rent_price` double(10, 0) NULL DEFAULT NULL COMMENT 'Rent price of the room group',
+  `min_deposit_period` int(5) NULL DEFAULT NULL COMMENT 'minimun months of deposit',
+  `area` double(10, 0) NULL DEFAULT NULL COMMENT 'Area of the room group',
+  `bedroom_quantity` int(5) NULL DEFAULT 1 COMMENT 'Number of  bedrooms in the building',
+  `bathroom_quantity` int(5) NULL DEFAULT 1 COMMENT 'Number of bathrooms in the building',
+  `direction` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'direction of the room',
+  `is_available` bit(1) NULL DEFAULT b'1' COMMENT 'The group is available or not',
+  `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'Room group is verified or not',
+  `deposit_price` double(10, 0) NULL DEFAULT NULL COMMENT 'Deposit price of the room group',
+  `description` text CHARACTER SET utf8mb4  NULL COMMENT 'Description of the room group',
+  `capacity` int(10) NULL DEFAULT NULL COMMENT 'Capacity of the room group',
+  `view_amount` int(10) NULL DEFAULT NULL COMMENT 'View amount of the room group',
+  `phone_view_amount` int(10) NULL DEFAULT NULL COMMENT 'View via phone amount of the room group',
+  `is_sponsored` bit(1) NULL DEFAULT b'0' COMMENT 'The room group is sponsored or not',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`room_group_id`) USING BTREE,
-  KEY `FK_room_group_building` (`building_id`) USING BTREE,
-  CONSTRAINT `FK_room_group_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_room_group_building`(`building_id`) USING BTREE,
+  CONSTRAINT `FK_room_group_building` FOREIGN KEY (`building_id`) REFERENCES `building` (`building_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 140 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_group
 -- ----------------------------
-BEGIN;
 INSERT INTO `room_group` VALUES (1, 9, NULL, 2500000, 1, 150, 1, 1, 'all', NULL, NULL, 1500000, 'Phòng đẹp, sạch sẽ có ban công. Hàng xóm thân thiện', 2, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `room_group` VALUES (10, 8, NULL, 7500000, 1, 200, 2, 2, 'Đông Bắc', NULL, NULL, 5000000, 'Căn hộ view đẹp, đầy đủ tiện nghi.\nGửi xe tầng hầm miễn phí.\nTest', 4, NULL, NULL, NULL, '2019-11-04 06:40:15.296960', '2019-11-04 06:40:15.296960');
 INSERT INTO `room_group` VALUES (11, 9, NULL, 1500000, 1, 100, 1, 1, 'all', NULL, NULL, 1000000, 'Phòng đẹp, sạch sẽ', 2, NULL, NULL, NULL, NULL, NULL);
@@ -2185,27 +2200,25 @@ INSERT INTO `room_group` VALUES (136, 110, NULL, 2500000, 1, 100, 1, 1, 'all', b
 INSERT INTO `room_group` VALUES (137, 111, NULL, 5500000, 2, 100, 2, 2, 'Đông Bắc', b'1', NULL, 3000000, '<p>Phòng đầy đủ tiện nghi</p>\n', 2, NULL, NULL, b'0', '2019-11-13 14:57:21.625368', NULL);
 INSERT INTO `room_group` VALUES (138, 112, NULL, 9500000, 1, 200, 3, 3, 'Đông Bắc', b'1', NULL, 5000000, '<p>Nhà đẹp, dễ bán hàng</p>\n', 6, NULL, NULL, b'0', '2019-11-13 18:27:27.410557', NULL);
 INSERT INTO `room_group` VALUES (139, 113, NULL, 5500000, 1, 100, 2, 2, 'Bắc', b'1', NULL, 2000000, '<p>Phòng view đẹp</p>\n', 4, NULL, NULL, b'0', '2019-11-14 04:54:44.791829', NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for room_image
 -- ----------------------------
 DROP TABLE IF EXISTS `room_image`;
-CREATE TABLE `room_image` (
+CREATE TABLE `room_image`  (
   `image_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the image',
-  `image_url` text COMMENT 'URL of the image',
-  `room_group_id` int(2) DEFAULT NULL COMMENT 'ID of room group of image',
+  `image_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL of the image',
+  `room_group_id` int(2) NULL DEFAULT NULL COMMENT 'ID of room group of image',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`image_id`) USING BTREE,
-  KEY `FK_roomGroup_image` (`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_roomGroup_image` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=401 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_roomGroup_image`(`room_group_id`) USING BTREE,
+  CONSTRAINT `FK_roomGroup_image` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 401 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_image
 -- ----------------------------
-BEGIN;
 INSERT INTO `room_image` VALUES (16, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572849419039-4', 10, NULL, NULL);
 INSERT INTO `room_image` VALUES (17, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572849419039-3', 10, NULL, NULL);
 INSERT INTO `room_image` VALUES (18, 'https://storage.googleapis.com/room_images_bucket/room-image-10-rc-upload-1572849419039-2', 10, NULL, NULL);
@@ -2591,41 +2604,39 @@ INSERT INTO `room_image` VALUES (397, 'https://storage.googleapis.com/room_image
 INSERT INTO `room_image` VALUES (398, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-5', 139, '2019-11-14 04:54:46.993416', NULL);
 INSERT INTO `room_image` VALUES (399, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-4', 139, '2019-11-14 04:54:46.992234', NULL);
 INSERT INTO `room_image` VALUES (400, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-3', 139, '2019-11-14 04:54:46.992107', NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for saved_room
 -- ----------------------------
 DROP TABLE IF EXISTS `saved_room`;
-CREATE TABLE `saved_room` (
+CREATE TABLE `saved_room`  (
   `user_id` int(5) NOT NULL COMMENT 'ID of the user who saved the room',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of the saved room group',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
-  PRIMARY KEY (`user_id`,`room_group_id`) USING BTREE,
-  KEY `FK_room_group_saved_room` (`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_room_group_saved_room` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`),
-  CONSTRAINT `FK_user_saved_room` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  PRIMARY KEY (`user_id`, `room_group_id`) USING BTREE,
+  INDEX `FK_room_group_saved_room`(`room_group_id`) USING BTREE,
+  CONSTRAINT `FK_room_group_saved_room` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_saved_room` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for service
 -- ----------------------------
 DROP TABLE IF EXISTS `service`;
-CREATE TABLE `service` (
+CREATE TABLE `service`  (
   `service_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the service',
-  `icon_id` varchar(50) DEFAULT NULL,
-  `service_name` varchar(255) DEFAULT NULL COMMENT 'Name of the service',
-  `description` text COMMENT 'Description of the service',
+  `icon_id` varchar(50) CHARACTER SET utf8mb4  NULL DEFAULT NULL,
+  `service_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of the service',
+  `description` text CHARACTER SET utf8mb4  NULL COMMENT 'Description of the service',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`service_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of service
 -- ----------------------------
-BEGIN;
 INSERT INTO `service` VALUES (1, '1', 'Wifi', 'Internet access', '2019-10-23 12:18:47.727281', '2019-10-23 12:18:47.727281');
 INSERT INTO `service` VALUES (2, '2', 'Điện', 'Giá điện', '2019-10-23 12:18:48.405884', '2019-10-23 12:18:48.405884');
 INSERT INTO `service` VALUES (3, '3', 'Nước', 'Giá nước', '2019-10-23 12:18:49.143173', '2019-10-23 12:18:49.143173');
@@ -2633,102 +2644,122 @@ INSERT INTO `service` VALUES (4, '4', 'Bảo vệ', 'Bảo vệ vật tư', '201
 INSERT INTO `service` VALUES (5, '5', 'Giặt đồ', 'Giặt quần áo', '2019-10-23 12:18:50.828194', '2019-10-23 12:18:50.828194');
 INSERT INTO `service` VALUES (6, '6', 'Trông xe', 'Trông xe tại nhà', '2019-10-23 12:18:51.756663', '2019-10-23 12:18:51.756663');
 INSERT INTO `service` VALUES (7, '7', 'Dọn vệ sinh', 'Dịch vụ dọn vệ sinh tận phòng', '2019-10-23 12:18:52.902631', '2019-10-23 12:18:52.902631');
-COMMIT;
+
+-- ----------------------------
+-- Table structure for system_information
+-- ----------------------------
+DROP TABLE IF EXISTS `system_information`;
+CREATE TABLE `system_information`  (
+  `info_id` int(3) NOT NULL AUTO_INCREMENT COMMENT 'Id of the information',
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Title of the information',
+  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'Content of the information',
+  `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
+  `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
+  PRIMARY KEY (`info_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for tenant_review
 -- ----------------------------
 DROP TABLE IF EXISTS `tenant_review`;
-CREATE TABLE `tenant_review` (
+CREATE TABLE `tenant_review`  (
   `review_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the review',
   `user_id` int(5) NOT NULL COMMENT 'ID of user who sends the review',
   `room_group_id` int(5) NOT NULL COMMENT 'ID of reviewed room group',
-  `comment` text COMMENT 'Content of the review',
-  `accuracy_star` int(2) DEFAULT NULL COMMENT 'Rating stars for accuracy',
-  `host_star` int(2) DEFAULT NULL COMMENT 'Rating stars for hosting',
-  `security_star` int(2) DEFAULT NULL COMMENT 'Rating stars for security',
+  `comment` text CHARACTER SET utf8mb4  NULL COMMENT 'Content of the review',
+  `accuracy_star` int(2) NULL DEFAULT NULL COMMENT 'Rating stars for accuracy',
+  `host_star` int(2) NULL DEFAULT NULL COMMENT 'Rating stars for hosting',
+  `security_star` int(2) NULL DEFAULT NULL COMMENT 'Rating stars for security',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`review_id`) USING BTREE,
-  KEY `FK_user_tenant_review` (`user_id`) USING BTREE,
-  KEY `FK_room_group_review` (`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_room_group_review` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`),
-  CONSTRAINT `FK_user_tenant_review` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_user_tenant_review`(`user_id`) USING BTREE,
+  INDEX `FK_room_group_review`(`room_group_id`) USING BTREE,
+  CONSTRAINT `FK_room_group_review` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_user_tenant_review` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for transaction
 -- ----------------------------
 DROP TABLE IF EXISTS `transaction`;
-CREATE TABLE `transaction` (
+CREATE TABLE `transaction`  (
   `transaction_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the transaction',
   `user_id` int(5) NOT NULL COMMENT 'ID of the user who make the transaction',
   `room_id` int(5) NOT NULL COMMENT 'ID of room in the transaction',
-  `transaction_status` tinyint(1) DEFAULT NULL COMMENT 'Status code of the transaction',
+  `start_date` timestamp(6) NULL DEFAULT NULL COMMENT 'Start date of the transaction',
+  `transaction_status` tinyint(1) NULL DEFAULT NULL COMMENT 'Status code of the transaction',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`transaction_id`) USING BTREE,
-  KEY `FK_User_Transaction` (`user_id`) USING BTREE,
-  KEY `FK_Room_Transaction` (`room_id`) USING BTREE,
-  CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`),
-  CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_User_Transaction`(`user_id`) USING BTREE,
+  INDEX `FK_Room_Transaction`(`room_id`) USING BTREE,
+  CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of transaction
+-- ----------------------------
+INSERT INTO `transaction` VALUES (1, 1, 58, NULL, 1, '2019-11-19 02:04:48.947019', '2019-11-19 11:10:23.800084');
 
 -- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
+CREATE TABLE `user`  (
   `user_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the user',
-  `first_name` varchar(255) DEFAULT NULL COMMENT 'First name of the user',
-  `last_name` varchar(255) DEFAULT NULL COMMENT 'Last name of the user',
-  `phone_number` varchar(20) DEFAULT NULL COMMENT 'Phone number of the user',
-  `password` varchar(255) DEFAULT NULL COMMENT 'Password of user',
-  `role_admin` varchar(255) DEFAULT NULL COMMENT 'Role of account login admin page',
-  `gender` bit(1) DEFAULT NULL COMMENT 'Gender of the user',
-  `email` varchar(255) DEFAULT NULL COMMENT 'Email of the user',
-  `avatar` text COMMENT 'Avatar URL of the user',
-  `address` text COMMENT 'Address of the user',
-  `is_phone_number_verified` bit(1) DEFAULT NULL COMMENT 'User phone number is verified or not',
-  `is_selfie_verified` bit(1) DEFAULT NULL COMMENT 'User selfie image is verified or not',
-  `is_government_id_verified` bit(1) DEFAULT NULL COMMENT 'User government id card is verified or not',
-  `is_verified` bit(1) DEFAULT NULL COMMENT 'User is verified or not',
-  `is_host` bit(1) DEFAULT NULL COMMENT 'User is host or not',
-  `is_active` bit(1) DEFAULT b'1' COMMENT 'User is active or not',
-  `balance` double(20,0) unsigned DEFAULT '0' COMMENT 'Balance of user in system',
+  `first_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'First name of the user',
+  `last_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Last name of the user',
+  `phone_number` varchar(20) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Phone number of the user',
+  `password` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Password of user',
+  `role_admin` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Role of account login admin page',
+  `gender` bit(1) NULL DEFAULT NULL COMMENT 'Gender of the user',
+  `email` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Email of the user',
+  `avatar` text CHARACTER SET utf8mb4  NULL COMMENT 'Avatar URL of the user',
+  `address` text CHARACTER SET utf8mb4  NULL COMMENT 'Address of the user',
+  `id_card_front` text CHARACTER SET utf8mb4  NULL COMMENT 'Image of front side of ID card',
+  `id_card_back` text CHARACTER SET utf8mb4  NULL COMMENT 'Image of back side of ID card',
+  `selfie_image` text CHARACTER SET utf8mb4  NULL COMMENT 'Image of user selfie',
+  `is_phone_number_verified` bit(1) NULL DEFAULT NULL COMMENT 'User phone number is verified or not',
+  `is_selfie_verified` bit(1) NULL DEFAULT NULL COMMENT 'User selfie image is verified or not',
+  `is_government_id_verified` bit(1) NULL DEFAULT NULL COMMENT 'User government id card is verified or not',
+  `is_verified` bit(1) NULL DEFAULT NULL COMMENT 'User is verified or not',
+  `is_host` bit(1) NULL DEFAULT NULL COMMENT 'User is host or not',
+  `is_active` bit(1) NULL DEFAULT b'1' COMMENT 'User is active or not',
+  `balance` double(20, 0) UNSIGNED NULL DEFAULT 0 COMMENT 'Balance of user in system',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-BEGIN;
-INSERT INTO `user` VALUES (1, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$bnWk.ogxlGO.px6ohFd1WO0.Cghq2KFQ6GO9Z/5pVzlHdlvMWzVIu', 'admin', NULL, 'your_email_1@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 08:31:27.557877', '2019-11-13 14:47:35.380551');
-INSERT INTO `user` VALUES (15, 'Nguyễn', 'Hoàng', '+84378666519', '$2a$08$5n3kFshjhI.3PqeusnHksefEJ2XNkNKkopocvmtvitHI2F6YfEAm2', NULL, NULL, 'your_email_303@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:13:03.579070', '2019-11-13 15:14:31.405148');
-INSERT INTO `user` VALUES (16, 'Hoàng Lê Thanh', 'Sơn', '+84982604182', '$2a$08$5I1pVXjFlNiCKwlzMN5HruULi1XEmpThJgueZzKQj/PradYgU.2k6', NULL, NULL, 'your_email_393@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:16:20.430927', '2019-11-13 15:16:30.640439');
-INSERT INTO `user` VALUES (18, 'Phạm Tùng', 'Anh', '+84778364588', '$2a$08$EM2xDcN2PbN61wxkyUiFJuFEhP/r0X01z52/MiShD5TgEfTdafuUK', NULL, NULL, 'your_email_392@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:19:39.776997', '2019-11-13 15:21:58.822217');
-INSERT INTO `user` VALUES (21, 'Đinh Đức', 'Việt', '+84386666428', '$2a$08$InYf4/Fw9SSzuwFZjOZ1PugPRZKzROs3gjN4AQsbMjh4eKS4grXXG', NULL, NULL, 'your_email_21@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:31:15.343005', '2019-11-13 15:33:26.112185');
-INSERT INTO `user` VALUES (22, 'A', 'Hihi', '+84367120251', '$2a$08$75fsq.dStbaxwmV.tZGyb.rfIaWpZxvudsdp9Lvagri3QTbiE0eCm', NULL, NULL, 'your_email_22@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:32:47.408454', '2019-11-13 15:33:26.702295');
-COMMIT;
+INSERT INTO `user` VALUES (1, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$bnWk.ogxlGO.px6ohFd1WO0.Cghq2KFQ6GO9Z/5pVzlHdlvMWzVIu', 'admin', NULL, 'your_email_1@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'1', NULL, NULL, NULL, NULL, b'1', 1000000, '2019-11-13 08:31:27.557877', '2019-11-19 10:57:24.931597');
+INSERT INTO `user` VALUES (3, 'demo', 'user', NULL, NULL, NULL, NULL, 'your_email_23@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'1', 0, '2019-11-18 22:07:43.404898', NULL);
+INSERT INTO `user` VALUES (15, 'Nguyễn', 'Hoàng', '+84378666519', '$2a$08$5n3kFshjhI.3PqeusnHksefEJ2XNkNKkopocvmtvitHI2F6YfEAm2', NULL, NULL, 'your_email_303@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:13:03.579070', '2019-11-13 15:14:31.405148');
+INSERT INTO `user` VALUES (16, 'Hoàng Lê Thanh', 'Sơn', '+84982604182', '$2a$08$5I1pVXjFlNiCKwlzMN5HruULi1XEmpThJgueZzKQj/PradYgU.2k6', NULL, NULL, 'your_email_393@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:16:20.430927', '2019-11-13 15:16:30.640439');
+INSERT INTO `user` VALUES (18, 'Phạm Tùng', 'Anh', '+84778364588', '$2a$08$EM2xDcN2PbN61wxkyUiFJuFEhP/r0X01z52/MiShD5TgEfTdafuUK', NULL, NULL, 'your_email_392@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:19:39.776997', '2019-11-13 15:21:58.822217');
+INSERT INTO `user` VALUES (21, 'Đinh Đức', 'Việt', '+84386666428', '$2a$08$InYf4/Fw9SSzuwFZjOZ1PugPRZKzROs3gjN4AQsbMjh4eKS4grXXG', NULL, NULL, 'your_email_21@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:31:15.343005', '2019-11-13 15:33:26.112185');
+INSERT INTO `user` VALUES (22, 'A', 'Hihi', '+84367120251', '$2a$08$75fsq.dStbaxwmV.tZGyb.rfIaWpZxvudsdp9Lvagri3QTbiE0eCm', NULL, NULL, 'your_email_22@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:32:47.408454', '2019-11-13 15:33:26.702295');
 
 -- ----------------------------
 -- Table structure for user_verification_image
 -- ----------------------------
 DROP TABLE IF EXISTS `user_verification_image`;
-CREATE TABLE `user_verification_image` (
+CREATE TABLE `user_verification_image`  (
   `card_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of the user card',
   `user_id` int(5) NOT NULL COMMENT 'ID of the user',
-  `id_card_front_url` text COMMENT 'URL to the front side of the ID Lisence Card image',
-  `id_card_back_url` text COMMENT 'URL to the back side of the ID Lisence Card image',
-  `selfie_url` text COMMENT 'URL to the selfie image of the user',
+  `id_card_front_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL to the front side of the ID Lisence Card image',
+  `id_card_back_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL to the back side of the ID Lisence Card image',
+  `selfie_url` text CHARACTER SET utf8mb4  NULL COMMENT 'URL to the selfie image of the user',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`card_id`) USING BTREE,
-  KEY `FK_user_verification` (`user_id`) USING BTREE,
-  CONSTRAINT `FK_user_verification` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `FK_user_verification`(`user_id`) USING BTREE,
+  CONSTRAINT `FK_user_verification` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Triggers structure for table user
