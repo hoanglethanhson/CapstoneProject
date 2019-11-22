@@ -18,7 +18,7 @@ export default [
         handler: roomAmenitiesFunction.createRoomAmenities
     },
     {
-        path: "/roomAmenities/:roomGroupId/:amenitiesId",
+        path: "/roomAmenities/:roomGroupId",
         method: "put",
         authentication: true,
         handler: roomAmenitiesFunction.updateRoomAmenities
