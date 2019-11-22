@@ -8,7 +8,6 @@ export default class AmenitiesFunction {
         const amenities = await Amenities.repo.find();
         if (amenities.length != 0) res.status(200).send(amenities);
         else next(new HTTP400Error('0 record.'));
-
     };
 
     static getAmenitiesOne: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +25,6 @@ export default class AmenitiesFunction {
         if (error) next(error);
         else {
             const checkAmenities = await Amenities.repo.findOne({usableName: body['usableName']});
-
             if (checkAmenities) next(new HTTP400Error('amenities already exists'));
             else {
                 const newAmenities = await Amenities.repo.save(body);
