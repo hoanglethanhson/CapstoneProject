@@ -14,6 +14,7 @@ describe('[model] buildingService', () => {
     let buildingService1: BuildingService;
     beforeEach(async () => {
         await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
         buildingService1 = new BuildingService();
         buildingService1.buildingId = 1;
         buildingService1.serviceId = 1;

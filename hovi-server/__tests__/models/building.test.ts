@@ -17,10 +17,12 @@ describe('[model] building', () => {
 
     beforeEach(async () => {
         await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
         building1 = new Building();
-        building1.id = 1;
+        building1.id = 2;
+        building1.typeId = 1;
 
-        building1 = await Building.repo.save(building1);
+        //building1 = await Building.repo.save(building1);
     });
 
 

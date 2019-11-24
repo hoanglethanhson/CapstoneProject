@@ -18,9 +18,12 @@ describe('[model] roomGroup', () => {
     let roomGroup1: RoomGroup;
     beforeEach(async () => {
         await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
         roomGroup1 = new RoomGroup();
-        roomGroup1.id = 1;
-        roomGroup1 = await RoomGroup.repo.save(roomGroup1);
+        roomGroup1.id = 2;
+        roomGroup1.buildingId = 1;
+
+        //roomGroup1 = await RoomGroup.repo.save(roomGroup1);
     });
 
     it('should return null if roomGroup is not found', async () => {

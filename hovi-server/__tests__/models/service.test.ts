@@ -14,10 +14,11 @@ describe('[model] service', () => {
     let service1: Service;
     beforeEach(async () => {
         await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
         service1 = new Service();
-        service1.id = 1;
+        service1.id = 2;
         service1.name = 'name';
-        service1 = await Service.repo.save(service1);
+        //service1 = await Service.repo.save(service1);
     });
 
 
@@ -25,7 +26,7 @@ describe('[model] service', () => {
         // expect.assertions(1);
         try {
             const duplicatedService = new Service();
-            duplicatedService.id = 2;
+            //duplicatedService.id = 3;
             duplicatedService.name = service1.name;
             await duplicatedService.save();
         } catch (error) {

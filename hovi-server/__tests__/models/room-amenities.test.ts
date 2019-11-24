@@ -14,6 +14,7 @@ describe('[model] roomAmenities', () => {
     let roomAmenities1: RoomAmenities;
     beforeEach(async () => {
         await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
         roomAmenities1 = new RoomAmenities();
         roomAmenities1.amenitiesId = 1;
         roomAmenities1.roomGroupId = 1;

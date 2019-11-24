@@ -73,6 +73,47 @@ export class DatabaseManager {
         await deleteQuery.from(User).execute();
     }
 
+    static async insertData() {
+        if (!DatabaseManager.connection) {
+            return;
+        }
+        let user = new User();
+        user.id = 1;
+        user = await User.repo.save(user);
+
+        let buildingType = new RoomType();
+        buildingType.id = 1;
+        buildingType = await RoomType.repo.save(buildingType);
+
+        let building = new Building();
+        building.id = 1;
+        building.typeId = 1;
+        building = await Building.repo.save(building);
+
+        let roomGroup = new RoomGroup();
+        roomGroup.id = 1;
+        roomGroup.buildingId = building.id;
+        roomGroup = await RoomGroup.repo.save(roomGroup);
+
+        let room = new Room();
+        room.roomId = 1;
+        room.roomGroupId = roomGroup.id;
+        room = await Room.repo.save(room);
+
+        let transaction = new Transaction();
+        transaction.transactionId = 1;
+        transaction.userId = user.id;
+        transaction.roomId = room.roomId;
+
+        let amenities = new Amenities();
+        amenities.id = 1;
+        amenities = await Amenities.repo.save(amenities);
+
+        let service = new Service();
+        service.id = 1;
+        service = await Service.repo.save(service);
+    }
+
 
     static async prepareDelete() {
         await getManager().query('SET foreign_key_checks = 0;');

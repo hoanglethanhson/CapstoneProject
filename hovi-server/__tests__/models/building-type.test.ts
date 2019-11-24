@@ -16,10 +16,10 @@ describe('[model] buildingType', () => {
     let buildingType1: RoomType;
     beforeEach(async () => {
         await DatabaseManager.clearData();
-        buildingType1 = await RoomType.repo.save(RoomType.repo.create({
-            id: 1,
-            type: 'building_type'
-        }));
+        await DatabaseManager.insertData();
+        buildingType1 = new RoomType();
+        buildingType1.id = 2;
+        buildingType1.type = "type";
     });
 
 
@@ -27,7 +27,7 @@ describe('[model] buildingType', () => {
         // expect.assertions(1);
         try {
             const duplicatedRoomType = new RoomType();
-            duplicatedRoomType.id = 2;
+            //duplicatedRoomType.id = 3;
             duplicatedRoomType.type = buildingType1.type;
             await duplicatedRoomType.save();
         } catch (error) {

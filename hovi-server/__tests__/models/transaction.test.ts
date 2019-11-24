@@ -19,11 +19,12 @@ describe('[model] transaction', () => {
     let transaction1: Transaction;
     beforeEach(async () => {
         await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
         transaction1 = new Transaction();
         transaction1.transactionId = 1;
         transaction1.userId = 1;
         transaction1.roomId = 1;
-        transaction1 = await Transaction.repo.save(transaction1);
+        //transaction1 = await Transaction.repo.save(transaction1);
     });
 
 

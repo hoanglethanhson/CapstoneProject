@@ -14,10 +14,11 @@ describe('[model] user', () => {
     let user1: User;
     beforeEach(async () => {
         await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
         user1 = new User();
-        user1.id = 1;
+        user1.id = 2;
         user1.phoneNumber = 'phone number';
-        user1 = await User.repo.save(user1);
+        //user1 = await User.repo.save(user1);
     });
 
 
@@ -25,7 +26,7 @@ describe('[model] user', () => {
         // expect.assertions(1);
         try {
             const duplicatedUser = new User();
-            duplicatedUser.id = 2;
+            //duplicatedUser.id = 3;
             duplicatedUser.firstName = 'Duplicated firstName of user1';
             duplicatedUser.lastName = 'Duplicated lastName of user1';
             duplicatedUser.phoneNumber = user1.phoneNumber;
