@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 19/11/2019 18:10:38
+ Date: 24/11/2019 13:48:26
 */
 
 SET NAMES utf8mb4;
@@ -2657,7 +2657,12 @@ CREATE TABLE `system_information`  (
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`info_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of system_information
+-- ----------------------------
+INSERT INTO `system_information` VALUES (1, 'web_title', 'HomoHouse', '2019-11-24 13:47:24.099984', NULL);
 
 -- ----------------------------
 -- Table structure for tenant_review

@@ -16,6 +16,7 @@ import BankTransferHistoryRoutes from "./bank-transfer-history-route";
 import ESRoute from "./es-route"
 import ReportedRoomRoutes from "./reported-room-route"
 import AdminBankAccountRoutes from "./admin-bank-account-route";
+import SystemInformationRoutes from "./system-information-route";
 
 export default [
   ...AuthRoutes,
@@ -35,5 +36,6 @@ export default [
   ...BankTransferHistoryRoutes,
   ...ReportedRoomRoutes,
   ...AdminBankAccountRoutes,
+  ...SystemInformationRoutes,
   ...ESRoute
 ];

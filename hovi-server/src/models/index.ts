@@ -16,6 +16,7 @@ import {TenantReview} from "./tenant-review";
 import {BankTransferHistory} from "./bank-transfer-history";
 import {ReportedRoom} from "./reported-room";
 import {AdminBankAccount} from "./admin-bank-account";
+import {SystemInformation} from "./system-information";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -46,7 +47,8 @@ export class DatabaseManager {
                 TenantReview,
                 BankTransferHistory,
                 ReportedRoom,
-                AdminBankAccount
+                AdminBankAccount,
+                SystemInformation
             ],
             maxQueryExecutionTime: 1000
         });
