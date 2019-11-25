@@ -24,6 +24,7 @@ import {TenantReview} from './tenant-review';
 import {ConstantValues} from '../utils/constant-values';
 import {Transaction} from "./transaction";
 import {ReportedRoom} from "./reported-room";
+import {SavedRoom} from "./saved-room";
 
 
 @Entity(RoomGroup.tableName)
@@ -215,6 +216,10 @@ export class RoomGroup extends BaseEntity {
     @OneToMany(type => ReportedRoom, reportedRoom => reportedRoom.roomGroup)
     @JoinColumn({name: RoomGroup.schema.id})
     reportedRooms: ReportedRoom[];
+
+    @OneToMany(type => SavedRoom, savedRoom => savedRoom.roomGroup)
+    @JoinColumn({name: RoomGroup.schema.id})
+    savedRooms: SavedRoom[];
 
 
     static get repo(): RoomGroupRepository {
