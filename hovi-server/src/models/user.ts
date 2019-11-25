@@ -307,7 +307,7 @@ export class UserRepository extends Repository<User> {
         const room = await Room.repo.findOne(transaction.roomId);
         const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
         const building = await Building.repo.findOne(roomGroup.buildingId);
-        if (building.hostId != userId && transaction.userId != userId) {
+        if (building.hostId != parseInt(userId) && transaction.userId != parseInt(userId)) {
             return false;
         }
         return true;
@@ -318,7 +318,7 @@ export class UserRepository extends Repository<User> {
         const room = await Room.repo.findOne(transaction.roomId);
         const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
         const building = await Building.repo.findOne(roomGroup.buildingId);
-        if (building.hostId != userId) {
+        if (building.hostId != parseInt(userId)) {
             return false;
         }
         return true;
