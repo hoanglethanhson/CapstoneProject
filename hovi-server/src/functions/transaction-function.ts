@@ -45,7 +45,7 @@ export default class TransactionFunction {
                     if (transaction[0]) {
                         const status = transaction[0].transactionStatus;
                         if (status != ConstantValues.DUMMY_STATUS && status != ConstantValues.CHECKED_OUT && status != ConstantValues.HOST_REJECTED) {
-                            res.status(200).send(status);
+                            res.status(200).send(transaction[0]);
                             return;
                         }
                         console.log("if branch");
