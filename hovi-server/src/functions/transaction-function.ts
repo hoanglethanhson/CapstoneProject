@@ -95,6 +95,7 @@ export default class TransactionFunction {
             const userId = req['currentUserId'];
             if (transaction.userId != parseInt(userId)) {
                 next(new HTTP303Error('Not your transaction.'));
+                return;
             }
             const room = await Room.repo.findOne(transaction.roomId);
             const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
@@ -160,6 +161,7 @@ export default class TransactionFunction {
         const userId = req['currentUserId'];
         if (!await User.repo.isUserAuthorized(userId, transactionId)) {
             next(new HTTP303Error('Not your transaction.'));
+            return;
         }
 
         const successResponse = await Transaction.repo.updateById(transactionId, body);
@@ -185,6 +187,7 @@ export default class TransactionFunction {
         const userId = req['currentUserId'];
         if (!await User.repo.isHostAuthorized(userId, transactionId)) {
             next(new HTTP303Error('Not your transaction.'));
+            return;
         }
 
         let transactionUpdate = transaction;
@@ -209,8 +212,10 @@ export default class TransactionFunction {
         const room = await Room.repo.findOne(transaction.roomId);
 
         const userId = req['currentUserId'];
-        if (!await User.repo.isHostAuthorized(userId, transactionId)) {
+        console.log(userId);
+        if (!await User.repo.isTenantAuthorized(userId, transactionId)) {
             next(new HTTP303Error('Not your transaction.'));
+            return;
         }
 
         let transactionUpdate = transaction;
@@ -236,6 +241,7 @@ export default class TransactionFunction {
         const userId = req['currentUserId'];
         if (!await User.repo.isHostAuthorized(userId, transactionId)) {
             next(new HTTP303Error('Not your transaction.'));
+            return;
         }
 
         let transactionUpdate = transaction;

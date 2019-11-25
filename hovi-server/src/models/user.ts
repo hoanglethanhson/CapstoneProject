@@ -313,6 +313,17 @@ export class UserRepository extends Repository<User> {
         return true;
     }
 
+    async isTenantAuthorized(userId: any, transactionId: any) {
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        if (transaction.userId != parseInt(userId)) {
+            return false;
+        }
+        return true;
+    }
+
     async isHostAuthorized(userId: any, transactionId: any) {
         const transaction = await Transaction.repo.findOne(transactionId);
         const room = await Room.repo.findOne(transaction.roomId);
