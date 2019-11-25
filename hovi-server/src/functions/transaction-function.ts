@@ -1,14 +1,14 @@
 import {Request, Response, NextFunction, Handler} from "express";
-import {validateByModel} from '../utils';
-import {HTTP303Error, HTTP400Error, HTTP409Error} from '../utils/httpErrors';
+import DBFirebase from '../utils/DBFirebase';
+import {HTTP303Error, HTTP400Error} from '../utils/httpErrors';
 import {Transaction} from "../models/transaction";
-import {IsNumber} from "class-validator";
 import {ConstantValues} from "../utils/constant-values";
 import {Room} from "../models/room";
 import {RoomGroup} from "../models/room-group";
 import {User} from "../models/user";
 import {Building} from "../models/building";
 import {AdminBankAccount} from "../models/admin-bank-account";
+
 
 export default class TransactionFunction {
     static getTransactions: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -30,17 +30,15 @@ export default class TransactionFunction {
         //const userId = 7;
         const roomId = req.params['roomId'];
 
-        if (Number(roomId) == Number.NaN){
-            next(new HTTP400Error('roomId not found.'));
-        } else {
+        if (isNaN(Number(roomId))) next(new HTTP400Error('roomId not found.'));
+        else {
             if (await Room.repo.findOne(roomId)) {
                 const room = await Room.repo.findOne(roomId);
                 const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
                 const building = await Building.repo.findOne(roomGroup.buildingId);
                 const hostId = building.hostId;
-                if (hostId == parseInt(userId)) {
-                    next(new HTTP303Error("Current user is host of the room group"));
-                } else {
+                if (hostId == parseInt(userId)) next(new HTTP303Error("Current user is host of the room group"));
+                else {
                     let successResponse;
                     let newTransaction;
                     const transaction = await Transaction.repo.getTransaction(userId, roomId);
@@ -55,21 +53,33 @@ export default class TransactionFunction {
                     } else {
                         console.log("else branch");
                         newTransaction = new Transaction();
-                        newTransaction.userId =  parseInt(userId);
+                        newTransaction.userId = parseInt(userId);
                         newTransaction.roomId = parseInt(roomId);
                         newTransaction.transactionStatus = ConstantValues.DUMMY_STATUS;
                         const result = await Transaction.repo.save(newTransaction);
-                        //successResponse = await Transaction.repo.findOne({transactionId: result.transactionId});
-                        //res.status(200).send(successResponse);
-                    }
-                    //const detail = await Transaction.repo.getTransactionRoomDetail(successResponse);
-                    if (newTransaction) {
-                        res.status(200).send(newTransaction);
+
+                        console.log('/messages/' + result.transactionId);
+                        // create conversation in firebase
+                        const notification = {
+                            receiverId: hostId,
+                            notificationId: result.transactionId,
+                            content: {
+                                title: building.buildingName,
+                                description: 'Có khách liên hệ thuê phòng.'
+                            }
+                        };
+
+                        DBFirebase.pushNotification(notification)
+                            .then(data => {
+                                console.log(data);
+                                res.status(200).send(result);
+                            }).catch(err => {
+                            console.log(err);
+                            next(new HTTP400Error(err.toString()))
+                        });
                     }
                 }
-            } else {
-                next(new HTTP400Error('roomId not found.'));
-            }
+            } else next(new HTTP400Error('roomId not found.'));
         }
     };
 

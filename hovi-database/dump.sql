@@ -10,8 +10,7 @@
  Target Server Type    : MySQL
  Target Server Version : 50728
  File Encoding         : 65001
-
- Date: 24/11/2019 13:48:26
+ Date: 19/11/2019 18:10:38
 */
 
 SET NAMES utf8mb4;
@@ -45,7 +44,7 @@ CREATE TABLE `amenities`  (
   `amenities_id` int(5) NOT NULL AUTO_INCREMENT COMMENT 'ID of amenities',
   `icon_id` varchar(50) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'id of icon show UI',
   `usable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when usable',
-  `unusable_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when unusable',
+  `unusable_name` varchar(255) FCHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'Name of amenities when unusable',
   `description` text CHARACTER SET utf8mb4  NULL COMMENT 'Description for amenities',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',

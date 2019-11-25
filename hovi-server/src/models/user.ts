@@ -80,7 +80,7 @@ export class User extends BaseEntity {
         name: User.schema.phoneNumber,
     })
     @MaxLength(20)
-    @IsPhoneNumber('VN',{
+    @IsPhoneNumber('VN', {
         message: 'Số điện thoại của bạn không hợp lệ'
     })
     phoneNumber: string;
@@ -268,11 +268,6 @@ export class UserRepository extends Repository<User> {
             await this.save(user);
         }
         return user;
-    }
-
-    async getHostPhone(userId: number) {
-        let user = await this.findOne({id: userId});
-        return user.phoneNumber;
     }
 
     async getUserDetail(userId: any) {
