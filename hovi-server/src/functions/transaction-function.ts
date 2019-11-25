@@ -153,9 +153,14 @@ export default class TransactionFunction {
         const transactionId = req.params['transactionId'];
         const roomId = body.roomId;
         const roomBody = await Room.repo.findOne(roomId);
+        const allRooms = await Room.repo.find({roomGroupId: roomBody.roomGroupId});
         if (roomBody.roomStatus == ConstantValues.ROOM_NOT_AVAILABLE) {
             next(new HTTP303Error('Room is not available.'));
-            return;
+            return {
+                data: {
+                    allRooms
+                }
+            };
         }
 
         const userId = req['currentUserId'];
