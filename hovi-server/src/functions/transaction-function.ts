@@ -152,6 +152,11 @@ export default class TransactionFunction {
             return;
         }
 
+        const userId = req['currentUserId'];
+        if (!await User.repo.isUserAuthorized(userId, transactionId)) {
+            next(new HTTP303Error('Not your transaction.'));
+        }
+
         const successResponse = await Transaction.repo.updateById(transactionId, body);
 
         const transaction = await Transaction.repo.findOne(transactionId);
@@ -172,6 +177,10 @@ export default class TransactionFunction {
         const transactionId = req.params['transactionId'];
         const transaction = await Transaction.repo.findOne(transactionId);
         const room = await Room.repo.findOne(transaction.roomId);
+        const userId = req['currentUserId'];
+        if (!await User.repo.isHostAuthorized(userId, transactionId)) {
+            next(new HTTP303Error('Not your transaction.'));
+        }
 
         let transactionUpdate = transaction;
         transactionUpdate.transactionStatus = ConstantValues.HOST_REJECTED;
@@ -182,8 +191,7 @@ export default class TransactionFunction {
         roomUpdate = await Room.repo.updateById(room.roomId, roomUpdate);
 
         let successResponse = {
-            transactionUpdate: transactionUpdate,
-            roomUpdate: roomUpdate
+            transactionUpdate: transactionUpdate
         }
 
         if (successResponse) res.status(200).send(successResponse);
@@ -193,6 +201,11 @@ export default class TransactionFunction {
     static checkInConfirmedTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const transactionId = req.params['transactionId'];
         const transaction = await Transaction.repo.findOne(transactionId);
+
+        const userId = req['currentUserId'];
+        if (!await User.repo.isHostAuthorized(userId, transactionId)) {
+            next(new HTTP303Error('Not your transaction.'));
+        }
 
         let transactionUpdate = transaction;
         transactionUpdate.transactionStatus = ConstantValues.HOST_DEPOSIT_TRANSFERRED;

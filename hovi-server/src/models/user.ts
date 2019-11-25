@@ -19,6 +19,8 @@ import {TenantReview} from "./tenant-review";
 import {ConstantValues} from "../utils/constant-values";
 import {BankTransferHistory} from "./bank-transfer-history";
 import {ReportedRoom} from "./reported-room";
+import {Room} from "./room";
+import {RoomGroup} from "./room-group";
 
 @Entity(User.tableName)
 @Unique(['phoneNumber'])
@@ -298,5 +300,27 @@ export class UserRepository extends Repository<User> {
                 },
             ]
         };
+    }
+
+    async isUserAuthorized(userId: any, transactionId: any) {
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        if (building.hostId != userId && transaction.userId != userId) {
+            return false;
+        }
+        return true;
+    }
+
+    async isHostAuthorized(userId: any, transactionId: any) {
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        if (building.hostId != userId) {
+            return false;
+        }
+        return true;
     }
 }
