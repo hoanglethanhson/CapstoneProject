@@ -307,6 +307,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             tenantAvatars = tenantAvatars.concat(tenant.avatar);
             tenantComments = tenantComments.concat(review.tenantReview_comment);
         }
+        const allRooms = await Room.repo.find({roomGroupId: roomGroupId});
 
         return {
             data: {
@@ -317,6 +318,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
                 bathroomQuantity: roomGroup.bathroomQuantity,
                 minDepositPeriod: roomGroup.minDepositPeriod,
                 floorQuantity: building.floorQuantity,
+                allRooms: allRooms,
                 availableRooms: availableRooms,
                 images: imageLinks,
                 title: buildingTitle(building.buildingName, building.province, building.district, building.ward),
