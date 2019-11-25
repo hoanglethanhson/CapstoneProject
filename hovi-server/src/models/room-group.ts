@@ -384,10 +384,13 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
 
     const transaction = await Transaction.repo.findOne(transactionId);
     const user = await User.repo.findOne(transaction.userId);
+
+    const allRooms = await Room.repo.find({roomGroupId: roomGroupId});
     //console.log(transactionStatuses);
     //console.log(statusValue);
     const data = {
       data : {
+        allRooms: allRooms,
         availableRooms: availableRooms,
         images: imageLinks,
         title: buildingTitle(building.buildingName, building.province, building.district, building.ward),

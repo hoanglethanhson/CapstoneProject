@@ -81,6 +81,11 @@ export default class RoomGroupFunction {
         const transaction = await Transaction.repo.findOne(transactionId);
         const room = await Room.repo.findOne(transaction.roomId);
         const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.id);
+        if (transaction.userId != parseInt(userId) && building.hostId != parseInt(userId)) {
+            next(new HTTP303Error('Not your transaction.'));
+            return;
+        }
         if (!roomGroup) next(new HTTP400Error('roomGroupId not found.')); else {
             const building = await Building.repo.findOne(roomGroup.buildingId);
             const hostId = building.hostId;
