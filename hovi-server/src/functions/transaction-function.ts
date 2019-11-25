@@ -145,6 +145,13 @@ export default class TransactionFunction {
     static updateTransactionAndLockRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
         const transactionId = req.params['transactionId'];
+        const roomId = body.roomId;
+        const roomBody = await Room.repo.findOne(roomId);
+        if (roomBody.roomStatus == ConstantValues.ROOM_NOT_AVAILABLE) {
+            next(new HTTP303Error('Room is not available.'));
+            return;
+        }
+
         const successResponse = await Transaction.repo.updateById(transactionId, body);
 
         const transaction = await Transaction.repo.findOne(transactionId);
