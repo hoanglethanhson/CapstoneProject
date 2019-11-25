@@ -44,6 +44,12 @@ export default [
         handler: TransactionFunction.checkInConfirmedTransaction
     },
     {
+        path: "/transactionCheckout/:transactionId",
+        method: "put",
+        authentication: true,
+        handler: TransactionFunction.checkOutConfirmedTransaction
+    },
+    {
         path: "/transaction/:transactionId",
         method: "delete",
         authentication: true,

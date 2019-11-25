@@ -26,6 +26,7 @@ export class ConstantValues {
     static readonly ENOUGH_BALANCE = 2;
     static readonly EXPIRE_FAILED = -3;
     static readonly HOST_DEPOSIT_TRANSFERRED = 3;
+    static readonly CHECKED_OUT = 4;
 
     //DEFINE ADMIN USER INFO
     static readonly ADMIN_USER_ID = 1;

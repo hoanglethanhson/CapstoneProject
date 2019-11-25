@@ -43,6 +43,11 @@ export default class TransactionFunction {
                     let newTransaction;
                     const transaction = await Transaction.repo.getTransaction(userId, roomId);
                     if (transaction[0]) {
+                        const status = transaction[0].transactionStatus;
+                        if (status != ConstantValues.DUMMY_STATUS && status != ConstantValues.CHECKED_OUT && status != ConstantValues.HOST_REJECTED) {
+                            res.status(200).send(status);
+                            return;
+                        }
                         console.log("if branch");
                         console.log(transaction[0]);
                         newTransaction = transaction[0];
@@ -201,6 +206,7 @@ export default class TransactionFunction {
     static checkInConfirmedTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const transactionId = req.params['transactionId'];
         const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
 
         const userId = req['currentUserId'];
         if (!await User.repo.isHostAuthorized(userId, transactionId)) {
@@ -209,6 +215,31 @@ export default class TransactionFunction {
 
         let transactionUpdate = transaction;
         transactionUpdate.transactionStatus = ConstantValues.HOST_DEPOSIT_TRANSFERRED;
+        transactionUpdate = await Transaction.repo.updateById(transactionId, transaction);
+
+        let roomUpdate = room;
+        roomUpdate.roomStatus = ConstantValues.ROOM_AVAILABLE;
+        roomUpdate = await Room.repo.updateById(room.roomId, roomUpdate);
+
+        let successResponse = {
+            transactionUpdate: transactionUpdate,
+        }
+
+        if (successResponse) res.status(200).send(successResponse);
+        else next(new HTTP400Error('transactionId not found'));
+    };
+
+    static checkOutConfirmedTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const transactionId = req.params['transactionId'];
+        const transaction = await Transaction.repo.findOne(transactionId);
+
+        const userId = req['currentUserId'];
+        if (!await User.repo.isHostAuthorized(userId, transactionId)) {
+            next(new HTTP303Error('Not your transaction.'));
+        }
+
+        let transactionUpdate = transaction;
+        transactionUpdate.transactionStatus = ConstantValues.CHECKED_OUT;
         transactionUpdate = await Transaction.repo.updateById(transactionId, transaction);
 
         let successResponse = {
