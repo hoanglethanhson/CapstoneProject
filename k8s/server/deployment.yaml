@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: hovi-server
+  name: hovi-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: hovi-server
+      tier: server
+  template:
+    metadata:
+      labels:
+        run: hovi-server
+        tier: server
+    spec:
+      containers:
+        - name: hovi-server
+          image: registry.gitlab.com/hovi-team-development/hovi-backend/server:prod
+          imagePullPolicy: Always
+          args:
+            - npm
+            - run
+            - start:prod
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      imagePullSecrets:
+        - name: gitlab-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hovi-server-svc
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    run: hovi-server
+  type: NodePort

@@ -5,7 +5,7 @@ services:
 stages:
   - test
   - image_build
-  - deploy
+  - deploy_live
 
 variables:
   # use the overlay storage driver
@@ -35,3 +35,39 @@ test:
     when: always
     paths:
       - ./hovi-server/coverage
+
+image_build:
+  stage: image_build
+  image: docker:stable
+  only:
+    - production
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  script:
+    - docker pull $SERVER_CACHE_IMAGE:latest || true
+    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:latest -t hovi-server ./hovi-server
+    - docker tag hovi-server $SERVER_CACHE_IMAGE:prod
+    - docker push $SERVER_CACHE_IMAGE:prod
+
+deploy_live:
+  stage: deploy_live
+  image: dwdraju/gke-kubectl-docker
+  only:
+    - production
+  when: manual
+  script:
+    - echo "$GCLOUD_SERVICE_KEY" > key.json
+    - gcloud auth activate-service-account --key-file=key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE --project $GCP_PROJECT_ID
+    - kubectl version
+    - kubectl apply -f ./k8s/ingress
+    - kubectl apply -f ./k8s/mysql
+    - |
+      if kubectl apply -f ./k8s/server/deployment.yaml | grep -q unchanged; then
+          echo "=> Patching server deployment to force image update."
+          kubectl patch deployment ./k8s/server/deployment.yaml -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"build\":\"$CI_COMMIT_SHORT_SHA\"}}}}}}"
+      else
+          echo "=> Server Deployment apply has changed the object, no need to force image update."
+      fi
