@@ -64,10 +64,4 @@ deploy_live:
     - kubectl version
     - kubectl apply -f ./k8s/ingress
     - kubectl apply -f ./k8s/mysql
-    - |
-      if kubectl apply -f ./k8s/server/deployment.yaml | grep -q unchanged; then
-          echo "=> Patching server deployment to force image update."
-          kubectl patch deployment ./k8s/server/deployment.yaml -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"build\":\"$CI_COMMIT_SHORT_SHA\"}}}}}}"
-      else
-          echo "=> Server Deployment apply has changed the object, no need to force image update."
-      fi
+    - kubectl apply -f ./k8s/server/deployment.yaml
