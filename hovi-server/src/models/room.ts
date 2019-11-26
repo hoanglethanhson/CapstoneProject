@@ -4,11 +4,14 @@ import {
   Entity,
   EntityRepository, getCustomRepository,
   Repository,
-  PrimaryColumn, ManyToOne, JoinColumn, OneToMany, Not, LessThan, getConnection,
+  PrimaryColumn, ManyToOne, JoinColumn, OneToMany, Not, LessThan, getConnection, getManager,
 } from 'typeorm';
 import { ConstantValues } from '../utils/constant-values';
 import { RoomGroup } from './room-group';
 import { Transaction } from './transaction';
+import {User} from "./user";
+import {Building} from "./building";
+import {RoomImage} from "./room-image";
 
 @Entity(Room.tableName)
 export class Room extends BaseEntity {
@@ -111,5 +114,59 @@ export class RoomRepository extends Repository<Room> {
       .where('room.room_group_id = :roomGroupId', { roomGroupId: roomGroupId })
       .andWhere('room.room_status <> :notAvailable', { notAvailable: ConstantValues.ROOM_NOT_AVAILABLE })
       .getMany();
+  }
+
+  async getManagementRooms(userId: any, keySent: any) {
+    let rawResult;
+    let result = [];
+    if (keySent.length == 1) {
+        const typeId = parseInt(keySent);
+        rawResult = await getManager()
+            .createQueryBuilder(Transaction, 'transaction')
+            .select(['*'])
+            .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+            .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
+            .innerJoin(RoomGroup, 'room_group', 'room.room_group_id = room_group.room_group_id')
+            .innerJoin(RoomImage, 'room_image', 'room_image.room_group_id = room_group.room_group_id')
+            .innerJoin(Building, 'building', 'room_group.building_id = building.building_id')
+            .where('building.building_type_id = :type_id', {type_id: typeId})
+            .andWhere('building.host_id = :user_id', {user_id: userId})
+            .getRawMany();
+    } else {
+      const buildingId = parseInt(keySent.split('-')[1].trim());
+      rawResult = await getManager()
+          .createQueryBuilder(Transaction, 'transaction')
+          .select(['*'])
+          .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+          .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
+          .innerJoin(RoomGroup, 'room_group', 'room.room_group_id = room_group.room_group_id')
+          .innerJoin(RoomImage, 'room_image', 'room_image.room_group_id = room_group.room_group_id')
+          .innerJoin(Building, 'building', 'room_group.building_id = building.building_id')
+          .where('building.building_id = :building_id', {building_id: buildingId})
+          .andWhere('building.host_id = :user_id', {user_id: userId})
+          .getRawMany();
+    }
+    for (const record of rawResult) {
+      const transaction = await Transaction.repo.findOne(record.transaction_id);
+      const tenant = await User.repo.findOne(transaction.userId);
+      const resultRecord = {
+        title: record.building_name,
+        address: record.province + record.district + record.ward,
+        image: record.image_url,
+        price: record.rent_price,
+        deposit: record.deposit_price,
+        status: (record.transaction_status)? record.transaction_status : 0,
+        transactionId: (record.transaction_id != ConstantValues.DUMMY_STATUS
+                        && record.transaction_id != ConstantValues.HOST_REJECTED)? record.transaction_id : null,
+        tenant: tenant,
+        roomId: record.room_id,
+        roomName: record.room_name,
+        roomGroupId: record.room_group_id,
+        buildingId: record.building_id,
+        buildingTypeId: record.building_type_id
+      }
+      result.push(resultRecord);
+    }
+    return result;
   }
 }

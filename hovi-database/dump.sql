@@ -9,8 +9,9 @@
 
  Target Server Type    : MySQL
  Target Server Version : 50728
- File Encoding         : 6500
- Date: 19/11/2019 18:10:38
+ File Encoding         : 65001
+
+ Date: 27/11/2019 02:00:18
 */
 
 SET NAMES utf8mb4;
@@ -2214,7 +2215,7 @@ CREATE TABLE `room_image`  (
   PRIMARY KEY (`image_id`) USING BTREE,
   INDEX `FK_roomGroup_image`(`room_group_id`) USING BTREE,
   CONSTRAINT `FK_roomGroup_image` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 401 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 405 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_image
@@ -2604,6 +2605,10 @@ INSERT INTO `room_image` VALUES (397, 'https://storage.googleapis.com/room_image
 INSERT INTO `room_image` VALUES (398, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-5', 139, '2019-11-14 04:54:46.993416', NULL);
 INSERT INTO `room_image` VALUES (399, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-4', 139, '2019-11-14 04:54:46.992234', NULL);
 INSERT INTO `room_image` VALUES (400, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-3', 139, '2019-11-14 04:54:46.992107', NULL);
+INSERT INTO `room_image` VALUES (401, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-5', 34, '2019-11-27 01:39:04.370074', '2019-11-27 01:40:06.692590');
+INSERT INTO `room_image` VALUES (402, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-4', 34, '2019-11-27 01:39:06.576784', '2019-11-27 01:40:07.964628');
+INSERT INTO `room_image` VALUES (403, 'https://storage.googleapis.com/room_images_bucket/room-image-138-rc-upload-1573669523703-3', 34, '2019-11-27 01:39:09.952830', '2019-11-27 01:40:08.736803');
+INSERT INTO `room_image` VALUES (404, 'https://storage.googleapis.com/room_images_bucket/room-image-137-rc-upload-1573656653125-5', 34, '2019-11-27 01:39:13.568712', '2019-11-27 01:40:09.876159');
 
 -- ----------------------------
 -- Table structure for saved_room
@@ -2701,12 +2706,15 @@ CREATE TABLE `transaction`  (
   INDEX `FK_Room_Transaction`(`room_id`) USING BTREE,
   CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of transaction
 -- ----------------------------
 INSERT INTO `transaction` VALUES (1, 1, 58, NULL, 1, '2019-11-19 02:04:48.947019', '2019-11-19 11:10:23.800084');
+INSERT INTO `transaction` VALUES (2, 1, 59, NULL, 1, '2019-11-27 00:42:40.659336', NULL);
+INSERT INTO `transaction` VALUES (3, 1, 60, NULL, 0, '2019-11-27 00:43:03.866709', NULL);
+INSERT INTO `transaction` VALUES (4, 3, 9, NULL, NULL, '2019-11-27 01:02:57.159096', '2019-11-27 01:04:10.021487');
 
 -- ----------------------------
 -- Table structure for user
