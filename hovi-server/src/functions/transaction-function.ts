@@ -173,11 +173,32 @@ export default class TransactionFunction {
         transactionUpdate = await Transaction.repo.updateById(transaction.transactionId, transactionUpdate);
 
         const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
         let updateRoom = room;
         updateRoom.roomStatus = ConstantValues.ROOM_NOT_AVAILABLE;
         updateRoom = await Room.repo.updateById(room.roomId, updateRoom);
 
-        if (successResponse) res.status(200).send(transactionUpdate);
+        if (successResponse) {
+            res.status(200).send(transactionUpdate);
+            const notification = {
+                receiverId: userId,
+                notificationId: transaction.transactionId,
+                content: {
+                    title: building.buildingName + " - " + room.roomName,
+                    description: 'Yêu cầu đặt cọc của bạn đã được gửi.'
+                }
+            };
+
+            DBFirebase.pushNotification(notification)
+                .then(data => {
+                    console.log(data);
+                    res.status(200).send(successResponse);
+                }).catch(err => {
+                console.log(err);
+                next(new HTTP400Error(err.toString()))
+            });
+        }
         else next(new HTTP400Error('transactionId not found'));
     };
 
@@ -185,6 +206,8 @@ export default class TransactionFunction {
         const transactionId = req.params['transactionId'];
         const transaction = await Transaction.repo.findOne(transactionId);
         const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
         const userId = req['currentUserId'];
         if (!await User.repo.isHostAuthorized(userId, transactionId)) {
             next(new HTTP303Error('Not your transaction.'));
@@ -203,7 +226,26 @@ export default class TransactionFunction {
             transactionUpdate: transactionUpdate
         }
 
-        if (successResponse) res.status(200).send(successResponse);
+        if (successResponse) {
+            res.status(200).send(successResponse);
+            const notification = {
+                receiverId: userId,
+                notificationId: transaction.transactionId,
+                content: {
+                    title: building.buildingName + " - " + room.roomName,
+                    description: 'Yêu cầu đặt cọc của bạn đã bị từ chối.'
+                }
+            };
+
+            DBFirebase.pushNotification(notification)
+                .then(data => {
+                    console.log(data);
+                    res.status(200).send(successResponse);
+                }).catch(err => {
+                console.log(err);
+                next(new HTTP400Error(err.toString()))
+            });
+        }
         else next(new HTTP400Error('transactionId not found'));
     };
 
@@ -211,8 +253,11 @@ export default class TransactionFunction {
         const transactionId = req.params['transactionId'];
         const transaction = await Transaction.repo.findOne(transactionId);
         const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
 
         const userId = req['currentUserId'];
+        const user = await User.repo.findOne(userId);
         console.log(userId);
         if (!await User.repo.isTenantAuthorized(userId, transactionId)) {
             next(new HTTP303Error('Not your transaction.'));
@@ -224,22 +269,65 @@ export default class TransactionFunction {
         transactionUpdate = await Transaction.repo.updateById(transactionId, transaction);
 
         let roomUpdate = room;
-        roomUpdate.roomStatus = ConstantValues.ROOM_AVAILABLE;
+        roomUpdate.roomStatus = ConstantValues.ROOM_NOT_AVAILABLE;
         roomUpdate = await Room.repo.updateById(room.roomId, roomUpdate);
 
         let successResponse = {
             transactionUpdate: transactionUpdate,
         }
 
-        if (successResponse) res.status(200).send(successResponse);
+        if (successResponse) {
+            res.status(200).send(successResponse);
+            const notification = {
+                receiverId: userId,
+                notificationId: transaction.transactionId,
+                content: {
+                    title: building.buildingName + " - " + room.roomName,
+                    description: 'Bạn đã được xác nhận chuyển đến phòng.'
+                }
+            };
+
+            DBFirebase.pushNotification(notification)
+                .then(data => {
+                    console.log(data);
+                    res.status(200).send(successResponse);
+                }).catch(err => {
+                console.log(err);
+                next(new HTTP400Error(err.toString()))
+            });
+
+            res.status(200).send(successResponse);
+            const notificationHost = {
+                receiverId: building.hostId,
+                notificationId: transaction.transactionId,
+                content: {
+                    title: building.buildingName + " - " + room.roomName,
+                    description: 'Khách ' + user.firstName  + ' đã được xác nhận chuyển đến phòng.'
+                }
+            };
+
+            DBFirebase.pushNotification(notificationHost)
+                .then(data => {
+                    console.log(data);
+                    res.status(200).send(successResponse);
+                }).catch(err => {
+                console.log(err);
+                next(new HTTP400Error(err.toString()))
+            });
+        }
         else next(new HTTP400Error('transactionId not found'));
     };
 
     static checkOutConfirmedTransaction: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const transactionId = req.params['transactionId'];
         const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
 
         const userId = req['currentUserId'];
+        const user = await User.repo.findOne(userId);
+
         if (!await User.repo.isHostAuthorized(userId, transactionId)) {
             next(new HTTP303Error('Not your transaction.'));
             return;
@@ -249,11 +337,53 @@ export default class TransactionFunction {
         transactionUpdate.transactionStatus = ConstantValues.CHECKED_OUT;
         transactionUpdate = await Transaction.repo.updateById(transactionId, transaction);
 
+        let roomUpdate = room;
+        roomUpdate.roomStatus = ConstantValues.ROOM_AVAILABLE;
+        roomUpdate = await Room.repo.updateById(room.roomId, roomUpdate);
+
         let successResponse = {
             transactionUpdate: transactionUpdate,
         }
 
-        if (successResponse) res.status(200).send(successResponse);
+        if (successResponse) {
+            res.status(200).send(successResponse);
+            const notification = {
+                receiverId: userId,
+                notificationId: transaction.transactionId,
+                content: {
+                    title: building.buildingName + " - " + room.roomName,
+                    description: 'Bạn đã được xác nhận chuyển ra khỏi phòng.'
+                }
+            };
+
+            DBFirebase.pushNotification(notification)
+                .then(data => {
+                    console.log(data);
+                    res.status(200).send(successResponse);
+                }).catch(err => {
+                console.log(err);
+                next(new HTTP400Error(err.toString()))
+            });
+
+            res.status(200).send(successResponse);
+            const notificationHost = {
+                receiverId: building.hostId,
+                notificationId: transaction.transactionId,
+                content: {
+                    title: building.buildingName + " - " + room.roomName,
+                    description: 'Khách ' + user.firstName  + ' đã được xác nhận chuyển ra khỏi phòng.'
+                }
+            };
+
+            DBFirebase.pushNotification(notificationHost)
+                .then(data => {
+                    console.log(data);
+                    res.status(200).send(successResponse);
+                }).catch(err => {
+                console.log(err);
+                next(new HTTP400Error(err.toString()))
+            });
+        }
         else next(new HTTP400Error('transactionId not found'));
     };
 
