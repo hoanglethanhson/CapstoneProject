@@ -71,15 +71,6 @@ export class SavedRoomRepository extends Repository<SavedRoom> {
         return savedRoom;
     }
 
-    async getUserInRoomGroup(roomGroupId: any) {
-        return await getRepository(RoomGroup)
-            .createQueryBuilder('roomGroup')
-            .select(['roomGroup.id', 'savedRoom.userId', 'savedRoom.roomGroupId'])
-            .where('savedRoom.roomGroupId = :roomGroupId', { roomGroupId: roomGroupId })
-            .innerJoin('roomGroup.savedRoom', 'savedRoom')
-            .getMany();
-    }
-
     async getOneRecord(roomGroupId: any, userId: any) {
         return await getRepository(SavedRoom)
             .createQueryBuilder('savedRoom')
@@ -96,23 +87,6 @@ export class SavedRoomRepository extends Repository<SavedRoom> {
             .where('roomGroupId = :roomGroupId', { roomGroupId: roomGroupId })
             .andWhere('userId = :userId', { userId: userId })
             .execute();
-    }
-
-    async getUserDetailRoomGroup(roomGroupId: any) {
-        return await getManager()
-            .createQueryBuilder(SavedRoom, 'room_user')
-            .select(['room_user.user_id', 'user.icon_id', 'user.usable_name as user_name'])
-            .innerJoin(RoomGroup, 'room_group', 'room_group.room_group_id = room_user.room_group_id')
-            .innerJoin(User, 'user', 'room_user.user_id = user.user_id')
-            .where('room_user.room_group_id = :room_group_id', { room_group_id: roomGroupId })
-            .getRawMany();
-    }
-
-    async getUserDetailNotInRoomGroup(roomGroupId: any) {
-        const userNot = await this.manager.query("SELECT user.user_id, user.icon_id, user.unusable_name as \'user_name\' FROM user where user.user_id\n" +
-            "NOT IN (select room_user.user_id from room_user INNER JOIN room_group on room_user.room_group_id = room_group.room_group_id WHERE room_group.room_group_id = ?)",
-            [roomGroupId]);
-        return userNot;
     }
 }
 

@@ -317,6 +317,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         return {
             data: {
                 buildingTypeId: building.typeId,
+                buildingName: building.buildingName,
                 roomGroupId: roomGroup.id,
                 direction: roomGroup.direction,
                 bedroomQuantity: roomGroup.bedroomQuantity,
