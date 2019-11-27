@@ -44,3 +44,7 @@ spec:
             backend:
               serviceName: hovi-search-svc
               servicePort: 8081
+          - path: /es/(.*)$
+            backend:
+              serviceName: hovi-web-admin-svc
+              servicePort: 80
