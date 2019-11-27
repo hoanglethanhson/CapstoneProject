@@ -47,4 +47,4 @@ spec:
           - path: /admin/(.*)$
             backend:
               serviceName: hovi-web-admin-svc
-              servicePort: 80
+              servicePort: 8002
