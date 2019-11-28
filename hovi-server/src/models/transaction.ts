@@ -15,6 +15,9 @@ import {User} from "./user";
 import {Room} from "./room";
 import {RoomGroup} from "./room-group";
 import {Building} from "./building";
+import {Amenities} from "./amenities";
+import {RoomAmenities} from "./room-amenities";
+import {ConstantValues} from "../utils/constant-values";
 
 @Entity(Transaction.tableName)
 export class Transaction extends BaseEntity {
@@ -24,6 +27,7 @@ export class Transaction extends BaseEntity {
         userId: 'user_id',
         roomId: 'room_id',
         transactionStatus: 'transaction_status',
+        startDate: 'start_date',
         createAt: 'created_at',
         updateAt: 'updated_at'
     };
@@ -56,6 +60,12 @@ export class Transaction extends BaseEntity {
     })
     transactionStatus: number;
 
+    @Column({
+        type: "timestamp",
+        name: Transaction.schema.startDate
+    })
+    startDate: Date;
+
     @CreateDateColumn({
         type: "timestamp",
         name: Transaction.schema.createAt
@@ -81,6 +91,7 @@ export class TransactionRepository extends Repository<Transaction> {
             transaction.userId = transactionUpdate.userId ;
             transaction.roomId = transactionUpdate.roomId;
             transaction.transactionStatus = transactionUpdate.transactionStatus ;
+            transaction.startDate = transactionUpdate.startDate;
             transaction.createAt = transactionUpdate.createAt;
             transaction.updateAt = transactionUpdate.updateAt;
             await this.save(transaction);
@@ -98,7 +109,7 @@ export class TransactionRepository extends Repository<Transaction> {
         return await this.find({userId: userId, roomId: roomId});
     }
 
-    async getTransactionRoomDetail(transactionId: any) {
+    async getTransactionRoomGroupDetail(transactionId: any) {
         let transaction = await this.findOne(transactionId);
         if (transaction == null) {
             return null;
@@ -110,9 +121,48 @@ export class TransactionRepository extends Repository<Transaction> {
             .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
             .innerJoin(RoomGroup, 'room_group', 'room.room_group_id = room_group.room_group_id')
             .innerJoin(Building, 'building', 'building.building_id = room_group.building_id')
-            .innerJoin(User, 'user', 'user.user_id = building.host_id')
+            .innerJoin(User, 'user', 'user.user_id = transaction.user_id')
             .where('transaction.transaction_id = :transactionId', { transactionId: transactionId })
-            .andWhere('room.room_id = :roomId', {roomId: transaction.roomId})
+            .getRawOne();
+    }
+
+    async getTransactionStatus(roomGroupId: number, userId: number, transactionId: number) {
+        const query = await getManager()
+            .createQueryBuilder(Transaction, 'transaction')
+            .select(['*'])
+            .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+            .where('room.room_group_id = :room_group_id', { room_group_id: roomGroupId })
+            .andWhere('transaction.user_id = :user_id', {user_id: userId})
+            .andWhere('transaction.transaction_id = :transactionId', {transactionId: transactionId})
+            .getSql();
+        //console.log(query);
+        return await getManager()
+            .createQueryBuilder(Transaction, 'transaction')
+            .select(['*'])
+            .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+            .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
+            .where('room.room_group_id = :room_group_id', { room_group_id: roomGroupId })
+            .andWhere('transaction.user_id = :user_id', {user_id: userId})
             .getRawMany();
     }
+
+    async getTransactionStatusForHost(transactionId: number) {
+        const query = await getManager()
+            .createQueryBuilder(Transaction, 'transaction')
+            .select(['*'])
+            .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+            .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
+            .andWhere('transaction.transaction_status <> :status', {status: ConstantValues.HOST_REJECTED})
+            .andWhere('transaction.transaction_id = :transactionId', {transactionId: transactionId})
+            .getSql();
+        console.log(query);
+        return await getManager()
+            .createQueryBuilder(Transaction, 'transaction')
+            .select(['*'])
+            .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+            .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
+            .andWhere('transaction.transaction_status <> :status', {status: ConstantValues.HOST_REJECTED})
+            .getRawOne();
+    }
+
 }

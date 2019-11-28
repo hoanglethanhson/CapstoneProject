@@ -19,15 +19,17 @@ export class ConstantValues {
     static readonly ADMIN = 3;
 
     //DEFINE TRANSACTION STATUS
+    static readonly DUMMY_STATUS = 0;
     static readonly ACCEPT_WAITING = 1;
     static readonly HOST_REJECTED = -1;
     static readonly NOT_ENOUGH_BALANCE = -2;
     static readonly ENOUGH_BALANCE = 2;
     static readonly EXPIRE_FAILED = -3;
     static readonly HOST_DEPOSIT_TRANSFERRED = 3;
+    static readonly CHECKED_OUT = 4;
 
     //DEFINE ADMIN USER INFO
-    static readonly ADMIN_USER_ID = 5;
+    static readonly ADMIN_USER_ID = 1;
     static readonly ADMIN_BANK = "TPBank";
     static readonly ADMIN_ACCOUNT_NUMBER = "02725034001";
 }

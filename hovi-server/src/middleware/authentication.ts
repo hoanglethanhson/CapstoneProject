@@ -10,6 +10,7 @@ const Authentication = (request: Request, response: Response, next: NextFunction
       .then(function(decodedToken) {
         console.log(decodedToken.uid);
         request['currentUserId'] = decodedToken.uid;
+        request['userAdmin'] = decodedToken.admin;
         next();
       }).catch(function(error) {
       console.debug(error);

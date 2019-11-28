@@ -36,7 +36,7 @@ export default class EsFunction {
         else {
             const building = await Building.repo.getBuildingInformationById(Number(buildingId));
             if (building) {
-                const {typeId, buildingName, location, roomGroups, province, district, ward, createdAt} = building;
+                const {typeId, buildingName, location, roomGroups, province, district, ward} = building;
                 const dataLocation = {
                     province: JSON.parse(province)[1],
                     district: JSON.parse(district)[1],
@@ -48,12 +48,15 @@ export default class EsFunction {
                 };
 
                 const posts = roomGroups.map(roomGroup => {
-                    const {id, gender, rentPrice, area, direction, capacity, roomAmenities, roomImages} = roomGroup;
+                    const {id, gender, rentPrice, area, direction, capacity, roomAmenities, roomImages, createdAt} = roomGroup;
                     const dataRoomImages = roomImages.map(data => data.imageUrl);
                     const amenities = roomAmenities.map(data => {
                         const {id, unusableName, usableName} = data.amenities;
                         return {id, name: unusableName ? unusableName : usableName};
                     });
+
+                    const date = createdAt ? Math.round(createdAt.getTime() / 1000) : Math.round(new Date().getTime() / 1000);
+
                     return {
                         id,
                         typeId,
@@ -65,7 +68,7 @@ export default class EsFunction {
                         amenities,
                         ...dataLocation,
                         roomImages: dataRoomImages,
-                        updatedAt: Math.round(createdAt.getTime() / 1000),
+                        updatedAt: date,
                         name: buildingTitle(buildingName, province, district, ward),
                     };
                 });

@@ -4,6 +4,9 @@ import {HTTP400Error} from '../utils/httpErrors';
 import {BankTransferHistory} from "../models/bank-transfer-history";
 import {ConstantValues} from "../utils/constant-values";
 import {Transaction} from "../models/transaction";
+import {User} from "../models/user";
+import {Room} from "../models/room";
+import {RoomGroup} from "../models/room-group";
 
 export default class BankTransferHistoryFunction {
     static getBankTransferHistories: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -22,14 +25,15 @@ export default class BankTransferHistoryFunction {
 
     static createBankTransferHistory: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
-        if (!body || !Array.isArray(body)) next(new HTTP400Error('Data is not valid'));
+        if (!body.data.bankData || !Array.isArray(body.data.bankData)) next(new HTTP400Error('Data is not valid'));
         let error = {};
 
         let resultArray = [];
         //Define transfer content regex
         const transferRegex = new RegExp("^DATCOC-[0-9]{1,}$");
-        if (Array.isArray(body)) {
-            for (const transfer of body) {
+        console.log(body.data.bankData);
+        if (Array.isArray(body.data.bankData)) {
+            for (const transfer of body.data.bankData) {
                 let isValidate = true;
                 //check if the content match the regex
                 if (!transferRegex.test(transfer.transferContent)) {
@@ -60,6 +64,11 @@ export default class BankTransferHistoryFunction {
                 let receiverAccountNumber;
                 let receiverUserType;
 
+                let moneyAmount = (transfer.credit != null)? parseFloat(transfer.credit) : parseFloat(transfer.debit);
+                let transferTime = new Date(transfer.transferDate);
+                let transferNote = transfer.transferContent;
+                let transferCode = transfer.transferCode;
+
 
                 if (transfer.credit != null) {
                     senderUserId = userId;
@@ -71,6 +80,28 @@ export default class BankTransferHistoryFunction {
                     receiverBank = ConstantValues.ADMIN_BANK;
                     receiverAccountNumber = ConstantValues.ADMIN_ACCOUNT_NUMBER;
                     receiverUserType = ConstantValues.ADMIN;
+
+                    //handle transfer to transaction status
+                    if (userId != -1) {
+                        const user = await User.repo.findOne(userId);
+                        const transaction = await Transaction.repo.findOne(transactionId);
+                        const room = await Room.repo.findOne(transaction.roomId);
+                        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+                        let totalBalance = user.balance + moneyAmount;
+                        let userUpdate = user;
+                        if (totalBalance >= roomGroup.depositPrice) {
+                            let transactionUpdate = transaction;
+                            transactionUpdate.transactionStatus = ConstantValues.ENOUGH_BALANCE;
+                            transactionUpdate = await Transaction.repo.updateById(transactionId, transactionUpdate);
+
+                            userUpdate.balance = totalBalance - roomGroup.depositPrice;
+                            userUpdate = await User.repo.updateById(userId, userUpdate);
+                        }  else {
+                            userUpdate.balance = totalBalance;
+                            userUpdate = await User.repo.updateById(userId, userUpdate);
+                        }
+                    }
+
                 } else {
                     senderUserId =  ConstantValues.ADMIN_USER_ID;
                     senderBank = ConstantValues.ADMIN_BANK;
@@ -82,9 +113,6 @@ export default class BankTransferHistoryFunction {
                     receiverAccountNumber = transfer.account.split("-")[0].trim();
                     receiverUserType = ConstantValues.HOST;
                 }
-                let moneyAmount = (transfer.credit != null)? parseFloat(transfer.credit) : parseInt(transfer.debit);
-                let transferTime = new Date(transfer.transferDate);
-                let transferNote = transfer.transferContent;
 
                 const result = {
                     senderUserId,
@@ -98,6 +126,7 @@ export default class BankTransferHistoryFunction {
                     moneyAmount,
                     transferTime,
                     transferNote,
+                    transferCode,
                     isValidate: isValidate
                 };
                 resultArray = resultArray.concat(result);

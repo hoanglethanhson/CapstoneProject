@@ -18,6 +18,10 @@ import {Feedback} from './feedback';
 import {TenantReview} from "./tenant-review";
 import {ConstantValues} from "../utils/constant-values";
 import {BankTransferHistory} from "./bank-transfer-history";
+import {ReportedRoom} from "./reported-room";
+import {Room} from "./room";
+import {RoomGroup} from "./room-group";
+import {SavedRoom} from "./saved-room";
 
 @Entity(User.tableName)
 @Unique(['phoneNumber'])
@@ -34,6 +38,9 @@ export class User extends BaseEntity {
         email: 'email',
         avatar: 'avatar',
         address: 'address',
+        idCardFront: 'id_card_front',
+        idCardBack: 'id_card_back',
+        selfieImage: 'selfie_image',
         isPhoneNumberVerified: 'is_phone_number_verified',
         isSelfieVerified: 'is_selfie_verified',
         isGovernmentIdVerified: 'is_government_id_verified',
@@ -76,7 +83,7 @@ export class User extends BaseEntity {
         name: User.schema.phoneNumber,
     })
     @MaxLength(20)
-    @IsPhoneNumber('VN',{
+    @IsPhoneNumber('VN', {
         message: 'Số điện thoại của bạn không hợp lệ'
     })
     phoneNumber: string;
@@ -127,6 +134,24 @@ export class User extends BaseEntity {
     })
     @MaxLength(255)
     address: string;
+
+    @Column({
+        type: 'text',
+        name: User.schema.idCardFront,
+    })
+    idCardFront: string;
+
+    @Column({
+        type: 'text',
+        name: User.schema.idCardBack,
+    })
+    idCardBack: string;
+
+    @Column({
+        type: 'text',
+        name: User.schema.selfieImage,
+    })
+    selfieImage: string;
 
     @Column({
         type: 'boolean',
@@ -208,6 +233,14 @@ export class User extends BaseEntity {
     @JoinColumn({name: User.schema.id})
     bankTransferHistoryReceivers: BankTransferHistory[];
 
+    @OneToMany(type => ReportedRoom, reportedRoom => reportedRoom.user)
+    @JoinColumn({name: User.schema.id})
+    reportedRooms: ReportedRoom[];
+
+    @OneToMany(type => SavedRoom, savedRoom => savedRoom.user)
+    @JoinColumn({name: User.schema.id})
+    savedRooms: SavedRoom[];
+
     checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
         return bcrypt.compareSync(unencryptedPassword, this.password);
     }
@@ -228,6 +261,12 @@ export class UserRepository extends Repository<User> {
             user.gender = userUpdate.gender ? userUpdate.gender : user.gender;
             user.avatar = userUpdate.avatar ? userUpdate.avatar : user.avatar;
             user.address = userUpdate.address ? userUpdate.address : user.address;
+            user.idCardFront = userUpdate.idCardFront ? userUpdate.idCardFront : user.idCardFront;
+            user.idCardBack = userUpdate.idCardBack ? userUpdate.idCardBack : user.idCardBack;
+            user.selfieImage = userUpdate.selfieImage ? userUpdate.selfieImage : user.selfieImage;
+            user.isPhoneNumberVerified = userUpdate.isPhoneNumberVerified ? userUpdate.isPhoneNumberVerified : user.isPhoneNumberVerified;
+            user.isGovernmentIdVerified = userUpdate.isGovernmentIdVerified ? userUpdate.isGovernmentIdVerified : user.isGovernmentIdVerified;
+            user.isSelfieVerified = userUpdate.isSelfieVerified ? userUpdate.isSelfieVerified : user.isSelfieVerified;
             user.email = userUpdate.email ? userUpdate.email : user.email;
             user.isVerified = userUpdate.isVerified ? userUpdate.isVerified : user.isVerified;
             user.isHost = userUpdate.isHost ? userUpdate.isHost : user.isHost;
@@ -236,11 +275,6 @@ export class UserRepository extends Repository<User> {
             await this.save(user);
         }
         return user;
-    }
-
-    async getHostPhone(userId: number) {
-        let user = await this.findOne({id: userId});
-        return user.phoneNumber;
     }
 
     async getUserDetail(userId: any) {
@@ -271,5 +305,38 @@ export class UserRepository extends Repository<User> {
                 },
             ]
         };
+    }
+
+    async isUserAuthorized(userId: any, transactionId: any) {
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        if (building.hostId != parseInt(userId) && transaction.userId != parseInt(userId)) {
+            return false;
+        }
+        return true;
+    }
+
+    async isTenantAuthorized(userId: any, transactionId: any) {
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        if (transaction.userId != parseInt(userId)) {
+            return false;
+        }
+        return true;
+    }
+
+    async isHostAuthorized(userId: any, transactionId: any) {
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        if (building.hostId != parseInt(userId)) {
+            return false;
+        }
+        return true;
     }
 }

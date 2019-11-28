@@ -166,6 +166,7 @@ export class BankTransferHistoryRepository extends Repository<BankTransferHistor
             bankTransferHistory.transferTime = bankTransferHistoryUpdate.transferTime ? bankTransferHistoryUpdate.transferTime : bankTransferHistory.transferTime;
             bankTransferHistory.moneyAmount = bankTransferHistoryUpdate.moneyAmount ? bankTransferHistoryUpdate.moneyAmount : bankTransferHistory.moneyAmount;
             bankTransferHistory.transferNote = bankTransferHistoryUpdate.transferNote ? bankTransferHistoryUpdate.transferNote : bankTransferHistory.transferNote;
+            bankTransferHistory.transferCode = bankTransferHistoryUpdate.transferCode ? bankTransferHistoryUpdate.transferCode : bankTransferHistory.transferCode;
             bankTransferHistory.createAt = bankTransferHistoryUpdate.createAt ? bankTransferHistoryUpdate.createAt : bankTransferHistory.createAt;
             bankTransferHistory.updateAt = bankTransferHistoryUpdate.updateAt ? bankTransferHistoryUpdate.updateAt : bankTransferHistory.updateAt;
             await this.save(bankTransferHistory);

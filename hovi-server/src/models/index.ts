@@ -14,6 +14,10 @@ import {Transaction} from "./transaction";
 import {Feedback} from "./feedback";
 import {TenantReview} from "./tenant-review";
 import {BankTransferHistory} from "./bank-transfer-history";
+import {ReportedRoom} from "./reported-room";
+import {AdminBankAccount} from "./admin-bank-account";
+import {SystemInformation} from "./system-information";
+import {SavedRoom} from "./saved-room";
 
 
 export class DatabaseManager {
@@ -43,7 +47,11 @@ export class DatabaseManager {
                 Transaction,
                 Feedback,
                 TenantReview,
-                BankTransferHistory
+                BankTransferHistory,
+                ReportedRoom,
+                AdminBankAccount,
+                SystemInformation,
+                SavedRoom
             ],
             maxQueryExecutionTime: 1000
         });

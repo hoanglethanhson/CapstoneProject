@@ -79,8 +79,8 @@ export class RoomRepository extends Repository<Room> {
   async updateById(roomId: any, roomUpdate: any) {
     let room = await this.findOne(roomId);
     if (room) {
-      room.roomName = roomUpdate.roomName ? roomUpdate.roomName : room.roomName;
-      room.roomStatus = roomUpdate.roomStatus ? roomUpdate.roomStatus : room.roomStatus;
+      room.roomName = roomUpdate.roomName;
+      room.roomStatus = roomUpdate.roomStatus;
       await this.save(room);
     }
     return room;
