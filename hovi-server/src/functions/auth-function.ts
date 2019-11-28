@@ -1,10 +1,12 @@
 import {Handler, NextFunction, Request, Response} from 'express';
 import * as bcrypt from 'bcryptjs';
-import {validateByModel} from '../utils';
+import {validateByModel, FirebaseAuthRequest} from '../utils';
 import FirebaseApp from '../utils/firebaseApp';
 import {HTTP400Error, HTTP409Error, HTTP403Error, HTTP404Error} from '../utils/httpErrors';
 import {User} from '../models/user';
 import {ConstantValues} from "../utils/constant-values";
+
+const request = require('request');
 
 export default class AuthFunction {
 
@@ -53,7 +55,7 @@ export default class AuthFunction {
                 FirebaseApp.auth().createUser({
                     uid: String(successResponse.id),
                     email: successResponse.email,
-                    emailVerified: true,
+                    emailVerified: false,
                     phoneNumber: successResponse.phoneNumber,
                     displayName: `${successResponse.firstName},${successResponse.lastName}`,
                     photoURL: successResponse.avatar,
@@ -80,4 +82,55 @@ export default class AuthFunction {
         }
     };
 
+    static sendResetPasswordEmail: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const {email} = req.body || {};
+        FirebaseAuthRequest({
+            method: 'post',
+            path: 'sendOobCode',
+            body: {email, requestType: 'PASSWORD_RESET'}
+        }, (error, response, body) => {
+            if (error) next(new HTTP400Error('Error send reset password !'));
+            else res.status(200).send(body);
+        });
+    };
+
+    static resetPassword: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const {oobCode, password} = req.body || {};
+        FirebaseAuthRequest({
+            method: 'post',
+            path: 'resetPassword',
+            body: {oobCode, requestType: 'PASSWORD_RESET'}
+        }, async (error, response, body) => {
+            if (error) next(new HTTP400Error('Error reset password !'));
+            else {
+                if (body.error) next(new HTTP400Error(body.error.message));
+                else {
+                    const existUser = await User.repo.findOne({email: body.email});
+                    existUser.password = bcrypt.hashSync(password, 8);
+                    await User.repo.save(existUser);
+                    res.status(200).send({message: 'Reset password successfully !'})
+                }
+            }
+        });
+    };
+
+    static getIdToken = async (phone, done) => {
+        const existUser = await User.repo.findOne({phoneNumber: phone});
+        if (!existUser) done({error: 'User not exists'});
+
+        let claims = existUser.roleAdmin === 'admin' ? {admin: true} : {};
+        FirebaseApp.auth().createCustomToken(String(existUser.id), claims)
+            .then(token => {
+                FirebaseAuthRequest({
+                    method: 'post',
+                    path: 'signInWithCustomToken',
+                    body: {token: token}
+                }, (error, res, body) => {
+                    if (error) return;
+                    else done(body.idToken);
+                });
+            }).catch(function (error) {
+            console.debug(error);
+        });
+    }
 }
