@@ -1,9 +1,10 @@
 import {Request, Response, NextFunction, Handler} from 'express';
 import GoogleStorage from '../utils/gcp';
 import config from '../../config';
-import {HTTP400Error} from '../utils/httpErrors';
+import {HTTP400Error, HTTP401Error} from '../utils/httpErrors';
 import {RoomImage} from '../models/room-image';
 import {validateByModel} from '../utils';
+import {Building} from "../models/building";
 
 const googleStorage = new GoogleStorage(config.BUCKET_NAME);
 
@@ -47,10 +48,7 @@ export default class RoomImageFunction {
                     let createData: RoomImage = new RoomImage();
                     createData.imageUrl = data.url;
                     createData.roomGroupId = roomGroupId;
-                    createRoomImagePromises.push(new Promise(async (resolve, reject) => {
-                        const successResponse = await RoomImage.repo.save(createData);
-                        resolve(successResponse);
-                    }));
+                    createRoomImagePromises.push(RoomImage.repo.save(createData));
                 }
             });
 
@@ -117,20 +115,19 @@ export default class RoomImageFunction {
         }
     };
 
-    static updateRoomImage: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const body = req.body || {};
-        const roomImageId = req.params['roomImageId'];
-        const successResponse = await RoomImage.repo.updateById(roomImageId, body);
-
-        if (successResponse) res.status(200).send(successResponse);
-        else next(new HTTP400Error('RoomImageId not found'));
-    };
-
     static deleteRoomImage: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const roomImageId = req.params['roomImageId'];
-        const successResponse = await RoomImage.repo.delete(roomImageId);
+        const buildingId = req.params['buildingId'];
+        const userId = req['currentUserId'];
 
-        if (successResponse.affected != 0) res.status(200).send('Delete room image successfully !');
-        else next(new HTTP400Error('Room image not found'));
+        const building = await Building.repo.findOne(buildingId);
+
+        if (building.hostId !== Number(userId)) next(new HTTP401Error('You are not authorized to perform this action.'));
+        else if (!roomImageId) next(new HTTP400Error('Invalid room image id !'));
+        else {
+            const successResponse = await RoomImage.repo.delete(roomImageId);
+            if (successResponse.affected != 0) res.status(200).send({result: 'Delete room image successfully !'});
+            else next(new HTTP400Error('Room image not found'));
+        }
     };
 }

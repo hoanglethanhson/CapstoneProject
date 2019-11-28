@@ -23,7 +23,7 @@ export default [
         handler: roomGroupFunction.getRoomGroupDetail
     },
     {
-        path: "/message/:transactionId",
+        path: "/transaction/:transactionId",
         method: "get",
         authentication: true,
         handler: roomGroupFunction.getRoomGroupTransactionDetail

@@ -25,7 +25,6 @@ export default class AmenitiesFunction {
         if (error) next(error);
         else {
             const checkAmenities = await Amenities.repo.findOne({usableName: body['usableName']});
-
             if (checkAmenities) next(new HTTP400Error('amenities already exists'));
             else {
                 const newAmenities = await Amenities.repo.save(body);

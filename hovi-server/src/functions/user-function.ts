@@ -21,7 +21,7 @@ export default class UserFunction {
   };
 
   static getUserDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req['currentUserId'];
+    const userId = req.params['id'];
     const user = await User.repo.getUserDetail(userId);
 
     if (user) res.status(200).send(user);

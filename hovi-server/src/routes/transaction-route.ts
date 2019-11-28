@@ -7,12 +7,12 @@ export default [
         authentication: true,
         handler: TransactionFunction.getTransactions
     },
-    {
+   /* {
         path: "/transaction/:transactionId",
         method: "get",
         authentication: true,
         handler: TransactionFunction.getTransaction
-    },
+    },*/
     {
         path: "/transaction/:roomId",
         method: "post",
@@ -42,6 +42,12 @@ export default [
         method: "put",
         authentication: true,
         handler: TransactionFunction.checkInConfirmedTransaction
+    },
+    {
+        path: "/transactionCheckout/:transactionId",
+        method: "put",
+        authentication: true,
+        handler: TransactionFunction.checkOutConfirmedTransaction
     },
     {
         path: "/transaction/:transactionId",

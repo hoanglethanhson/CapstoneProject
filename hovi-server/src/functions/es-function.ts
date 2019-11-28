@@ -54,6 +54,9 @@ export default class EsFunction {
                         const {id, unusableName, usableName} = data.amenities;
                         return {id, name: unusableName ? unusableName : usableName};
                     });
+
+                    const date = createdAt ? Math.round(createdAt.getTime() / 1000) : Math.round(new Date().getTime() / 1000);
+
                     return {
                         id,
                         typeId,
@@ -65,7 +68,7 @@ export default class EsFunction {
                         amenities,
                         ...dataLocation,
                         roomImages: dataRoomImages,
-                        updatedAt: Math.round(createdAt.getTime() / 1000),
+                        updatedAt: date,
                         name: buildingTitle(buildingName, province, district, ward),
                     };
                 });
