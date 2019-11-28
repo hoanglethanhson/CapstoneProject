@@ -11,7 +11,7 @@ describe('[model] room', () => {
     beforeAll(async () => {
         await DatabaseManager.init();
         roomGroup1.id = 1;
-        roomGroup1 = await RoomGroup.repo.save(roomGroup1);
+        //roomGroup1 = await RoomGroup.repo.save(roomGroup1);
     });
 
     afterAll(async () => {
@@ -91,9 +91,9 @@ describe('[model] room', () => {
         duplicatedRoom.roomName = "name";
 
         await Room.repo.save(duplicatedRoom);
-        await Building.repo.delete(duplicatedRoom.roomId);
+        await Room.repo.delete(duplicatedRoom.roomId);
 
-        const result = await Building.repo.findOne({id: duplicatedRoom.roomId});
+        const result = await Room.repo.findOne({roomId: duplicatedRoom.roomId});
         expect(result).toBeUndefined();
     });
 
