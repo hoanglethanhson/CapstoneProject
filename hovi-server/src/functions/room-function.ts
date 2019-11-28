@@ -21,8 +21,8 @@ export default class RoomFunction {
 
     static getManagementRooms: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const keySent = req.params['keySent'];
-        const userId = req['currentUserId'];
-        //const userId = 18;
+        //const userId = req['currentUserId'];
+        const userId = 18;
         const roomList = await Room.repo.getManagementRooms(userId, keySent);
 
         if (roomList) res.status(200).send(roomList);
