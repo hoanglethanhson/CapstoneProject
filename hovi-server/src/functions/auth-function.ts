@@ -6,8 +6,6 @@ import {HTTP400Error, HTTP409Error, HTTP403Error, HTTP404Error} from '../utils/h
 import {User} from '../models/user';
 import {ConstantValues} from "../utils/constant-values";
 
-const request = require('request');
-
 export default class AuthFunction {
 
     static signIn: Handler = async (req: Request, res: Response, next: NextFunction) => {
