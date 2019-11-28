@@ -12,6 +12,11 @@ export default [
         handler: roomFunction.getRoom
     },
     {
+        path: "/management/getListRoom/:keySent",
+        method: "get",
+        handler: roomFunction.getManagementRooms
+    },
+    {
         path: "/room/",
         method: "post",
         authentication: true,

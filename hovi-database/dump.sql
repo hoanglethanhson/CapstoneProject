@@ -11,11 +11,31 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 19/11/2019 01:36:23
+ Date: 27/11/2019 02:00:18
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for admin_bank_account
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_bank_account`;
+CREATE TABLE `admin_bank_account`  (
+  `account_id` int(3) NOT NULL AUTO_INCREMENT COMMENT 'Id of the account',
+  `bank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Bank name of the account',
+  `account_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Account number of the account',
+  `holder_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Name of the account holder',
+  `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
+  `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
+  PRIMARY KEY (`account_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of admin_bank_account
+-- ----------------------------
+INSERT INTO `admin_bank_account` VALUES (1, 'TPBank', '02725034001', 'NGUYEN VAN HOANG', '2019-11-19 18:10:10.953832', '2019-11-19 18:10:21.756397');
+INSERT INTO `admin_bank_account` VALUES (2, 'BIDV', '35110000383727', 'HOANG LE THANH SON', '2019-11-19 18:10:10.953832', '2019-11-19 18:10:26.275560');
 
 -- ----------------------------
 -- Table structure for amenities
@@ -2195,7 +2215,7 @@ CREATE TABLE `room_image`  (
   PRIMARY KEY (`image_id`) USING BTREE,
   INDEX `FK_roomGroup_image`(`room_group_id`) USING BTREE,
   CONSTRAINT `FK_roomGroup_image` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 401 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 405 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of room_image
@@ -2585,6 +2605,10 @@ INSERT INTO `room_image` VALUES (397, 'https://storage.googleapis.com/room_image
 INSERT INTO `room_image` VALUES (398, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-5', 139, '2019-11-14 04:54:46.993416', NULL);
 INSERT INTO `room_image` VALUES (399, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-4', 139, '2019-11-14 04:54:46.992234', NULL);
 INSERT INTO `room_image` VALUES (400, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-3', 139, '2019-11-14 04:54:46.992107', NULL);
+INSERT INTO `room_image` VALUES (401, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-5', 34, '2019-11-27 01:39:04.370074', '2019-11-27 01:40:06.692590');
+INSERT INTO `room_image` VALUES (402, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-4', 34, '2019-11-27 01:39:06.576784', '2019-11-27 01:40:07.964628');
+INSERT INTO `room_image` VALUES (403, 'https://storage.googleapis.com/room_images_bucket/room-image-138-rc-upload-1573669523703-3', 34, '2019-11-27 01:39:09.952830', '2019-11-27 01:40:08.736803');
+INSERT INTO `room_image` VALUES (404, 'https://storage.googleapis.com/room_images_bucket/room-image-137-rc-upload-1573656653125-5', 34, '2019-11-27 01:39:13.568712', '2019-11-27 01:40:09.876159');
 
 -- ----------------------------
 -- Table structure for saved_room
@@ -2627,6 +2651,24 @@ INSERT INTO `service` VALUES (6, '6', 'Trông xe', 'Trông xe tại nhà', '2019
 INSERT INTO `service` VALUES (7, '7', 'Dọn vệ sinh', 'Dịch vụ dọn vệ sinh tận phòng', '2019-10-23 12:18:52.902631', '2019-10-23 12:18:52.902631');
 
 -- ----------------------------
+-- Table structure for system_information
+-- ----------------------------
+DROP TABLE IF EXISTS `system_information`;
+CREATE TABLE `system_information`  (
+  `info_id` int(3) NOT NULL AUTO_INCREMENT COMMENT 'Id of the information',
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Title of the information',
+  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'Content of the information',
+  `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
+  `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
+  PRIMARY KEY (`info_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of system_information
+-- ----------------------------
+INSERT INTO `system_information` VALUES (1, 'web_title', 'HomoHouse', '2019-11-24 13:47:24.099984', NULL);
+
+-- ----------------------------
 -- Table structure for tenant_review
 -- ----------------------------
 DROP TABLE IF EXISTS `tenant_review`;
@@ -2664,7 +2706,15 @@ CREATE TABLE `transaction`  (
   INDEX `FK_Room_Transaction`(`room_id`) USING BTREE,
   CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of transaction
+-- ----------------------------
+INSERT INTO `transaction` VALUES (1, 1, 58, NULL, 1, '2019-11-19 02:04:48.947019', '2019-11-19 11:10:23.800084');
+INSERT INTO `transaction` VALUES (2, 1, 59, NULL, 1, '2019-11-27 00:42:40.659336', NULL);
+INSERT INTO `transaction` VALUES (3, 1, 60, NULL, 0, '2019-11-27 00:43:03.866709', NULL);
+INSERT INTO `transaction` VALUES (4, 3, 9, NULL, NULL, '2019-11-27 01:02:57.159096', '2019-11-27 01:04:10.021487');
 
 -- ----------------------------
 -- Table structure for user
@@ -2699,7 +2749,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$bnWk.ogxlGO.px6ohFd1WO0.Cghq2KFQ6GO9Z/5pVzlHdlvMWzVIu', 'admin', NULL, 'your_email_1@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 08:31:27.557877', '2019-11-13 14:47:35.380551');
+INSERT INTO `user` VALUES (1, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$bnWk.ogxlGO.px6ohFd1WO0.Cghq2KFQ6GO9Z/5pVzlHdlvMWzVIu', 'admin', NULL, 'your_email_1@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'1', NULL, NULL, NULL, NULL, b'1', 1000000, '2019-11-13 08:31:27.557877', '2019-11-19 10:57:24.931597');
 INSERT INTO `user` VALUES (3, 'demo', 'user', NULL, NULL, NULL, NULL, 'your_email_23@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'1', 0, '2019-11-18 22:07:43.404898', NULL);
 INSERT INTO `user` VALUES (15, 'Nguyễn', 'Hoàng', '+84378666519', '$2a$08$5n3kFshjhI.3PqeusnHksefEJ2XNkNKkopocvmtvitHI2F6YfEAm2', NULL, NULL, 'your_email_303@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:13:03.579070', '2019-11-13 15:14:31.405148');
 INSERT INTO `user` VALUES (16, 'Hoàng Lê Thanh', 'Sơn', '+84982604182', '$2a$08$5I1pVXjFlNiCKwlzMN5HruULi1XEmpThJgueZzKQj/PradYgU.2k6', NULL, NULL, 'your_email_393@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'1', NULL, NULL, NULL, NULL, b'1', 0, '2019-11-13 15:16:20.430927', '2019-11-13 15:16:30.640439');

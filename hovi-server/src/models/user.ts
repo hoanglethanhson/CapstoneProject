@@ -19,6 +19,9 @@ import {TenantReview} from "./tenant-review";
 import {ConstantValues} from "../utils/constant-values";
 import {BankTransferHistory} from "./bank-transfer-history";
 import {ReportedRoom} from "./reported-room";
+import {Room} from "./room";
+import {RoomGroup} from "./room-group";
+import {SavedRoom} from "./saved-room";
 
 @Entity(User.tableName)
 @Unique(['phoneNumber'])
@@ -80,7 +83,7 @@ export class User extends BaseEntity {
         name: User.schema.phoneNumber,
     })
     @MaxLength(20)
-    @IsPhoneNumber('VN',{
+    @IsPhoneNumber('VN', {
         message: 'Số điện thoại của bạn không hợp lệ'
     })
     phoneNumber: string;
@@ -234,6 +237,10 @@ export class User extends BaseEntity {
     @JoinColumn({name: User.schema.id})
     reportedRooms: ReportedRoom[];
 
+    @OneToMany(type => SavedRoom, savedRoom => savedRoom.user)
+    @JoinColumn({name: User.schema.id})
+    savedRooms: SavedRoom[];
+
     checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
         return bcrypt.compareSync(unencryptedPassword, this.password);
     }
@@ -270,11 +277,6 @@ export class UserRepository extends Repository<User> {
         return user;
     }
 
-    async getHostPhone(userId: number) {
-        let user = await this.findOne({id: userId});
-        return user.phoneNumber;
-    }
-
     async getUserDetail(userId: any) {
         const user = await this.findOne({id: userId});
         if (user == null) {
@@ -303,5 +305,38 @@ export class UserRepository extends Repository<User> {
                 },
             ]
         };
+    }
+
+    async isUserAuthorized(userId: any, transactionId: any) {
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        if (building.hostId != parseInt(userId) && transaction.userId != parseInt(userId)) {
+            return false;
+        }
+        return true;
+    }
+
+    async isTenantAuthorized(userId: any, transactionId: any) {
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        if (transaction.userId != parseInt(userId)) {
+            return false;
+        }
+        return true;
+    }
+
+    async isHostAuthorized(userId: any, transactionId: any) {
+        const transaction = await Transaction.repo.findOne(transactionId);
+        const room = await Room.repo.findOne(transaction.roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        if (building.hostId != parseInt(userId)) {
+            return false;
+        }
+        return true;
     }
 }

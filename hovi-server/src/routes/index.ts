@@ -15,23 +15,29 @@ import TenantReviewRoutes from "./tenant-review-route";
 import BankTransferHistoryRoutes from "./bank-transfer-history-route";
 import ESRoute from "./es-route"
 import ReportedRoomRoutes from "./reported-room-route"
+import AdminBankAccountRoutes from "./admin-bank-account-route";
+import SystemInformationRoutes from "./system-information-route";
+import SavedRoomRoutes from "./saved-room-route";
 
 export default [
-  ...AuthRoutes,
-  ...UserRoutes,
-  ...BuildingTypeRoutes,
-  ...ServiceRoutes,
-  ...AmenitiesRoutes,
-  ...BuildingRoutes,
-  ...RoomGroupRoutes,
-  ...RoomRoutes,
-  ...RoomImageRoutes,
-  ...BuildingServiceRoutes,
-  ...RoomAmenitiesRoutes,
-  ...TransactionRoutes,
-  ...FeedBackRoutes,
-  ...TenantReviewRoutes,
-  ...BankTransferHistoryRoutes,
-  ...ReportedRoomRoutes,
-  ...ESRoute
+    ...AuthRoutes,
+    ...UserRoutes,
+    ...BuildingTypeRoutes,
+    ...ServiceRoutes,
+    ...AmenitiesRoutes,
+    ...BuildingRoutes,
+    ...RoomGroupRoutes,
+    ...RoomRoutes,
+    ...RoomImageRoutes,
+    ...BuildingServiceRoutes,
+    ...RoomAmenitiesRoutes,
+    ...TransactionRoutes,
+    ...FeedBackRoutes,
+    ...TenantReviewRoutes,
+    ...BankTransferHistoryRoutes,
+    ...ReportedRoomRoutes,
+    ...AdminBankAccountRoutes,
+    ...SystemInformationRoutes,
+    ...ESRoute,
+    ...SavedRoomRoutes
 ];
