@@ -78,6 +78,9 @@ export class DatabaseManager {
         await deleteQuery.from(Building).execute();
         await deleteQuery.from(RoomType).execute();
 
+        await deleteQuery.from(SystemInformation).execute();
+        await deleteQuery.from(AdminBankAccount).execute();
+
         await deleteQuery.from(User).execute();
     }
 

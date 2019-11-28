@@ -32,12 +32,12 @@ describe('[model] roomGroup', () => {
     });
 
     it('should return true if roomGroup id is found', async () => {
-        const result = await RoomGroup.repo.find({buildingId: roomGroup1.buildingId});
+        const result = await RoomGroup.repo.find({id: roomGroup1.id});
         expect(result).toBeTruthy();
     });
 
     it('should return false if building id is not found', async () => {
-        const result = await RoomGroup.repo.findOne({buildingId: 100000});
+        const result = await RoomGroup.repo.findOne({id: 100000});
         expect(result).toBeFalsy();
     });
 
