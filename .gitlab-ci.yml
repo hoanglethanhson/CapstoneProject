@@ -5,7 +5,7 @@ services:
 stages:
   - test
   - image_build
-  - deploy
+  - deploy_live
 
 variables:
   # use the overlay storage driver
