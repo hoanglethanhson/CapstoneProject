@@ -148,7 +148,8 @@ export class RoomRepository extends Repository<Room> {
       const transaction = await Transaction.repo.findOne(record.transaction_id);
       const tenant = await User.repo.findOne(transaction.userId);
       const roomImage = await RoomImage.repo.find({roomGroupId: record.room_group_id});
-      const room = await Room.repo.findOne({roomName: record.room_name, roomGroupId: record.room_group_id})
+      const room = await Room.repo.findOne({roomName: record.room_name, roomGroupId: record.room_group_id});
+      const transactionInRoom = await Transaction.repo.find({roomId: room.roomId});
       //console.log(roomImage[0].imageUrl);
       const resultRecord = {
         title: record.building_name,
@@ -156,11 +157,11 @@ export class RoomRepository extends Repository<Room> {
         image: (roomImage.length > 0)? roomImage[0].imageUrl: null,
         price: record.rent_price,
         deposit: record.deposit_price,
-        status: (record.transaction_status)? record.transaction_status : 0,
+        status: (record.transaction_status &&record.transaction_status != ConstantValues.DUMMY_STATUS
+            && record.transaction_status != ConstantValues.HOST_REJECTED)? record.transaction_status : 0,
         transactionId: (record.transaction_status != ConstantValues.DUMMY_STATUS
                         && record.transaction_status != ConstantValues.HOST_REJECTED)? record.transaction_id : null,
-        tenant: (record.transaction_status != ConstantValues.DUMMY_STATUS
-            && record.transaction_status != ConstantValues.HOST_REJECTED) ? {
+        tenant: (transactionInRoom.length > 0) ? {
           userId: tenant.id,
           userName: tenant.firstName + " " + tenant.lastName,
           phoneNumber: tenant.phoneNumber
@@ -171,7 +172,9 @@ export class RoomRepository extends Repository<Room> {
         buildingId: record.building_id,
         buildingTypeId: record.building_type_id
       }
-      result.push(resultRecord);
+      if ((resultRecord.status != 0 && transactionInRoom.length > 0) || (transactionInRoom.length == 0)) {
+        result.push(resultRecord);
+      }
     }
     return result;
   }
