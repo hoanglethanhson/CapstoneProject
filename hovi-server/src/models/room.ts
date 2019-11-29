@@ -157,8 +157,8 @@ export class RoomRepository extends Repository<Room> {
         price: record.rent_price,
         deposit: record.deposit_price,
         status: (record.transaction_status)? record.transaction_status : 0,
-        transactionId: (record.transaction_id != ConstantValues.DUMMY_STATUS
-                        && record.transaction_id != ConstantValues.HOST_REJECTED)? record.transaction_id : null,
+        transactionId: (record.transaction_status != ConstantValues.DUMMY_STATUS
+                        && record.transaction_status != ConstantValues.HOST_REJECTED)? record.transaction_id : null,
         tenant: (record.transaction_id != null) ? {
           userId: tenant.id,
           userName: tenant.firstName + " " + tenant.lastName,
