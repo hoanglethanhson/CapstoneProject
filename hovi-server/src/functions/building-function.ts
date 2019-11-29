@@ -78,4 +78,20 @@ export default class BuildingFunction {
         if (successResponse.affected != 0) res.status(200).send('Delete building successfully !');
         else next(new HTTP404Error('Building not found'));
     };
+
+    static getHostBuildings: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const userId = req['currentUserId'];
+        const buildings = await Building.repo.find({hostId: userId});
+        let listData = [];
+        for (const building of buildings) {
+            const element = {
+                buildingId: building.id,
+                title: building.buildingName
+            }
+            listData.push(element);
+        }
+
+        if (listData) res.status(200).send(listData);
+        else next(new HTTP404Error('No buildings'));
+    };
 }
