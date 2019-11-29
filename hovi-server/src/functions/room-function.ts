@@ -23,6 +23,7 @@ export default class RoomFunction {
         const keySent = req.params['keySent'];
         const userId = req['currentUserId'];
         //const userId = 18;
+        console.log(userId);
         const roomList = await Room.repo.getManagementRooms(userId, keySent);
 
         if (roomList) res.status(200).send(roomList);
