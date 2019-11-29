@@ -122,22 +122,22 @@ export class RoomRepository extends Repository<Room> {
     if (keySent.length == 1) {
         const typeId = parseInt(keySent);
         rawResult = await getManager()
-            .createQueryBuilder(Transaction, 'transaction')
+            .createQueryBuilder(Room, 'room')
             .select(['*'])
-            .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
-            .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
             .innerJoin(RoomGroup, 'room_group', 'room.room_group_id = room_group.room_group_id')
-            .innerJoin(RoomImage, 'room_image', 'room_image.room_group_id = room_group.room_group_id')
+            //.innerJoin(RoomImage, 'room_image', 'room_image.room_group_id = room_group.room_group_id')
             .innerJoin(Building, 'building', 'room_group.building_id = building.building_id')
+            .leftJoin(Transaction, 'transaction', 'room.room_id = transaction.room_id')
+            .leftJoin(User, 'user', 'transaction.user_id = user.user_id')
             .where('building.building_type_id = :type_id', {type_id: typeId})
             .andWhere('building.host_id = :user_id', {user_id: userId})
             .getRawMany();
     } else {
       const buildingId = parseInt(keySent.split('-')[1].trim());
       rawResult = await getManager()
-          .createQueryBuilder(Transaction, 'transaction')
+          .createQueryBuilder(Room, 'room')
           .select(['*'])
-          .innerJoin(Room, 'room', 'room.room_id = transaction.room_id')
+          .leftJoin(Transaction, 'transaction', 'room.room_id = transaction.room_id')
           .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
           .innerJoin(RoomGroup, 'room_group', 'room.room_group_id = room_group.room_group_id')
           .innerJoin(RoomImage, 'room_image', 'room_image.room_group_id = room_group.room_group_id')
@@ -149,22 +149,25 @@ export class RoomRepository extends Repository<Room> {
     for (const record of rawResult) {
       const transaction = await Transaction.repo.findOne(record.transaction_id);
       const tenant = await User.repo.findOne(transaction.userId);
+      const roomImage = await RoomImage.repo.find({roomGroupId: record.room_group_id});
+      const room = await Room.repo.findOne({roomName: record.room_name, roomGroupId: record.room_group_id})
+      //console.log(roomImage[0].imageUrl);
       const resultRecord = {
         title: record.building_name,
         address: record.province + record.district + record.ward,
-        image: record.image_url,
+        image: (roomImage.length > 0)? roomImage[0].imageUrl: null,
         price: record.rent_price,
         deposit: record.deposit_price,
         status: (record.transaction_status)? record.transaction_status : 0,
         transactionId: (record.transaction_id != ConstantValues.DUMMY_STATUS
                         && record.transaction_id != ConstantValues.HOST_REJECTED)? record.transaction_id : null,
-        tenant: {
+        tenant: (record.transaction_id != null) ? {
           userId: tenant.id,
           userName: tenant.firstName + " " + tenant.lastName,
           phoneNumber: tenant.phoneNumber
-        },
-        roomId: record.room_id,
-        roomName: record.room_name,
+        } : null,
+        roomId: room.roomId,
+        roomName: room.roomName,
         roomGroupId: record.room_group_id,
         buildingId: record.building_id,
         buildingTypeId: record.building_type_id
