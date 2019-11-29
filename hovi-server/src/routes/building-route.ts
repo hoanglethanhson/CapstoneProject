@@ -13,7 +13,7 @@ export default [
     handler: buildingFunction.getBuilding,
   },
   {
-    path: '/hostBuildings/',
+    path: '/buildingKhuTro/',
     method: 'get',
     authentication: true,
     handler: buildingFunction.getHostBuildings,

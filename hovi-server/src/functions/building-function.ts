@@ -81,7 +81,7 @@ export default class BuildingFunction {
 
     static getHostBuildings: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const userId = req['currentUserId'];
-        const buildings = await Building.repo.find({hostId: userId});
+        const buildings = await Building.repo.find({hostId: userId, typeId: 3});
         let listData = [];
         for (const building of buildings) {
             const element = {
