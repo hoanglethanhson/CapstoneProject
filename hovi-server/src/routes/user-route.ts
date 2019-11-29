@@ -2,10 +2,10 @@ import UserFunction from "../functions/user-function";
 
 export default [
     {
-        path: "/user/",
+        path: "/user/avatar",
         method: "get",
         authentication: true,
-        handler: UserFunction.getUsers
+        handler: UserFunction.getAvatar
     },
     {
         path: "/userOne/",
@@ -47,5 +47,16 @@ export default [
         method: "post",
         authentication: true,
         handler: UserFunction.changePassword
+    },
+    {
+        path: '/user/upload-avatar',
+        method: 'post',
+        authentication: true,
+        uploadOptions: {
+            type: 'photos',
+            fileSize: 10 * 1024 * 1024,
+            isMultiple: false,
+        },
+        handler: UserFunction.updateAvatar
     },
 ];

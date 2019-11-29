@@ -11,7 +11,7 @@ import {
     Unique,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import {IsEmail, Length, MaxLength, IsPhoneNumber} from 'class-validator';
+import {IsEmail, IsPhoneNumber, Length, MaxLength} from 'class-validator';
 import {Building} from './building';
 import {Transaction} from './transaction';
 import {Feedback} from './feedback';
@@ -44,8 +44,6 @@ export class User extends BaseEntity {
         isPhoneNumberVerified: 'is_phone_number_verified',
         isSelfieVerified: 'is_selfie_verified',
         isGovernmentIdVerified: 'is_government_id_verified',
-        isVerified: 'is_verified',
-        isHost: 'is_host',
         isActive: 'is_active',
         balance: 'balance',
         createdAt: 'created_at',
@@ -104,10 +102,10 @@ export class User extends BaseEntity {
     roleAdmin: string;
 
     @Column({
-        type: 'boolean',
+        type: 'tinyint',
         name: User.schema.gender,
     })
-    gender: boolean;
+    gender: number;
 
     @Column({
         type: 'varchar',
@@ -170,18 +168,6 @@ export class User extends BaseEntity {
         name: User.schema.isGovernmentIdVerified,
     })
     isGovernmentIdVerified: boolean;
-
-    @Column({
-        type: 'boolean',
-        name: User.schema.isVerified,
-    })
-    isVerified: boolean;
-
-    @Column({
-        type: 'boolean',
-        name: User.schema.isHost,
-    })
-    isHost: boolean;
 
     @Column({
         type: 'boolean',
@@ -255,11 +241,7 @@ export class UserRepository extends Repository<User> {
     async updateById(userId: any, userUpdate: User) {
         let user = await this.findOne(userId);
         if (user) {
-            user.firstName = userUpdate.firstName ? userUpdate.firstName : user.firstName;
-            user.lastName = userUpdate.lastName ? userUpdate.lastName : user.lastName;
-            user.phoneNumber = userUpdate.phoneNumber ? userUpdate.phoneNumber : user.phoneNumber;
             user.gender = userUpdate.gender ? userUpdate.gender : user.gender;
-            user.avatar = userUpdate.avatar ? userUpdate.avatar : user.avatar;
             user.address = userUpdate.address ? userUpdate.address : user.address;
             user.idCardFront = userUpdate.idCardFront ? userUpdate.idCardFront : user.idCardFront;
             user.idCardBack = userUpdate.idCardBack ? userUpdate.idCardBack : user.idCardBack;
@@ -267,14 +249,32 @@ export class UserRepository extends Repository<User> {
             user.isPhoneNumberVerified = userUpdate.isPhoneNumberVerified ? userUpdate.isPhoneNumberVerified : user.isPhoneNumberVerified;
             user.isGovernmentIdVerified = userUpdate.isGovernmentIdVerified ? userUpdate.isGovernmentIdVerified : user.isGovernmentIdVerified;
             user.isSelfieVerified = userUpdate.isSelfieVerified ? userUpdate.isSelfieVerified : user.isSelfieVerified;
-            user.email = userUpdate.email ? userUpdate.email : user.email;
-            user.isVerified = userUpdate.isVerified ? userUpdate.isVerified : user.isVerified;
-            user.isHost = userUpdate.isHost ? userUpdate.isHost : user.isHost;
             user.isActive = userUpdate.isActive ? userUpdate.isActive : user.isActive;
             user.balance = userUpdate.balance ? userUpdate.balance : user.balance;
             await this.save(user);
         }
         return user;
+    }
+
+    async updateUserInformationById(userId: any, userUpdate: User) {
+        let user = await this.findOne(userId);
+        let oldEmail = user.email;
+        if (user) {
+            user.firstName = userUpdate.firstName ? userUpdate.firstName : user.firstName;
+            user.lastName = userUpdate.lastName ? userUpdate.lastName : user.lastName;
+            user.gender = userUpdate.gender;
+            user.address = userUpdate.address ? userUpdate.address : user.address;
+            user.email = userUpdate.email ? userUpdate.email : user.email;
+            await this.save(user);
+        }
+
+        return {...user, oldEmail, password: ''};
+    }
+
+    async updateAvatar(userId: any, url: string) {
+        let user = await this.findOne(userId);
+        user.avatar = url;
+        await this.save(user);
     }
 
     async getUserDetail(userId: any) {
@@ -309,19 +309,8 @@ export class UserRepository extends Repository<User> {
 
     async getUserSetting(userId: any) {
         const user = await this.findOne({id: userId});
-        if (user == null) {
-            return null;
-        }
-        const result = {
-            user_avatar: user.avatar,
-            user_phone_number: user.phoneNumber,
-            user_first_name: user.firstName,
-            user_last_name: user.lastName,
-            gender: user.gender,
-            email: user.email,
-            address: user.address,
-        }
-        return result;
+        user.password = '';
+        return user;
     }
 
     async isUserAuthorized(userId: any, transactionId: any) {
@@ -329,21 +318,12 @@ export class UserRepository extends Repository<User> {
         const room = await Room.repo.findOne(transaction.roomId);
         const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
         const building = await Building.repo.findOne(roomGroup.buildingId);
-        if (building.hostId != parseInt(userId) && transaction.userId != parseInt(userId)) {
-            return false;
-        }
-        return true;
+        return !(building.hostId != parseInt(userId) && transaction.userId != parseInt(userId));
     }
 
     async isTenantAuthorized(userId: any, transactionId: any) {
         const transaction = await Transaction.repo.findOne(transactionId);
-        const room = await Room.repo.findOne(transaction.roomId);
-        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
-        const building = await Building.repo.findOne(roomGroup.buildingId);
-        if (transaction.userId != parseInt(userId)) {
-            return false;
-        }
-        return true;
+        return transaction.userId == parseInt(userId);
     }
 
     async isHostAuthorized(userId: any, transactionId: any) {
@@ -351,9 +331,6 @@ export class UserRepository extends Repository<User> {
         const room = await Room.repo.findOne(transaction.roomId);
         const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
         const building = await Building.repo.findOne(roomGroup.buildingId);
-        if (building.hostId != parseInt(userId)) {
-            return false;
-        }
-        return true;
+        return building.hostId == parseInt(userId);
     }
 }

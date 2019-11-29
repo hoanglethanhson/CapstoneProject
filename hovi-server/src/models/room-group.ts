@@ -41,7 +41,6 @@ export class RoomGroup extends BaseEntity {
         bathroomQuantity: 'bathroom_quantity',
         direction: 'direction',
         isAvailable: 'is_available',
-        isVerified: 'is_verified',
         depositPrice: 'deposit_price',
         description: 'description',
         capacity: 'capacity',
@@ -130,13 +129,6 @@ export class RoomGroup extends BaseEntity {
         name: RoomGroup.schema.isAvailable,
     })
     isAvailable: boolean;
-
-    @Column({
-        type: 'boolean',
-        name: RoomGroup.schema.isVerified,
-    })
-    isVerified: boolean;
-
 
     @Column({
         type: 'double',
@@ -240,7 +232,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             roomGroup.bathroomQuantity = roomGroupUpdate.bathroomQuantity ? roomGroupUpdate.bathroomQuantity : roomGroup.bathroomQuantity;
             roomGroup.direction = roomGroupUpdate.direction ? roomGroupUpdate.direction : roomGroup.direction;
             roomGroup.isAvailable = roomGroupUpdate.isAvailable ? roomGroupUpdate.isAvailable : roomGroup.isAvailable;
-            roomGroup.isVerified = roomGroupUpdate.isVerified ? roomGroupUpdate.isVerified : roomGroup.isVerified;
             roomGroup.depositPrice = roomGroupUpdate.depositPrice ? roomGroupUpdate.depositPrice : roomGroup.depositPrice;
             roomGroup.description = roomGroupUpdate.description ? roomGroupUpdate.description : roomGroup.description;
             roomGroup.capacity = roomGroupUpdate.capacity ? roomGroupUpdate.capacity : roomGroup.capacity;
