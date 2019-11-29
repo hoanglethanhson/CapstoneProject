@@ -159,7 +159,8 @@ export class RoomRepository extends Repository<Room> {
         status: (record.transaction_status)? record.transaction_status : 0,
         transactionId: (record.transaction_status != ConstantValues.DUMMY_STATUS
                         && record.transaction_status != ConstantValues.HOST_REJECTED)? record.transaction_id : null,
-        tenant: (record.transaction_id != null) ? {
+        tenant: (record.transaction_status != ConstantValues.DUMMY_STATUS
+            && record.transaction_status != ConstantValues.HOST_REJECTED) ? {
           userId: tenant.id,
           userName: tenant.firstName + " " + tenant.lastName,
           phoneNumber: tenant.phoneNumber
