@@ -33,6 +33,17 @@ export default class RoomFunction {
         else next(new HTTP400Error('roomId not found.'));
     };
 
+    static getRoomsTenant: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const key = req.params['key'];
+        const userId = req['currentUserId'];
+        //const userId = 1;
+        console.log(userId);
+        const roomList = await Room.repo.getManagementRoomsForTenant(userId, key);
+
+        if (roomList) res.status(200).send(roomList);
+        else next(new HTTP400Error('roomId not found.'));
+    };
+
     static createRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
         const error = await validateByModel(Room, body);

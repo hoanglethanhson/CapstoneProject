@@ -18,6 +18,12 @@ export default [
         handler: roomFunction.getManagementRooms
     },
     {
+        path: "/myRoom/getListRoom/:key",
+        authentication: true,
+        method: "get",
+        handler: roomFunction.getRoomsTenant
+    },
+    {
         path: "/room/",
         method: "post",
         authentication: true,
