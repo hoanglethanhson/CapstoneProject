@@ -113,8 +113,31 @@ export class RoomRepository extends Repository<Room> {
       .from(Room, 'room')
       .where('room.room_group_id = :roomGroupId', { roomGroupId: roomGroupId })
       .andWhere('room.room_status <> :notAvailable', { notAvailable: ConstantValues.ROOM_NOT_AVAILABLE })
+        .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
       .getMany();
   }
+
+  async dummyIndex(roomId: any, result: any) {
+    let resultIndex = -1;
+    for (let i = 0; i < result.length; i++) {
+      //console.log(result[i].roomId + " " + result[i].status);
+      if (result[i].roomId == roomId && (result[i].status == ConstantValues.DUMMY_STATUS || result[i].status == null)) {
+        resultIndex = i;
+      }
+    }
+    return resultIndex;
+  }
+
+  async countAppearance(roomId: any, result: any) {
+    let count = 0;
+    for (let i = 0; i < result.length; i++) {
+      if (result[i].roomId == roomId) {
+        count++;
+      }
+    }
+    return count;
+  }
+
 
   async getManagementRooms(userId: any, keySent: any) {
     let rawResult;
@@ -130,6 +153,7 @@ export class RoomRepository extends Repository<Room> {
             .leftJoin(User, 'user', 'transaction.user_id = user.user_id')
             .where('building.building_type_id = :type_id', {type_id: typeId})
             .andWhere('building.host_id = :user_id', {user_id: userId})
+            .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
             .getRawMany();
     } else {
       const buildingId = parseInt(keySent.split('-')[1].trim());
@@ -142,6 +166,7 @@ export class RoomRepository extends Repository<Room> {
           .leftJoin(User, 'user', 'transaction.user_id = user.user_id')
           .where('building.building_id = :building_id', {building_id: buildingId})
           .andWhere('building.host_id = :user_id', {user_id: userId})
+          .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
           .getRawMany();
     }
     for (const record of rawResult) {
@@ -153,15 +178,19 @@ export class RoomRepository extends Repository<Room> {
       //console.log(roomImage[0].imageUrl);
       const resultRecord = {
         title: record.building_name,
-        address: record.province + record.district + record.ward,
+        address: {
+          province: record.province,
+          district: record.district,
+          ward: record.ward
+        },
         image: (roomImage.length > 0)? roomImage[0].imageUrl: null,
         price: record.rent_price,
         deposit: record.deposit_price,
-        status: (record.transaction_status &&record.transaction_status != ConstantValues.DUMMY_STATUS
-            && record.transaction_status != ConstantValues.HOST_REJECTED)? record.transaction_status : 0,
+        status: (record.transaction_status)? record.transaction_status : 0,
         transactionId: (record.transaction_status != ConstantValues.DUMMY_STATUS
                         && record.transaction_status != ConstantValues.HOST_REJECTED)? record.transaction_id : null,
-        tenant: (transactionInRoom.length > 0) ? {
+        tenant: (transactionInRoom.length > 0 && record.transaction_status != ConstantValues.DUMMY_STATUS
+            && record.transaction_status != ConstantValues.HOST_REJECTED && record.transaction_status != null) ? {
           userId: tenant.id,
           userName: tenant.firstName + " " + tenant.lastName,
           phoneNumber: tenant.phoneNumber
@@ -172,8 +201,15 @@ export class RoomRepository extends Repository<Room> {
         buildingId: record.building_id,
         buildingTypeId: record.building_type_id
       }
-      if ((resultRecord.status != 0 && transactionInRoom.length > 0) || (transactionInRoom.length == 0)) {
-        result.push(resultRecord);
+      if ((resultRecord.status != ConstantValues.HOST_REJECTED && transactionInRoom.length > 0) || (transactionInRoom.length == 0)) {
+        if (await this.dummyIndex(resultRecord.roomId, result) != -1 && await this.countAppearance(resultRecord.roomId, result) > 0) {
+          //console.log("bingo");
+          //console.log(resultRecord);
+          result.splice(await this.dummyIndex(resultRecord.roomId, result), 1);
+        }
+        if (resultRecord.status != 0 || (resultRecord.status == 0 && await this.countAppearance(resultRecord.roomId, result) == 0)) {
+          result.push(resultRecord);
+        }
       }
     }
     return result;

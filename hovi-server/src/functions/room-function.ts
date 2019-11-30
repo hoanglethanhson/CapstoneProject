@@ -1,7 +1,10 @@
 import {Request, Response, NextFunction, Handler} from "express";
 import {validateByModel} from '../utils';
-import {HTTP400Error} from '../utils/httpErrors';
+import {HTTP303Error, HTTP400Error} from '../utils/httpErrors';
 import {Room} from "../models/room";
+import {RoomGroup} from "../models/room-group";
+import {Building} from "../models/building";
+import {ConstantValues} from "../utils/constant-values";
 
 export default class RoomFunction {
     static getRooms: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -21,8 +24,8 @@ export default class RoomFunction {
 
     static getManagementRooms: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const keySent = req.params['keySent'];
-        const userId = req['currentUserId'];
-        //const userId = 18;
+        //const userId = req['currentUserId'];
+        const userId = 15;
         console.log(userId);
         const roomList = await Room.repo.getManagementRooms(userId, keySent);
 
@@ -53,9 +56,23 @@ export default class RoomFunction {
 
     static deleteRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const roomId = req.params['roomId'];
-        const successResponse = await Room.repo.delete(roomId);
+        const room = await Room.repo.findOne(roomId);
+        const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
+        const building = await Building.repo.findOne(roomGroup.buildingId);
+        const userId = req['currentUserId'];
+        if (building.hostId != parseInt(userId)) {
+            next(new HTTP303Error('You are not the host of this room.'));
+            return;
+        }
+        if (room.roomStatus == ConstantValues.ROOM_NOT_AVAILABLE) {
+            next(new HTTP303Error('This room is being used at the moment.'));
+            return;
+        }
+        let roomDelete = room;
+        roomDelete.roomStatus = ConstantValues.ROOM_WAS_DELETED;
+        roomDelete = await Room.repo.updateById(room.roomId, roomDelete);
 
-        if (successResponse.affected != 0) res.status(200).send("Delete room successfully !");
+        if (roomDelete) res.status(200).send("Delete room successfully !");
         else next(new HTTP400Error('Room not found'));
     };
 }
