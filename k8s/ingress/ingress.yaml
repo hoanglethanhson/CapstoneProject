@@ -30,7 +30,8 @@ metadata:
     ingress.kubernetes.io/proxy-body-size: 100m
 spec:
   rules:
-    - http:
+    - host: homohouse.vn
+      http:
         paths:
           - path: /(.*)$
             backend:
@@ -44,7 +45,10 @@ spec:
             backend:
               serviceName: hovi-search-svc
               servicePort: 8081
-          - path: /admin/(.*)$
+    - host: admin.homohouse.vn
+      http:
+        paths:
+          - path: /(.*)$
             backend:
               serviceName: hovi-web-admin-svc
-              servicePort: 8002
+              servicePort: 81
