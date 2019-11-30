@@ -86,6 +86,20 @@ export default class AuthFunction {
         });
     };
 
+    static changePassword: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const body = req.body || {};
+        const userId = req['currentUserId'];
+        const oldPassword = body.oldPassword;
+        const user = await User.repo.findOne(userId);
+        if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
+            next(new HTTP400Error('Wrong current password!'));
+        } else {
+            user.password = bcrypt.hashSync(body.newPassword, 8);
+            await User.repo.save(user);
+            res.status(200).send({message: 'Update password successfully !'});
+        }
+    };
+
     static verifyEmail: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const {oobCode} = req.body || {};
         FirebaseAuthRequest({

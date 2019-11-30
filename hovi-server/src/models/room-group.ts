@@ -66,11 +66,11 @@ export class RoomGroup extends BaseEntity {
     buildingId: number;
 
     @Column({
-        type: 'boolean',
+        type: 'tinyint',
         unique: false,
         name: RoomGroup.schema.gender,
     })
-    gender: boolean;
+    gender: number;
 
     @Column({
         type: 'double',

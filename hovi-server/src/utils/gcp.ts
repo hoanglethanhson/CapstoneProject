@@ -39,9 +39,9 @@ export default class {
         });
     }
 
-    uploadAvatar = (file: any, userId: number, uniqueId: any) => {
+    uploadUserImage = (file: any, typeImage: string, userId: number, uniqueId: any) => {
         return new Promise((resolve, reject) => {
-            const gcsFileName = `user-avatar-${userId}-${uniqueId}`;
+            const gcsFileName = `user-${typeImage}-${userId}-${uniqueId}`;
             const bucketFile = this.bucket.file(gcsFileName);
 
             bucketFile.createWriteStream('')
