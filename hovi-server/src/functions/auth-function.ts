@@ -66,32 +66,6 @@ export default class AuthFunction {
         }
     };
 
-    static verifyPhoneNumber: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const body = req.body || {};
-
-        if (!body['phoneNumber']) next(new HTTP400Error('Phone number not be empty'));
-
-        const user = await User.repo.findOne({phoneNumber: body['phoneNumber']});
-        if (!user) next(new HTTP409Error('Phone number not exists'));
-        else {
-            user.isPhoneNumberVerified = true;
-            await User.repo.save(user);
-            res.status(200).send('ok');
-        }
-    };
-
-    static sendResetPasswordEmail: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const {email} = req.body || {};
-        FirebaseAuthRequest({
-            method: 'post',
-            path: 'sendOobCode',
-            body: {email, requestType: 'PASSWORD_RESET'}
-        }, (error, response, body) => {
-            if (error) next(new HTTP400Error('Error send reset password !'));
-            else res.status(200).send(body);
-        });
-    };
-
     static resetPassword: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const {oobCode, password} = req.body || {};
         FirebaseAuthRequest({
@@ -108,6 +82,35 @@ export default class AuthFunction {
                     await User.repo.save(existUser);
                     res.status(200).send({message: 'Reset password successfully !'})
                 }
+            }
+        });
+    };
+
+    static changePassword: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const body = req.body || {};
+        const userId = req['currentUserId'];
+        const oldPassword = body.oldPassword;
+        const user = await User.repo.findOne(userId);
+        if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
+            next(new HTTP400Error('Wrong current password!'));
+        } else {
+            user.password = bcrypt.hashSync(body.newPassword, 8);
+            await User.repo.save(user);
+            res.status(200).send({message: 'Update password successfully !'});
+        }
+    };
+
+    static verifyEmail: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const {oobCode} = req.body || {};
+        FirebaseAuthRequest({
+            method: 'post',
+            path: 'update',
+            body: {oobCode}
+        }, async (error, response, body) => {
+            if (error) next(new HTTP400Error('Error verify email !'));
+            else {
+                if (body.error) next(new HTTP400Error(body.error.message));
+                else res.status(200).send({message: 'Verify email successfully !'});
             }
         });
     };

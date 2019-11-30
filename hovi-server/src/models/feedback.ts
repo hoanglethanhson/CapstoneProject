@@ -37,12 +37,13 @@ export class Feedback extends BaseEntity {
 
     @Column({
         type: "varchar",
-        length: 1000,
+        //length: 1000,
         unique: true,
+        nullable: true,
         name: Feedback.schema.email,
     })
-    @MaxLength(1000)
-    @IsEmail()
+    //@MaxLength(1000)
+    //@IsEmail()
     email: string;
 
     @Column({
