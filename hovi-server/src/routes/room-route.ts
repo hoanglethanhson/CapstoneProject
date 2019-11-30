@@ -13,7 +13,7 @@ export default [
     },
     {
         path: "/management/getListRoom/:keySent",
-        authentication: false,
+        authentication: true,
         method: "get",
         handler: roomFunction.getManagementRooms
     },
