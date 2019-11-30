@@ -117,11 +117,11 @@ export class RoomRepository extends Repository<Room> {
       .getMany();
   }
 
-  async dummyIndex(roomId: any, result: any) {
+  async dummyOrRejectedIndex(roomId: any, result: any) {
     let resultIndex = -1;
     for (let i = 0; i < result.length; i++) {
       console.log(result[i].roomId + " " + result[i].status);
-      if (result[i].roomId == roomId && (result[i].status == ConstantValues.DUMMY_STATUS || result[i].status == null)) {
+      if (result[i].roomId == roomId && (result[i].status == ConstantValues.DUMMY_STATUS || result[i].status == null || result[i].status == ConstantValues.HOST_REJECTED)) {
         resultIndex = i;
       }
     }
@@ -201,16 +201,19 @@ export class RoomRepository extends Repository<Room> {
         buildingId: record.building_id,
         buildingTypeId: record.building_type_id
       }
-      //console.log(resultRecord);
+      console.log(resultRecord);
       if ((resultRecord.status != ConstantValues.HOST_REJECTED && transactionInRoom.length > 0) || (transactionInRoom.length == 0)) {
-        if (await this.dummyIndex(resultRecord.roomId, result) != -1 && await this.countAppearance(resultRecord.roomId, result) > 0) {
+        if (await this.dummyOrRejectedIndex(resultRecord.roomId, result) != -1 && await this.countAppearance(resultRecord.roomId, result) > 0) {
           console.log("bingo");
-          console.log(resultRecord);
-          result.splice(await this.dummyIndex(resultRecord.roomId, result), 1);
+          //console.log(resultRecord);
+          result.splice(await this.dummyOrRejectedIndex(resultRecord.roomId, result), 1);
         }
         if (resultRecord.status != 0 || (resultRecord.status == 0 && await this.countAppearance(resultRecord.roomId, result) == 0)) {
           result.push(resultRecord);
         }
+      }
+      if (resultRecord.status == ConstantValues.HOST_REJECTED && transactionInRoom.length > 0 && await this.countAppearance(resultRecord.roomId, result) == 0) {
+        result.push(resultRecord);
       }
     }
     return result;
