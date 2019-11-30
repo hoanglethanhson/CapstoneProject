@@ -1,7 +1,8 @@
 import {Request, Response, NextFunction, Handler} from "express";
 import {validateByModel} from '../utils';
-import {HTTP400Error} from '../utils/httpErrors';
+import {HTTP303Error, HTTP400Error} from '../utils/httpErrors';
 import {TenantReview} from "../models/tenant-review";
+import {Room} from "../models/room";
 
 export default class TenantReviewFunction {
     static getTenantReviews: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +20,11 @@ export default class TenantReviewFunction {
     };
 
     static createTenantReview: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const userId = req['currentUserId'];
         const body = req.body || {};
+        if (!await Room.repo.isUserInGroup(userId, body.roomGroupId)) {
+            next(new HTTP303Error('You do not have permission to post a review to this room group.'));
+        }
         const error = await validateByModel(TenantReview, body);
 
         if (error) next(error);

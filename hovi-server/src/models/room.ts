@@ -295,4 +295,23 @@ export class RoomRepository extends Repository<Room> {
     return result;
   }
 
+  async isUserInGroup(userId: any, roomGroupId: any) {
+      let resultArray = [];
+      resultArray = await getManager()
+          .createQueryBuilder(Room, 'room')
+          .select(['*'])
+          .innerJoin(RoomGroup, 'room_group', 'room.room_group_id = room_group.room_group_id')
+          .innerJoin(Transaction, 'transaction', 'room.room_id = transaction.room_id')
+          .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
+          .where('transaction.user_id = :user_id', {user_id: userId})
+          .andWhere('room_group.room_group_id = :roomGroupId', {roomGroupId: roomGroupId})
+          .andWhere('transaction.transaction_status = :checkedOut', {checkedOut: ConstantValues.CHECKED_OUT})
+          .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
+          .getRawMany();
+      if (resultArray.length == 0) {
+          return false;
+      }
+      return true;
+  }
+
 }
