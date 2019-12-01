@@ -1,7 +1,7 @@
 import {Handler, NextFunction, Request, Response} from 'express';
 import {HTTP404Error} from '../utils/httpErrors';
 import {Building} from '../models/building';
-import {Client} from 'elasticsearch';
+import {Client} from '@elastic/elasticsearch';
 import config from '../../config';
 import {buildingTitle} from '../utils';
 
@@ -9,7 +9,7 @@ import {buildingTitle} from '../utils';
  * Create connecting to elasticSearch
  */
 const client = new Client({
-    host: config.ES_ENDPOINT,
+    node: config.ES_ENDPOINT,
 });
 
 /**
@@ -55,7 +55,10 @@ export default class EsFunction {
                         return {id, name: unusableName ? unusableName : usableName};
                     });
 
-                    const date = createdAt ? Math.round(createdAt.getTime() / 1000) : Math.round(new Date().getTime() / 1000);
+                    let date = createdAt ? Math.round(createdAt.getTime()) : Math.round(new Date().getTime());
+                    if(id<30) date = new Date().getTime();
+
+                    // const date = createdAt ? Math.round(createdAt.getTime()) : Math.round(new Date().getTime());
 
                     return {
                         id,
@@ -67,9 +70,10 @@ export default class EsFunction {
                         capacity,
                         amenities,
                         ...dataLocation,
+                        viewAmount: 0,
                         roomImages: dataRoomImages,
-                        updatedAt: date,
                         name: buildingTitle(buildingName, province, district, ward),
+                        updatedAt: date
                     };
                 });
 
@@ -98,5 +102,22 @@ export default class EsFunction {
                 });
             } else next(new HTTP404Error('Building id not found.'));
         }
+    };
+
+    static updateRoomES = (id) => {
+        return client.update({
+            index: ROOMS_INDEX,
+            type: ROOMS_TYPE,
+            id,
+            body: {
+                "script": {
+                    "source": "ctx._source.viewAmount += params.count",
+                    "lang": "painless",
+                    "params": {
+                        "count": 1
+                    }
+                }
+            },
+        });
     };
 }

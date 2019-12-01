@@ -224,7 +224,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     async updateById(roomGroupId: any, roomGroupUpdate: RoomGroup) {
         let roomGroup = await this.findOne(roomGroupId);
         if (roomGroup) {
-            roomGroup.gender = roomGroupUpdate.gender ? roomGroupUpdate.gender : roomGroup.gender;
+            roomGroup.gender = roomGroupUpdate.gender;
             roomGroup.rentPrice = roomGroupUpdate.rentPrice ? roomGroupUpdate.rentPrice : roomGroup.rentPrice;
             roomGroup.minDepositPeriod = roomGroupUpdate.minDepositPeriod ? roomGroupUpdate.minDepositPeriod : roomGroup.minDepositPeriod;
             roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
