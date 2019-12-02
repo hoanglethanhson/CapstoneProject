@@ -65,10 +65,11 @@ export default class RoomGroupFunction {
 
     static getRoomGroupDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const roomGroupId = req.params['roomGroupId'];
+        const userId = req['currentUserId'];
         const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
 
         if (!roomGroup) next(new HTTP400Error('roomGroupId not found.'));
-        const roomGroupDetail = await RoomGroup.repo.getRoomGroupDetail(roomGroupId, roomGroup);
+        const roomGroupDetail = await RoomGroup.repo.getRoomGroupDetail(roomGroupId, roomGroup, userId);
 
         if (roomGroupDetail) res.status(200).send(roomGroupDetail);
         else next(new HTTP400Error('error get details.'));

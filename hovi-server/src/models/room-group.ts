@@ -258,7 +258,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             .getRawMany();
     }
 
-    async getRoomGroupDetail(roomGroupId: any, roomGroup: RoomGroup) {
+    async getRoomGroupDetail(roomGroupId: any, roomGroup: RoomGroup, userId: any) {
         if (Number.isInteger(roomGroupId)) {
             return null;
         }
@@ -304,6 +304,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             tenantComments = tenantComments.concat(review.tenantReview_comment);
         }
         const allRooms = await Room.repo.find({roomGroupId: roomGroupId});
+        const canComment = await Room.repo.isUserBeingInGroup(userId, roomGroupId) && await Room.repo.isUserCheckedOutGroup(userId, roomGroupId);
 
         return {
             data: {
@@ -350,7 +351,8 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
                     tenantAvatars,
                     tenantIds,
                     tenantComments
-                }
+                },
+                canComment: canComment
             }
         };
     }

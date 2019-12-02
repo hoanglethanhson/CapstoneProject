@@ -22,7 +22,7 @@ export default class TenantReviewFunction {
     static createTenantReview: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const userId = req['currentUserId'];
         const body = req.body || {};
-        if (!await Room.repo.isUserInGroup(userId, body.roomGroupId)) {
+        if (!await Room.repo.isUserBeingInGroup(userId, body.roomGroupId) && ! await Room.repo.isUserCheckedOutGroup(userId, body.roomGroupId)) {
             next(new HTTP303Error('You do not have permission to post a review to this room group.'));
         }
         const error = await validateByModel(TenantReview, body);
