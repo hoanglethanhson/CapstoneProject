@@ -295,13 +295,21 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         let tenantIds = [];
         let tenantAvatars = [];
         let tenantComments = [];
+        let reviews = [];
         for (const review of reviewList) {
             console.log(review);
             console.log(review.user_id);
             let tenant = await User.repo.findOne(review.user_id);
-            tenantIds = tenantIds.concat(tenant.id);
+            const record = {
+                tenantId: tenant.id,
+                tenantName: tenant.firstName + ' ' + tenant.lastName,
+                tenantAvatars: tenant.avatar,
+                tenantComments: review.tenantReview_comment
+            };
+            reviews.push(record);
+            /*tenantIds = tenantIds.concat(tenant.id);
             tenantAvatars = tenantAvatars.concat(tenant.avatar);
-            tenantComments = tenantComments.concat(review.tenantReview_comment);
+            tenantComments = tenantComments.concat(review.tenantReview_comment);*/
         }
         const allRooms = await Room.repo.find({roomGroupId: roomGroupId});
 
@@ -346,11 +354,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
                     host_rate: rating[0].host_rate,
                     security_rate: rating[0].security_rate,
                 },
-                reviewList: {
-                    tenantAvatars,
-                    tenantIds,
-                    tenantComments
-                },
+                reviewList: reviews,
             }
         };
     }
