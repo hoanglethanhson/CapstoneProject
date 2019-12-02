@@ -21,4 +21,10 @@ export default [
         method: 'post',
         handler: AuthFunction.verifyEmail,
     },
+    {
+        path: "/auth/change-password",
+        method: "post",
+        authentication: true,
+        handler: AuthFunction.changePassword
+    },
 ];

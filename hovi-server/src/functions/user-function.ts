@@ -42,44 +42,6 @@ export default class UserFunction {
         else next(new HTTP400Error('userId not found.'));
     };
 
-    static createUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const body = req.body || {};
-
-        if (!body['email']) body['email'] = 'example@homehouse.vn';
-
-        const error = await validateByModel(User, body);
-        if (error) next(error);
-        else {
-            const checkUsername = await User.repo.findOne({phoneNumber: body['phone']});
-            if (checkUsername) next(new HTTP400Error('Phone number already exists'));
-
-            else {
-                body['password'] = bcrypt.hashSync(body['password'], 8);
-                const newUser = await User.repo.save(body);
-                const successResponse = await User.repo.findOne({id: newUser.id});
-                successResponse['password'] = '';
-                res.status(200).send(successResponse);
-            }
-        }
-    };
-
-    static changePassword: Handler = async (req: Request, res: Response, next: NextFunction) => {
-        const body = req.body || {};
-        const userId = req['currentUserId'];
-        const oldPassword = body.oldPassword;
-        const user = await User.repo.findOne(userId);
-        if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
-            next(new HTTP400Error('Wrong current password!'));
-        } else {
-            const userUpdate = user;
-            userUpdate.password = bcrypt.hashSync(body.newPassword, 8);
-            const successResponse = await User.repo.updateById(userId, userUpdate);
-            if (successResponse) res.status(200).send(successResponse.id);
-            else next(new HTTP400Error('update password failed.'));
-            console.log(res);
-        }
-    };
-
     static updateUser: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
         const userId = req['currentUserId'];
@@ -94,19 +56,21 @@ export default class UserFunction {
         } else next(new HTTP400Error('userId not found'));
     };
 
-    static updateAvatar: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    static updateUserImage: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const userId = req['currentUserId'];
-        const {uniqueId} = req.body;
+        const {uniqueId, typeImage} = req.body;
         const file = req['file'];
 
         if (!file) next(new HTTP400Error('Images not found.'));
         else if (!uniqueId) next(new HTTP400Error('Unique id not found.'));
+        else if (!typeImage) next(new HTTP400Error('Type image not found.'));
         else {
-            const response = await googleStorage.uploadAvatar(file, userId, uniqueId);
-            await User.repo.updateAvatar(userId, response['url']);
-            await FirebaseApp.auth().updateUser(userId, {
+            const response = await googleStorage.uploadUserImage(file, typeImage, userId, uniqueId);
+            await User.repo.updateUserImage(userId, typeImage, response['url']);
+            if (typeImage === 'avatar') await FirebaseApp.auth().updateUser(userId, {
                 photoURL: response['url']
             });
+
             res.status(200).send({message: 'Upload successfully'});
         }
     };

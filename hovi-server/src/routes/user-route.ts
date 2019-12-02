@@ -26,12 +26,6 @@ export default [
     },
     {
         path: "/user/",
-        method: "post",
-        authentication: true,
-        handler: UserFunction.createUser
-    },
-    {
-        path: "/user/",
         method: "put",
         authentication: true,
         handler: UserFunction.updateUser
@@ -43,13 +37,7 @@ export default [
         handler: UserFunction.deleteUser
     },
     {
-        path: "/userChangePassword/",
-        method: "post",
-        authentication: true,
-        handler: UserFunction.changePassword
-    },
-    {
-        path: '/user/upload-avatar',
+        path: '/user/upload',
         method: 'post',
         authentication: true,
         uploadOptions: {
@@ -57,6 +45,6 @@ export default [
             fileSize: 10 * 1024 * 1024,
             isMultiple: false,
         },
-        handler: UserFunction.updateAvatar
+        handler: UserFunction.updateUserImage
     },
 ];
