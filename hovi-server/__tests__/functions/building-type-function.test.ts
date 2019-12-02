@@ -1,4 +1,4 @@
-import createServer from './server';
+import createServer from '../../src/server-test';
 import AuthFunction from "../../src/functions/auth-function";
 
 const supertest = require('supertest');
