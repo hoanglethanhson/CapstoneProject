@@ -304,7 +304,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             tenantComments = tenantComments.concat(review.tenantReview_comment);
         }
         const allRooms = await Room.repo.find({roomGroupId: roomGroupId});
-        const canComment = await Room.repo.isUserBeingInGroup(userId, roomGroupId) && await Room.repo.isUserCheckedOutGroup(userId, roomGroupId);
+        const canComment = await Room.repo.isUserBeingInGroup(userId, roomGroupId) || await Room.repo.isUserCheckedOutGroup(userId, roomGroupId);
 
         return {
             data: {
