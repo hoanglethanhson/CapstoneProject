@@ -25,14 +25,14 @@ metadata:
   name: ingress-nginx
   annotations:
     kubernetes.io/ingress.class: nginx
-    certmanager.k8s.io/cluster-issuer: letsencrypt
+#    certmanager.k8s.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/proxy-body-size: 100m
     ingress.kubernetes.io/proxy-body-size: 100m
 spec:
-  tls:
-    - hosts: [homohouse.vn, admin.homohouse.vn, api.homohouse.vn, es.homohouse.vn]
-      secretName: homo-house-vn-tls
+#  tls:
+#    - hosts: [homohouse.vn, admin.homohouse.vn, api.homohouse.vn, es.homohouse.vn]
+#      secretName: homo-house-vn-tls
   rules:
     - host: homohouse.vn
       http:
