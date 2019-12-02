@@ -271,9 +271,9 @@ export class UserRepository extends Repository<User> {
         return {...user, oldEmail, password: ''};
     }
 
-    async updateAvatar(userId: any, url: string) {
+    async updateUserImage(userId: any, typeImage: string, url: string) {
         let user = await this.findOne(userId);
-        user.avatar = url;
+        user[typeImage] = url;
         await this.save(user);
     }
 

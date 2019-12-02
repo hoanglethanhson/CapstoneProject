@@ -1,12 +1,12 @@
 import {Request, Response, NextFunction, Handler} from 'express';
-import {isObject} from '../utils';
-import {HTTP303Error, HTTP400Error, HTTP401Error} from '../utils/httpErrors';
+import {HTTP400Error, HTTP401Error} from '../utils/httpErrors';
 import {RoomGroup} from '../models/room-group';
 import {Room} from '../models/room';
 import {ConstantValues} from '../utils/constant-values';
 import {Transaction} from "../models/transaction";
 import {Building} from "../models/building";
 import {TenantReview} from "../models/tenant-review";
+import EsFunction from "./es-function";
 
 export default class RoomGroupFunction {
     static getRoomGroups: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -70,6 +70,9 @@ export default class RoomGroupFunction {
 
         if (!roomGroup) next(new HTTP400Error('roomGroupId not found.'));
         const roomGroupDetail = await RoomGroup.repo.getRoomGroupDetail(roomGroupId, roomGroup);
+        EsFunction.updateRoomES(roomGroupId)
+            .then(data => console.log(data))
+            .catch(err => console.log(err));
 
         if (roomGroupDetail) res.status(200).send(roomGroupDetail);
         else next(new HTTP400Error('error get details.'));
@@ -109,10 +112,10 @@ export default class RoomGroupFunction {
         const transaction = await Transaction.repo.findOne(transactionId);
         const room = await Room.repo.findOne(transaction.roomId);
         const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
-       /* if (transaction.userId != parseInt(userId) && building.hostId != parseInt(userId)) {
-            next(new HTTP303Error('Not your transaction.'));
-            return;
-        }*/
+        /* if (transaction.userId != parseInt(userId) && building.hostId != parseInt(userId)) {
+             next(new HTTP303Error('Not your transaction.'));
+             return;
+         }*/
         if (!roomGroup) next(new HTTP400Error('roomGroupId not found.')); else {
             const building = await Building.repo.findOne(roomGroup.buildingId);
             const hostId = building.hostId;
