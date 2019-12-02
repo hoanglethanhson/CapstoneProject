@@ -10,16 +10,16 @@ describe('Test function building type', () => {
 
     beforeEach(async (done) => {
         server = await createServer();
-        server.listen(done);
-        request = supertest.agent(server);
+        await server.listen(done);
+        request = await supertest.agent(server);
         token = await AuthFunction.getIdToken('+84986352227');
     });
 
-    afterAll((done) => {
+    afterAll(async (done) => {
         request.close(done);
     });
 
-    it('Test get all building type', () => {
+    it('Test get all building type', async () => {
         request
             .get('/buildingType')
             .then(response => {
@@ -27,7 +27,7 @@ describe('Test function building type', () => {
             });
     });
 
-    it('Test get all saved room of user not authentication', () => {
+    it('Test get all saved room of user not authentication', async () => {
         request
             .get('/saved-rooms')
             .set('Accept', 'application/json')
@@ -35,7 +35,7 @@ describe('Test function building type', () => {
             .expect('{"status":401,"message":"Unauthorized"}')
     });
 
-    it('Test get all saved room of user', () => {
+    it('Test get all saved room of user', async () => {
         request
             .get('/saved-rooms')
             .set('Authorization', token)
