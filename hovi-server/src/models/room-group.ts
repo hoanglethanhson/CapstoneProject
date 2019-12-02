@@ -70,7 +70,7 @@ export class RoomGroup extends BaseEntity {
         unique: false,
         name: RoomGroup.schema.gender,
     })
-    gender: boolean;
+    gender: number;
 
     @Column({
         type: 'double',
