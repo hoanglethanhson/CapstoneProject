@@ -115,23 +115,20 @@ export default class AuthFunction {
         });
     };
 
-    static getIdToken = async (phone, done) => {
+    static getIdToken = async (phone) => {
         const existUser = await User.repo.findOne({phoneNumber: phone});
-        if (!existUser) done({error: 'User not exists'});
-
-        let claims = existUser.roleAdmin === 'admin' ? {admin: true} : {};
-        FirebaseApp.auth().createCustomToken(String(existUser.id), claims)
-            .then(token => {
-                FirebaseAuthRequest({
-                    method: 'post',
-                    path: 'signInWithCustomToken',
-                    body: {token: token}
-                }, (error, res, body) => {
-                    if (error) return;
-                    else done(body.idToken);
-                });
-            }).catch(function (error) {
-            console.debug(error);
+        if (!existUser) return {error: 'User not exists'};
+        const claims = existUser.roleAdmin === 'admin' ? {admin: true} : {};
+        const token = await FirebaseApp.auth().createCustomToken(String(existUser.id), claims);
+        return new Promise((resolve, reject) => {
+            FirebaseAuthRequest({
+                method: 'post',
+                path: 'signInWithCustomToken',
+                body: {token: token, returnSecureToken: true}
+            }, (error, res, body) => {
+                if (error) reject(error);
+                else resolve(body.idToken);
+            });
         });
     }
 }
