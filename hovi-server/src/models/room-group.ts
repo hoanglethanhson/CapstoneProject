@@ -306,7 +306,10 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         const allRooms = await Room.repo.find({roomGroupId: roomGroupId});
 
         const reviewTimes = await TenantReview.find({userId: userId, roomGroupId: roomGroupId});
-        const canComment = reviewTimes.length == 0 && (await Room.repo.isUserBeingInGroup(userId, roomGroupId) || await Room.repo.isUserCheckedOutGroup(userId, roomGroupId));
+        let canComment = reviewTimes.length == 0 && (await Room.repo.isUserBeingInGroup(userId, roomGroupId) || await Room.repo.isUserCheckedOutGroup(userId, roomGroupId));
+        if (userId == null || userId == undefined) {
+            canComment = false;
+        }
 
         return {
             data: {
