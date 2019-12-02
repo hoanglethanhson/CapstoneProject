@@ -18,6 +18,7 @@ import {ReportedRoom} from "./reported-room";
 import {AdminBankAccount} from "./admin-bank-account";
 import {SystemInformation} from "./system-information";
 import {SavedRoom} from "./saved-room";
+import {HostReview} from "./host-review";
 
 export class DatabaseManager {
     static connection: Connection;
@@ -50,7 +51,8 @@ export class DatabaseManager {
                 ReportedRoom,
                 AdminBankAccount,
                 SystemInformation,
-                SavedRoom
+                SavedRoom,
+                HostReview
             ],
             maxQueryExecutionTime: 1000
         });
