@@ -1,4 +1,3 @@
-import {DatabaseManager} from './models';
 import {applyMiddleware, applyRoutes} from './utils';
 import routes from './routes';
 import middleware from './middleware';
@@ -13,11 +12,9 @@ process.on('unhandledRejection', e => {
     process.exit(1);
 });
 
-export default async () => {
-    await DatabaseManager.init();
-    const router = require('express')();
-    applyMiddleware(middleware, router);
-    applyRoutes(routes, router);
-    applyMiddleware(errorHandlers, router);
-    return router;
-};
+const router = require('express')();
+applyMiddleware(middleware, router);
+applyRoutes(routes, router);
+applyMiddleware(errorHandlers, router);
+
+export default router;

@@ -1,21 +1,22 @@
-import createServer from '../../src/server-test';
+import server from '../../src/server-test';
 import AuthFunction from "../../src/functions/auth-function";
+import {DatabaseManager} from "../../src/models";
 
 const supertest = require('supertest');
 
 describe('Test function building type', () => {
     let request = null;
-    let server = null;
     let token = null;
 
-    beforeEach(async (done) => {
-        server = await createServer();
+    beforeEach(async () => {
+        await DatabaseManager.init();
         token = await AuthFunction.getIdToken('+84986352227');
-        request = await supertest.agent(server.listen(done));
+        request = supertest(server);
     });
 
     afterAll(async () => {
         await request.close();
+        await DatabaseManager.close();
     });
 
     it('Test get all building type', () => {
