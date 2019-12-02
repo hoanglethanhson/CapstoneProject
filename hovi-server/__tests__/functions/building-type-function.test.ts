@@ -6,40 +6,44 @@ const supertest = require('supertest');
 describe('Test function building type', () => {
     let request = null;
     let server = null;
-    let token;
+    let token = null;
 
     beforeEach(async (done) => {
         server = await createServer();
-        await server.listen(done);
-        request = await supertest.agent(server);
         token = await AuthFunction.getIdToken('+84986352227');
+        request = await supertest.agent(server.listen(done));
     });
 
-    afterAll(async (done) => {
-        request.close(done);
+    afterAll(async () => {
+        await request.close();
     });
 
-    it('Test get all building type', async () => {
-        request
+    it('Test get all building type', () => {
+        return request
             .get('/buildingType')
+            .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(200);
             });
     });
 
-    it('Test get all saved room of user not authentication', async () => {
-        request
+    it('Test get all saved room of user not authentication', () => {
+        return request
             .get('/saved-rooms')
             .set('Accept', 'application/json')
-            .expect(401)
-            .expect('{"status":401,"message":"Unauthorized"}')
+            .then(response => {
+                expect(response.status).toBe(401);
+                expect(response.body.message).toBe('Unauthorized')
+            });
     });
 
-    it('Test get all saved room of user', async () => {
-        request
+    it('Test get all saved room of user', () => {
+        return request
             .get('/saved-rooms')
             .set('Authorization', token)
             .set('Accept', 'application/json')
-            .expect(200)
+            .then(response => {
+                expect(response.status).toBe(200);
+            });
     });
 });
