@@ -308,6 +308,7 @@ export class RoomRepository extends Repository<Room> {
           .andWhere('transaction.transaction_status = :transferred', {transferred: ConstantValues.HOST_DEPOSIT_TRANSFERRED})
           .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
           .getRawMany();
+      console.log(resultArray.length);
       if (resultArray.length == 0) {
           return false;
       }
@@ -327,6 +328,7 @@ export class RoomRepository extends Repository<Room> {
         .andWhere('transaction.transaction_status = :checkedOut', {checkedOut: ConstantValues.CHECKED_OUT})
         .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
         .getRawMany();
+    console.log(resultArray.length);
     if (resultArray.length == 0) {
       return false;
     }

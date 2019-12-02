@@ -6,6 +6,7 @@ import {Room} from '../models/room';
 import {ConstantValues} from '../utils/constant-values';
 import {Transaction} from "../models/transaction";
 import {Building} from "../models/building";
+import {TenantReview} from "../models/tenant-review";
 
 export default class RoomGroupFunction {
     static getRoomGroups: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -65,15 +66,34 @@ export default class RoomGroupFunction {
 
     static getRoomGroupDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const roomGroupId = req.params['roomGroupId'];
-        const userId = req['currentUserId'];
         const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
 
         if (!roomGroup) next(new HTTP400Error('roomGroupId not found.'));
-        const roomGroupDetail = await RoomGroup.repo.getRoomGroupDetail(roomGroupId, roomGroup, userId);
+        const roomGroupDetail = await RoomGroup.repo.getRoomGroupDetail(roomGroupId, roomGroup);
 
         if (roomGroupDetail) res.status(200).send(roomGroupDetail);
         else next(new HTTP400Error('error get details.'));
 
+    };
+
+    static getCanComment: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const roomGroupId = req.params['roomGroupId'];
+        const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+        if (roomGroup == null) {
+            next(new HTTP400Error('error get details.'));
+            return;
+        }
+        let canComment = false;
+        const userId = req['currentUserId'];
+        console.log(userId);
+        if (userId == null || userId == undefined) {
+            res.status(200).send(canComment);
+            return;
+        }
+        const reviewTimes = await TenantReview.repo.find({userId: parseInt(userId), roomGroupId: parseInt(roomGroupId)});
+        canComment = reviewTimes.length == 0 && (await Room.repo.isUserBeingInGroup(userId, roomGroupId) || await Room.repo.isUserCheckedOutGroup(userId, roomGroupId));
+
+        res.status(200).send(canComment);
     };
 
     static getRoomGroupTransactionDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {

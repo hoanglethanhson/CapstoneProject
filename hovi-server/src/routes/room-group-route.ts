@@ -23,6 +23,12 @@ export default [
         handler: roomGroupFunction.getRoomGroupDetail
     },
     {
+        path: "/getCanComment/:roomGroupId",
+        method: "get",
+        authentication: true,
+        handler: roomGroupFunction.getCanComment
+    },
+    {
         path: "/transaction/:transactionId",
         method: "get",
         authentication: true,
