@@ -305,8 +305,7 @@ export class RoomRepository extends Repository<Room> {
           .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
           .where('transaction.user_id = :user_id', {user_id: userId})
           .andWhere('room_group.room_group_id = :roomGroupId', {roomGroupId: roomGroupId})
-          .andWhere('transaction.transaction_status = :checkedOut', {checkedOut: ConstantValues.CHECKED_OUT})
-          .orWhere('transaction.transaction_status = :transferred', {transferred: ConstantValues.HOST_DEPOSIT_TRANSFERRED})
+          .andWhere('transaction.transaction_status = :transferred', {transferred: ConstantValues.HOST_DEPOSIT_TRANSFERRED})
           .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
           .getRawMany();
       if (resultArray.length == 0) {
@@ -325,8 +324,7 @@ export class RoomRepository extends Repository<Room> {
         .innerJoin(User, 'user', 'transaction.user_id = user.user_id')
         .where('transaction.user_id = :user_id', {user_id: userId})
         .andWhere('room_group.room_group_id = :roomGroupId', {roomGroupId: roomGroupId})
-        //.andWhere('transaction.transaction_status = :checkedOut', {checkedOut: ConstantValues.CHECKED_OUT})
-        .andWhere('transaction.transaction_status = :transferred', {transferred: ConstantValues.HOST_DEPOSIT_TRANSFERRED})
+        .andWhere('transaction.transaction_status = :checkedOut', {checkedOut: ConstantValues.CHECKED_OUT})
         .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
         .getRawMany();
     if (resultArray.length == 0) {
