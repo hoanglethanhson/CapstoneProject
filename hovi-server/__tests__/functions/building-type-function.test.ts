@@ -14,9 +14,10 @@ describe('Test function building type', () => {
         request = supertest(server);
     });
 
-    afterAll(async () => {
-        await request.close();
+    afterAll(async (done) => {
         await DatabaseManager.close();
+        await request.close();
+        done();
     });
 
     it('Test get all building type', () => {
