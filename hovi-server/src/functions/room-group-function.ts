@@ -79,6 +79,7 @@ export default class RoomGroupFunction {
     static getCanComment: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const roomGroupId = req.params['roomGroupId'];
         const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+        let result;
         if (roomGroup == null) {
             next(new HTTP400Error('error get details.'));
             return;
@@ -87,13 +88,19 @@ export default class RoomGroupFunction {
         const userId = req['currentUserId'];
         console.log(userId);
         if (userId == null || userId == undefined) {
-            res.status(200).send(canComment);
+            result = {
+                canComment: canComment
+            }
+            res.status(200).send(result);
             return;
         }
         const reviewTimes = await TenantReview.repo.find({userId: parseInt(userId), roomGroupId: parseInt(roomGroupId)});
         canComment = reviewTimes.length == 0 && (await Room.repo.isUserBeingInGroup(userId, roomGroupId) || await Room.repo.isUserCheckedOutGroup(userId, roomGroupId));
 
-        res.status(200).send(canComment);
+        result = {
+            canComment: canComment
+        }
+        res.status(200).send(result);
     };
 
     static getRoomGroupTransactionDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
