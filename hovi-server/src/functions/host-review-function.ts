@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction, Handler} from "express";
 import {validateByModel} from '../utils';
-import {HTTP400Error} from '../utils/httpErrors';
+import {HTTP303Error, HTTP400Error} from '../utils/httpErrors';
 import {HostReview} from "../models/host-review";
 
 export default class HostReviewFunction {
@@ -21,6 +21,16 @@ export default class HostReviewFunction {
 
     static createHostReview: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
+        const hostId = req['currentUserId'];
+        if (!await HostReview.repo.isHostAndTenant(hostId, body.userId)) {
+            next(new HTTP303Error('You are not the host of this user.'));
+            return;
+        }
+        const reviewTimes = await HostReview.repo.find({hostId: hostId, tenantId: body.userId});
+        if (reviewTimes.length > 0) {
+            next(new HTTP303Error('You have reviewed this user before.'));
+            return;
+        }
         const error = await validateByModel(HostReview, body);
 
         if (error) next(error);

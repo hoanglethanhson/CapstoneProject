@@ -12,6 +12,11 @@ import {
     UpdateDateColumn, getRepository, getManager
 } from 'typeorm';
 import {User} from "./user";
+import {RoomGroup} from "./room-group";
+import {Building} from "./building";
+import {Transaction} from "./transaction";
+import {ConstantValues} from "../utils/constant-values";
+import {Room} from "./room";
 
 @Entity(HostReview.tableName)
 export class HostReview extends BaseEntity {
@@ -83,6 +88,21 @@ export class HostReviewRepository extends Repository<HostReview> {
             await this.save(review);
         }
         return review;
+    }
+
+    async isHostAndTenant(hostId: any, tenantId: any) {
+        let result =  await getManager()
+            .createQueryBuilder(Room, 'room')
+            .select(['*'])
+            .innerJoin(RoomGroup, 'room_group', 'room.room_group_id = room_group.room_group_id')
+            .innerJoin(Building, 'building', 'room_group.building_id = building.building_id')
+            .leftJoin(Transaction, 'transaction', 'room.room_id = transaction.room_id')
+            .leftJoin(User, 'user', 'transaction.user_id = user.user_id')
+            .where('building.host_id = :host_id', {host_id: hostId})
+            .andWhere('transaction.user_id = :tenant_id', {tenant_id: tenantId})
+            .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
+            .getRawMany();
+        return (result.length > 0);
     }
 
 }
