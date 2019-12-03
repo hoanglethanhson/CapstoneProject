@@ -301,6 +301,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             console.log(review.user_id);
             let tenant = await User.repo.findOne(review.user_id);
             const record = {
+                reviewId: review.review_id,
                 tenantId: tenant.id,
                 tenantName: tenant.firstName + ' ' + tenant.lastName,
                 tenantAvatars: tenant.avatar,
