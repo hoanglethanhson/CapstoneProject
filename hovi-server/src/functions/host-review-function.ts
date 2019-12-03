@@ -30,7 +30,7 @@ export default class HostReviewFunction {
     static createHostReview: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
         const hostId = req['currentUserId'];
-        if (!await HostReview.repo.isHostAndTenant(hostId, body.userId)) {
+        if (!await HostReview.repo.isBeingHostAndTenant(hostId, body.userId) && !await HostReview.repo.isCheckedOutHostAndTenant(hostId, body.userId)) {
             next(new HTTP303Error('You are not the host of this user.'));
             return;
         }

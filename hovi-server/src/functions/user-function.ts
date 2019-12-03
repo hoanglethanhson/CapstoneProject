@@ -30,7 +30,7 @@ export default class UserFunction {
     static getUserDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const userId = req.params['id'];
         const currentUserId = req['currentUserId'];
-        let canComment = await HostReview.repo.isHostAndTenant(currentUserId, userId);
+        let canComment = await HostReview.repo.isBeingHostAndTenant(currentUserId, userId) || await HostReview.repo.isCheckedOutHostAndTenant(currentUserId, userId);
         const user = await User.repo.getUserDetail(userId);
         let result = {
             user,
