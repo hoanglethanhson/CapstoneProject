@@ -38,10 +38,15 @@ export default class TenantReviewFunction {
     static updateTenantReview: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
         const tenantReviewId = req.params['tenantReviewId'];
-        const successResponse = await TenantReview.repo.updateById(tenantReviewId, body);
+        const error = await validateByModel(TenantReview, body);
 
-        if (successResponse) res.status(200).send(successResponse);
-        else next(new HTTP400Error('tenantReviewId not found'));
+        if (error) next(error);
+        else {
+            const successResponse = await TenantReview.repo.updateById(tenantReviewId, body);
+
+            if (successResponse) res.status(200).send(successResponse);
+            else next(new HTTP400Error('tenantReviewId not found'));
+        }
     };
 
     static deleteTenantReview: Handler = async (req: Request, res: Response, next: NextFunction) => {
