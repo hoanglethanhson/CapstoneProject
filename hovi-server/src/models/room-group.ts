@@ -41,7 +41,6 @@ export class RoomGroup extends BaseEntity {
         bathroomQuantity: 'bathroom_quantity',
         direction: 'direction',
         isAvailable: 'is_available',
-        isVerified: 'is_verified',
         depositPrice: 'deposit_price',
         description: 'description',
         capacity: 'capacity',
@@ -67,11 +66,11 @@ export class RoomGroup extends BaseEntity {
     buildingId: number;
 
     @Column({
-        type: 'boolean',
+        type: 'tinyint',
         unique: false,
         name: RoomGroup.schema.gender,
     })
-    gender: boolean;
+    gender: number;
 
     @Column({
         type: 'double',
@@ -130,13 +129,6 @@ export class RoomGroup extends BaseEntity {
         name: RoomGroup.schema.isAvailable,
     })
     isAvailable: boolean;
-
-    @Column({
-        type: 'boolean',
-        name: RoomGroup.schema.isVerified,
-    })
-    isVerified: boolean;
-
 
     @Column({
         type: 'double',
@@ -232,7 +224,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
     async updateById(roomGroupId: any, roomGroupUpdate: RoomGroup) {
         let roomGroup = await this.findOne(roomGroupId);
         if (roomGroup) {
-            roomGroup.gender = roomGroupUpdate.gender ? roomGroupUpdate.gender : roomGroup.gender;
+            roomGroup.gender = roomGroupUpdate.gender;
             roomGroup.rentPrice = roomGroupUpdate.rentPrice ? roomGroupUpdate.rentPrice : roomGroup.rentPrice;
             roomGroup.minDepositPeriod = roomGroupUpdate.minDepositPeriod ? roomGroupUpdate.minDepositPeriod : roomGroup.minDepositPeriod;
             roomGroup.area = roomGroupUpdate.area ? roomGroupUpdate.area : roomGroup.area;
@@ -240,7 +232,6 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
             roomGroup.bathroomQuantity = roomGroupUpdate.bathroomQuantity ? roomGroupUpdate.bathroomQuantity : roomGroup.bathroomQuantity;
             roomGroup.direction = roomGroupUpdate.direction ? roomGroupUpdate.direction : roomGroup.direction;
             roomGroup.isAvailable = roomGroupUpdate.isAvailable ? roomGroupUpdate.isAvailable : roomGroup.isAvailable;
-            roomGroup.isVerified = roomGroupUpdate.isVerified ? roomGroupUpdate.isVerified : roomGroup.isVerified;
             roomGroup.depositPrice = roomGroupUpdate.depositPrice ? roomGroupUpdate.depositPrice : roomGroup.depositPrice;
             roomGroup.description = roomGroupUpdate.description ? roomGroupUpdate.description : roomGroup.description;
             roomGroup.capacity = roomGroupUpdate.capacity ? roomGroupUpdate.capacity : roomGroup.capacity;

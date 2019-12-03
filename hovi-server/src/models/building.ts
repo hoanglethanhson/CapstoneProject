@@ -28,7 +28,6 @@ export class Building extends BaseEntity {
     location: 'location',
     floorQuantity: 'floor_quantity',
     hostId: 'host_id',
-    isVerified: 'is_verified',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   };
@@ -120,12 +119,6 @@ export class Building extends BaseEntity {
   floorQuantity: number;
 
   @Column({
-    type: 'boolean',
-    name: Building.schema.isVerified,
-  })
-  isVerified: boolean;
-
-  @Column({
     type: 'timestamp',
     name: Building.schema.createdAt,
   })
@@ -163,7 +156,6 @@ export class BuildingRepository extends Repository<Building> {
       building.detailedAddress = buildingUpdate.detailedAddress ? buildingUpdate.detailedAddress : building.detailedAddress;
       building.location = buildingUpdate.location ? buildingUpdate.location : building.location;
       building.floorQuantity = buildingUpdate.floorQuantity ? buildingUpdate.floorQuantity : building.floorQuantity;
-      building.isVerified = buildingUpdate.isVerified ? buildingUpdate.isVerified : building.isVerified;
       await this.save(building);
     }
     return building;

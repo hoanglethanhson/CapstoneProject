@@ -7,8 +7,7 @@ export default class SavedRoomFunction {
     static getSavedRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const userId = req['currentUserId'];
         const savedRooms = await SavedRoom.repo.find({userId});
-        if (savedRooms.length != 0) res.status(200).send(savedRooms);
-        else next(new HTTP400Error('0 record.'));
+        res.status(200).send(savedRooms);
     };
 
     static saveRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {

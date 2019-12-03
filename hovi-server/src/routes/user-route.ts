@@ -2,10 +2,10 @@ import UserFunction from "../functions/user-function";
 
 export default [
     {
-        path: "/user/",
+        path: "/user/avatar",
         method: "get",
         authentication: true,
-        handler: UserFunction.getUsers
+        handler: UserFunction.getAvatar
     },
     {
         path: "/userOne/",
@@ -19,13 +19,13 @@ export default [
         handler: UserFunction.getUserDetail
     },
     {
-        path: "/user/",
-        method: "post",
+        path: "/userSetting/",
+        method: "get",
         authentication: true,
-        handler: UserFunction.createUser
+        handler: UserFunction.getUserSetting
     },
     {
-        path: "/user/:userId",
+        path: "/user/",
         method: "put",
         authentication: true,
         handler: UserFunction.updateUser
@@ -35,5 +35,16 @@ export default [
         method: "delete",
         authentication: true,
         handler: UserFunction.deleteUser
+    },
+    {
+        path: '/user/upload',
+        method: 'post',
+        authentication: true,
+        uploadOptions: {
+            type: 'photos',
+            fileSize: 10 * 1024 * 1024,
+            isMultiple: false,
+        },
+        handler: UserFunction.updateUserImage
     },
 ];
