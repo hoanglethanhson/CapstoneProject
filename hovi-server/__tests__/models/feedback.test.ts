@@ -20,7 +20,7 @@ describe('[model] feedback', () => {
         feedback1.feedbackId = 1;
         feedback1.content = 'nice';
 
-        feedback1 = await Feedback.repo.save(feedback1);
+        //feedback1 = await Feedback.repo.save(feedback1);
     });
 
     it('should return null if feedback is not found', async () => {

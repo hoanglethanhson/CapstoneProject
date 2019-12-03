@@ -18,7 +18,7 @@ describe('[model] roomAmenities', () => {
         roomAmenities1 = new RoomAmenities();
         roomAmenities1.amenitiesId = 1;
         roomAmenities1.roomGroupId = 1;
-        roomAmenities1 = await RoomAmenities.repo.save(roomAmenities1);
+        //roomAmenities1 = await RoomAmenities.repo.save(roomAmenities1);
     });
 
 

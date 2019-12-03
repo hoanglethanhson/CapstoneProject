@@ -19,7 +19,7 @@ describe('[model] buildingService', () => {
         buildingService1.buildingId = 1;
         buildingService1.serviceId = 1;
         buildingService1.servicePrice = 100;
-        buildingService1 = await BuildingService.repo.save(buildingService1);
+        //buildingService1 = await BuildingService.repo.save(buildingService1);
     });
 
 

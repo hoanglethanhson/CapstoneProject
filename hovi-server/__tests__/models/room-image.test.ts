@@ -20,12 +20,13 @@ describe('[model] roomImage', () => {
     let roomImage1: RoomImage;
     beforeEach(async () => {
         await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
 
         roomImage1 = new RoomImage();
         roomImage1.imageId = 1;
         roomImage1.imageUrl = 'abc';
 
-        roomImage1 = await RoomImage.repo.save(roomImage1);
+        //roomImage1 = await RoomImage.repo.save(roomImage1);
     });
 
     //Failed test due to have not had logic handling in function file

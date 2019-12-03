@@ -20,7 +20,7 @@ describe('[model] systemInformation', () => {
         info1.info_id = 2;
         info1.title = "A";
 
-        info1 = await SystemInformation.repo.save(info1);
+        //info1 = await SystemInformation.repo.save(info1);
     });
 
 

@@ -21,13 +21,14 @@ describe('[model] room', () => {
     let room1: Room;
     beforeEach(async () => {
         await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
 
-        room1 = await Room.repo.save(Room.repo.create({
+        /*room1 = await Room.repo.save(Room.repo.create({
             roomId: 1,
             roomGroupId: roomGroup1.id,
             roomName: 'room_name',
             roomStatus: 1
-        }));
+        }));*/
     });
 
     //Failed test due to have not had logic handling in function file

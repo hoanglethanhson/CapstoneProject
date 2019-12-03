@@ -17,13 +17,13 @@ describe('[model] reportedRoom', () => {
     let report1: ReportedRoom;
     beforeEach(async () => {
         await DatabaseManager.clearData();
-        //await DatabaseManager.insertData();
+        await DatabaseManager.insertData();
 
         report1 = new ReportedRoom();
         report1.reportId = 1;
         report1.reportContent = "reportContent";
 
-        report1 = await ReportedRoom.repo.save(report1);
+        //report1 = await ReportedRoom.repo.save(report1);
     });
 
 

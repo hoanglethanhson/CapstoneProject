@@ -18,7 +18,7 @@ describe('[model] bankTransferHistory', () => {
         bankTransferHistory1 = new BankTransferHistory();
         bankTransferHistory1.transferId = 1;
         bankTransferHistory1.transferCode = "1234"
-        bankTransferHistory1 = await BankTransferHistory.repo.save(bankTransferHistory1);
+        //bankTransferHistory1 = await BankTransferHistory.repo.save(bankTransferHistory1);
     });
 
     it('should return null if bankTransferHistory is not found', async () => {

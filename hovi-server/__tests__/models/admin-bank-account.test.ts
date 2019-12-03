@@ -21,7 +21,7 @@ describe('[model] bankAccount', () => {
         bankAccount1.accountId = 2;
         bankAccount1.bank = "A";
 
-        bankAccount1 = await AdminBankAccount.repo.save(bankAccount1);
+        //bankAccount1 = await AdminBankAccount.repo.save(bankAccount1);
     });
 
 

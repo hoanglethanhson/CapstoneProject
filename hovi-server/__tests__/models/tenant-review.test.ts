@@ -18,12 +18,13 @@ describe('[model] tenantReview', () => {
     let review1: TenantReview;
     beforeEach(async () => {
         await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
 
         review1 = new TenantReview();
         review1.reviewId = 1;
         review1.comment = "comment";
 
-        review1 = await TenantReview.repo.save(review1);
+        //review1 = await TenantReview.repo.save(review1);
     });
 
 

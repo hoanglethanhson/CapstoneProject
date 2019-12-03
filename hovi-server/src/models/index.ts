@@ -68,6 +68,8 @@ export class DatabaseManager {
         await deleteQuery.from(Amenities).execute();
 
         await deleteQuery.from(RoomImage).execute();
+        await deleteQuery.from(ReportedRoom).execute();
+        await deleteQuery.from(SavedRoom).execute();
         await deleteQuery.from(Transaction).execute();
         await deleteQuery.from(Feedback).execute();
         await deleteQuery.from(TenantReview).execute();
@@ -89,52 +91,95 @@ export class DatabaseManager {
             return;
         }
         let user = new User();
-        user.id = 1;
+        user.id = 100;
         user = await User.repo.save(user);
 
         let buildingType = new RoomType();
-        buildingType.id = 1;
+        buildingType.id = 100;
         buildingType = await RoomType.repo.save(buildingType);
 
         let building = new Building();
-        building.id = 1;
-        //building.typeId = 1;
+        building.id = 100;
+        building.typeId = 100;
         building = await Building.repo.save(building);
 
         let roomGroup = new RoomGroup();
-        roomGroup.id = 1;
-        //roomGroup.buildingId = building.id;
+        roomGroup.id = 100;
+        roomGroup.buildingId = building.id;
         roomGroup = await RoomGroup.repo.save(roomGroup);
 
         let room = new Room();
-        room.roomId = 1;
-        //room.roomGroupId = roomGroup.id;
+        room.roomId = 100;
+        room.roomGroupId = 100;
         room = await Room.repo.save(room);
 
         let transaction = new Transaction();
-        transaction.transactionId = 1;
-        //transaction.userId = user.id;
-        //transaction.roomId = room.roomId;
+        transaction.transactionId = 100;
+        transaction.userId = 100;
+        transaction.roomId = 100;
+        transaction = await Transaction.repo.save(transaction);
 
         let amenities = new Amenities();
-        amenities.id = 1;
+        amenities.id = 100;
         amenities = await Amenities.repo.save(amenities);
 
         let service = new Service();
-        service.id = 1;
+        service.id = 100;
         service = await Service.repo.save(service);
 
         let adminBankAccount = new AdminBankAccount();
-        adminBankAccount.accountId = 1;
+        adminBankAccount.accountId = 100;
         adminBankAccount = await AdminBankAccount.repo.save(adminBankAccount);
 
         let bankTransferHistory = new BankTransferHistory();
-        bankTransferHistory.transferId = 1;
+        bankTransferHistory.transferId = 100;
+        bankTransferHistory.senderUserId = 100;
+        bankTransferHistory.receiverUserId = 100;
         bankTransferHistory = await BankTransferHistory.repo.save(bankTransferHistory);
 
         let systemInformation = new SystemInformation();
-        systemInformation.info_id = 1;
+        systemInformation.info_id = 100;
         systemInformation = await SystemInformation.repo.save(systemInformation);
+
+        let roomAmenities = new RoomAmenities();
+        roomAmenities.amenitiesId = 100;
+        roomAmenities.roomGroupId = 100;
+        roomAmenities = await RoomAmenities.repo.save(roomAmenities);
+
+        let buildingService = new BuildingService();
+        buildingService.buildingId = 100;
+        buildingService.serviceId = 100;
+        buildingService = await BuildingService.repo.save(buildingService);
+
+        let feedback = new Feedback();
+        feedback.feedbackId = 100;
+        feedback.content = "a";
+        feedback.userId = 100;
+        feedback = await Feedback.repo.save(feedback);
+
+        let reportedRoom = new ReportedRoom();
+        reportedRoom.userId = 100;
+        reportedRoom.reportId = 100;
+        reportedRoom.roomGroupId = 100;
+        reportedRoom.reportContent = "a";
+        reportedRoom = await ReportedRoom.repo.save(reportedRoom);
+
+        let roomImage = new RoomImage();
+        roomImage.roomGroupId = 100;
+        roomImage.imageId = 100;
+        roomImage = await RoomImage.repo.save(roomImage);
+
+        let savedRoom = new SavedRoom();
+        savedRoom.userId = 100;
+        savedRoom.roomGroupId = 100;
+        savedRoom = await SavedRoom.repo.save(savedRoom);
+
+        let tenantReview = new TenantReview();
+        tenantReview.userId = 100;
+        tenantReview.roomGroupId = 100;
+        tenantReview.reviewId = 100;
+        tenantReview.comment = "a";
+        tenantReview = await TenantReview.repo.save(tenantReview);
     }
 
 

@@ -25,7 +25,7 @@ describe('[model] savedRoom', () => {
         savedRoom1.userId = 1;
         savedRoom1.roomGroupId = 1;
 
-        savedRoom1 = await SavedRoom.repo.save(savedRoom1);
+        //savedRoom1 = await SavedRoom.repo.save(savedRoom1);
     });
 
 
