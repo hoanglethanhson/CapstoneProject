@@ -8,7 +8,6 @@
  Source Schema         : HoviDB
 
  Target Server Type    : MySQL
-
  Target Server Version : 50727
  File Encoding         : 65001
 
@@ -2230,15 +2229,9 @@ CREATE TABLE `room_image` (
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`image_id`) USING BTREE,
-<<<<<<< HEAD
-  INDEX `FK_roomGroup_image`(`room_group_id`) USING BTREE,
-  CONSTRAINT `FK_roomGroup_image` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 405 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
-=======
   KEY `FK_roomGroup_image` (`room_group_id`) USING BTREE,
   CONSTRAINT `FK_roomGroup_image` FOREIGN KEY (`room_group_id`) REFERENCES `room_group` (`room_group_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=401 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
->>>>>>> fe7b3f4d0f46de9cede5f2d9037bbfcfe7b7e257
 
 -- ----------------------------
 -- Records of room_image
@@ -2629,14 +2622,7 @@ INSERT INTO `room_image` VALUES (397, 'https://storage.googleapis.com/room_image
 INSERT INTO `room_image` VALUES (398, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-5', 139, '2019-11-14 04:54:46.993416', NULL);
 INSERT INTO `room_image` VALUES (399, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-4', 139, '2019-11-14 04:54:46.992234', NULL);
 INSERT INTO `room_image` VALUES (400, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-3', 139, '2019-11-14 04:54:46.992107', NULL);
-<<<<<<< HEAD
-INSERT INTO `room_image` VALUES (401, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-5', 34, '2019-11-27 01:39:04.370074', '2019-11-27 01:40:06.692590');
-INSERT INTO `room_image` VALUES (402, 'https://storage.googleapis.com/room_images_bucket/room-image-139-rc-upload-1573707170100-4', 34, '2019-11-27 01:39:06.576784', '2019-11-27 01:40:07.964628');
-INSERT INTO `room_image` VALUES (403, 'https://storage.googleapis.com/room_images_bucket/room-image-138-rc-upload-1573669523703-3', 34, '2019-11-27 01:39:09.952830', '2019-11-27 01:40:08.736803');
-INSERT INTO `room_image` VALUES (404, 'https://storage.googleapis.com/room_images_bucket/room-image-137-rc-upload-1573656653125-5', 34, '2019-11-27 01:39:13.568712', '2019-11-27 01:40:09.876159');
-=======
 COMMIT;
->>>>>>> fe7b3f4d0f46de9cede5f2d9037bbfcfe7b7e257
 
 -- ----------------------------
 -- Table structure for saved_room
@@ -2734,32 +2720,18 @@ CREATE TABLE `transaction` (
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`transaction_id`) USING BTREE,
-<<<<<<< HEAD
-  INDEX `FK_User_Transaction`(`user_id`) USING BTREE,
-  INDEX `FK_Room_Transaction`(`room_id`) USING BTREE,
-  CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4  ROW_FORMAT = Dynamic;
-=======
   KEY `FK_User_Transaction` (`user_id`) USING BTREE,
   KEY `FK_Room_Transaction` (`room_id`) USING BTREE,
   CONSTRAINT `FK_Room_Transaction` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`),
   CONSTRAINT `FK_User_Transaction` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
->>>>>>> fe7b3f4d0f46de9cede5f2d9037bbfcfe7b7e257
 
 -- ----------------------------
 -- Records of transaction
 -- ----------------------------
 BEGIN;
 INSERT INTO `transaction` VALUES (1, 1, 58, NULL, 1, '2019-11-19 02:04:48.947019', '2019-11-19 11:10:23.800084');
-<<<<<<< HEAD
-INSERT INTO `transaction` VALUES (2, 1, 59, NULL, 1, '2019-11-27 00:42:40.659336', NULL);
-INSERT INTO `transaction` VALUES (3, 1, 60, NULL, 0, '2019-11-27 00:43:03.866709', NULL);
-INSERT INTO `transaction` VALUES (4, 3, 9, NULL, NULL, '2019-11-27 01:02:57.159096', '2019-11-27 01:04:10.021487');
-=======
 COMMIT;
->>>>>>> fe7b3f4d0f46de9cede5f2d9037bbfcfe7b7e257
 
 -- ----------------------------
 -- Table structure for user
