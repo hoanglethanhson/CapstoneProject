@@ -28,8 +28,8 @@ export default class HostReviewFunction {
         }
         const reviewTimes = await HostReview.repo.find({hostId: hostId, tenantId: body.userId});
         if (reviewTimes.length > 0) {
-            next(new HTTP303Error('You have reviewed this user before.'));
-            return;
+            //next(new HTTP303Error('You have reviewed this user before.'));
+            return HostReviewFunction.updateHostReview(req, res, next);
         }
         const error = await validateByModel(HostReview, body);
 
