@@ -98,23 +98,23 @@ export class DatabaseManager {
 
         let building = new Building();
         building.id = 1;
-        building.typeId = 1;
+        //building.typeId = 1;
         building = await Building.repo.save(building);
 
         let roomGroup = new RoomGroup();
         roomGroup.id = 1;
-        roomGroup.buildingId = building.id;
+        //roomGroup.buildingId = building.id;
         roomGroup = await RoomGroup.repo.save(roomGroup);
 
         let room = new Room();
         room.roomId = 1;
-        room.roomGroupId = roomGroup.id;
+        //room.roomGroupId = roomGroup.id;
         room = await Room.repo.save(room);
 
         let transaction = new Transaction();
         transaction.transactionId = 1;
-        transaction.userId = user.id;
-        transaction.roomId = room.roomId;
+        //transaction.userId = user.id;
+        //transaction.roomId = room.roomId;
 
         let amenities = new Amenities();
         amenities.id = 1;
@@ -123,6 +123,18 @@ export class DatabaseManager {
         let service = new Service();
         service.id = 1;
         service = await Service.repo.save(service);
+
+        let adminBankAccount = new AdminBankAccount();
+        adminBankAccount.accountId = 1;
+        adminBankAccount = await AdminBankAccount.repo.save(adminBankAccount);
+
+        let bankTransferHistory = new BankTransferHistory();
+        bankTransferHistory.transferId = 1;
+        bankTransferHistory = await BankTransferHistory.repo.save(bankTransferHistory);
+
+        let systemInformation = new SystemInformation();
+        systemInformation.info_id = 1;
+        systemInformation = await SystemInformation.repo.save(systemInformation);
     }
 
 
