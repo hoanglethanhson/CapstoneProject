@@ -114,7 +114,8 @@ export class HostReviewRepository extends Repository<HostReview> {
             .getSql());
         return await getManager()
             .createQueryBuilder(HostReview, 'host_review')
-            .select(['user.first_name, user.last_name, user.avatar, host_review.comment'])
+            .select(['host_review.review_id, host_review.host_id, host_review.tenant_id, user.first_name' +
+            ', user.last_name, user.avatar, host_review.comment'])
             .innerJoin(User, 'user', 'host_review.host_id = user.user_id')
             .where('host_review.tenant_id = :tenantId', {tenantId: tenantId})
             .getRawMany();
