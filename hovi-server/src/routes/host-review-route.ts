@@ -12,6 +12,11 @@ export default [
         handler: hostReviewFunction.getHostReview
     },
     {
+        path: "/hostReviewsOfTenant/:tenantId",
+        method: "get",
+        handler: hostReviewFunction.getHostReviewByTenantId
+    },
+    {
         path: "/hostReview/",
         method: "post",
         authentication: true,

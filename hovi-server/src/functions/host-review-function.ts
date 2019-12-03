@@ -19,6 +19,14 @@ export default class HostReviewFunction {
         else next(new HTTP400Error('hostReviewId not found.'));
     };
 
+    static getHostReviewByTenantId: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const tenantId = req.params['tenantId'];
+        const hostReviews = await HostReview.repo.find({tenantId: parseInt(tenantId)});
+
+        if (hostReviews) res.status(200).send(hostReviews);
+        else next(new HTTP400Error('tenantId not found.'));
+    };
+
     static createHostReview: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
         const hostId = req['currentUserId'];

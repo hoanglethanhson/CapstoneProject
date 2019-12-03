@@ -47,7 +47,7 @@ export class HostReview extends BaseEntity {
     @ManyToOne(type => User, user => user.tenants)
     @JoinColumn({name: HostReview.schema.tenantId})
     tenant: User;
-    @Column({name: HostReview.schema.hostId})
+    @Column({name: HostReview.schema.tenantId})
     tenantId: number;
 
 
