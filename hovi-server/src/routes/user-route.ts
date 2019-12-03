@@ -16,6 +16,7 @@ export default [
     {
         path: "/userShow/:id",
         method: "get",
+        authentication: true,
         handler: UserFunction.getUserDetail
     },
     {
