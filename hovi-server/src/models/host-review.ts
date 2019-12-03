@@ -105,4 +105,19 @@ export class HostReviewRepository extends Repository<HostReview> {
         return (result.length > 0);
     }
 
+    async getHostReviewOfTenant(tenantId: any) {
+        console.log(await getManager()
+            .createQueryBuilder(HostReview, 'host_review')
+            .select(['user.first_name. user.last_name, user.avatar, host_review.comment'])
+            .innerJoin(User, 'user', 'host_review.host_id = user.user_id')
+            .where('host_review.tenant_id = :tenantId', {tenantId: tenantId})
+            .getSql());
+        return await getManager()
+            .createQueryBuilder(HostReview, 'host_review')
+            .select(['user.first_name, user.last_name, user.avatar, host_review.comment'])
+            .innerJoin(User, 'user', 'host_review.host_id = user.user_id')
+            .where('host_review.tenant_id = :tenantId', {tenantId: tenantId})
+            .getRawMany();
+    }
+
 }
