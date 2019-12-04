@@ -26,6 +26,7 @@ export default class ServiceFunction {
         if (error) next(error);
         else {
             const checkService = await Service.repo.findOne({name: body['name']});
+            console.log(checkService);
 
             if (checkService) next(new HTTP400Error('Service already exists'));
             else {
