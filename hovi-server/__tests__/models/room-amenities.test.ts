@@ -1,6 +1,7 @@
 import {QueryFailedError} from 'typeorm';
 import {DatabaseManager} from '../../src/models';
 import {RoomAmenities} from '../../src/models/room-amenities';
+import {Amenities} from "../../src/models/amenities";
 
 describe('[model] roomAmenities', () => {
     beforeAll(async () => {
@@ -25,9 +26,9 @@ describe('[model] roomAmenities', () => {
     it('should not insert duplicated amenities and roomGroup', async () => {
         // expect.assertions(1);
         try {
-            const duplicatedRoomAmenities = new RoomAmenities();
-            duplicatedRoomAmenities.amenitiesId = 1;
-            duplicatedRoomAmenities.roomGroupId = 1;
+            let duplicatedRoomAmenities = new RoomAmenities();
+            duplicatedRoomAmenities.amenitiesId = 100;
+            duplicatedRoomAmenities.roomGroupId = 100;
             await duplicatedRoomAmenities.save();
         } catch (error) {
             expect(error).toBeInstanceOf(QueryFailedError);
@@ -56,9 +57,13 @@ describe('[model] roomAmenities', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedRoomAmenities = new RoomAmenities();
+        let amenities = new Amenities();
+        amenities.id = 101;
+        await amenities.save();
+
+        let duplicatedRoomAmenities = new RoomAmenities();
         duplicatedRoomAmenities.amenitiesId = 1;
-        duplicatedRoomAmenities.roomGroupId = 1;
+        duplicatedRoomAmenities.roomGroupId = 100;
 
         await RoomAmenities.repo.save(duplicatedRoomAmenities);
 
@@ -67,14 +72,22 @@ describe('[model] roomAmenities', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedRoomAmenities = new RoomAmenities();
+        let amenities = new Amenities();
+        amenities.id = 101;
+        await amenities.save();
+
+        let amenitiesUpdate = new Amenities();
+        amenities.id = 102;
+        await amenities.save();
+
+        let duplicatedRoomAmenities = new RoomAmenities();
         duplicatedRoomAmenities.amenitiesId = 1;
-        duplicatedRoomAmenities.roomGroupId = 1;
+        duplicatedRoomAmenities.roomGroupId = 100;
 
         await RoomAmenities.repo.save(duplicatedRoomAmenities);
 
         let updateRoomAmenities = duplicatedRoomAmenities;
-        updateRoomAmenities.roomGroupId = 2;
+        updateRoomAmenities.amenitiesId = 102;
         await RoomAmenities.repo.updateById(duplicatedRoomAmenities.roomGroupId, duplicatedRoomAmenities.amenitiesId, updateRoomAmenities);
 
         const result = await RoomAmenities.repo.getOneRecord(duplicatedRoomAmenities.roomGroupId, duplicatedRoomAmenities.amenitiesId);

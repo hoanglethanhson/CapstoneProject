@@ -27,11 +27,11 @@ describe('[model] bankTransferHistory', () => {
     });
 
     it('should return true if bankTransferHistory code is found', async () => {
-        const result = await BankTransferHistory.repo.find({transferCode: bankTransferHistory1.transferCode});
+        const result = await BankTransferHistory.repo.find({transferCode: "1234"});
         expect(result).toBeTruthy();
     });
 
-    it('should return false if bankTransferHistory cdoe is not found', async () => {
+    it('should return false if bankTransferHistory code is not found', async () => {
         const result = await BankTransferHistory.repo.findOne({transferCode: "bla bla"});
         expect(result).toBeFalsy();
     });

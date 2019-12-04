@@ -6,8 +6,6 @@ import {Room} from "../../src/models/room";
 import {Building} from "../../src/models/building";
 
 describe('[model] transaction', () => {
-    let user1 = new User();
-    let room1 = new Room();
     beforeAll(async () => {
         await DatabaseManager.init();
     });
@@ -46,10 +44,10 @@ describe('[model] transaction', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedTransaction = new Transaction();
-        duplicatedTransaction.userId = 1;
-        duplicatedTransaction.roomId = 1;
-        duplicatedTransaction.transactionId = 100;
+        let duplicatedTransaction = new Transaction();
+        duplicatedTransaction.userId = 100;
+        duplicatedTransaction.roomId = 100;
+        duplicatedTransaction.transactionId = 101;
 
         await Transaction.repo.save(duplicatedTransaction);
 
@@ -58,10 +56,10 @@ describe('[model] transaction', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedTransaction = new Transaction();
-        duplicatedTransaction.transactionId = 100;
-        duplicatedTransaction.userId = 1;
-        duplicatedTransaction.roomId = 1;
+        let duplicatedTransaction = new Transaction();
+        duplicatedTransaction.userId = 100;
+        duplicatedTransaction.roomId = 100;
+        duplicatedTransaction.transactionId = 101;
 
         await Transaction.repo.save(duplicatedTransaction);
 
@@ -74,10 +72,10 @@ describe('[model] transaction', () => {
     });
 
     it('should return null object after it was deleted', async () => {
-        const duplicatedTransaction = new Transaction();
-        duplicatedTransaction.transactionId = 100;
-        duplicatedTransaction.userId = 1;
-        duplicatedTransaction.roomId = 1;
+        let duplicatedTransaction = new Transaction();
+        duplicatedTransaction.userId = 100;
+        duplicatedTransaction.roomId = 100;
+        duplicatedTransaction.transactionId = 101;
 
         await Transaction.repo.save(duplicatedTransaction);
         await Transaction.repo.delete(duplicatedTransaction.transactionId);

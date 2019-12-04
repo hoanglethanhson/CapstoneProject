@@ -42,7 +42,7 @@ describe('[model] roomGroup', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedRoomGroup = new RoomGroup();
+        let duplicatedRoomGroup = new RoomGroup();
         duplicatedRoomGroup.id = 200;
 
         await RoomGroup.repo.save(duplicatedRoomGroup);
@@ -52,7 +52,7 @@ describe('[model] roomGroup', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedRoomGroup = new RoomGroup();
+        let duplicatedRoomGroup = new RoomGroup();
         duplicatedRoomGroup.id = 200;
 
         await RoomGroup.repo.save(duplicatedRoomGroup);
@@ -66,7 +66,7 @@ describe('[model] roomGroup', () => {
     });
 
     it('should return null object after it was deleted', async () => {
-        const duplicatedRoomGroup = new RoomGroup();
+        let duplicatedRoomGroup = new RoomGroup();
         duplicatedRoomGroup.id = 200;
 
         await RoomGroup.repo.save(duplicatedRoomGroup);

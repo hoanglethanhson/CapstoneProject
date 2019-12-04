@@ -25,9 +25,9 @@ describe('[model] service', () => {
     it('should not insert duplicated name', async () => {
         // expect.assertions(1);
         try {
-            const duplicatedService = new Service();
+            let duplicatedService = new Service();
             //duplicatedService.id = 3;
-            duplicatedService.name = service1.name;
+            duplicatedService.name = "name";
             await duplicatedService.save();
         } catch (error) {
             expect(error).toBeInstanceOf(QueryFailedError);
@@ -51,8 +51,9 @@ describe('[model] service', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedService = new Service();
-        duplicatedService.name = "wifi"
+        let duplicatedService = new Service();
+        duplicatedService.id = 101;
+        duplicatedService.name = "wifi";
 
         await Service.repo.save(duplicatedService);
 
@@ -61,8 +62,9 @@ describe('[model] service', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedService = new Service();
-        duplicatedService.name = "wifi"
+        let duplicatedService = new Service();
+        duplicatedService.id = 101;
+        duplicatedService.name = "wifi";
 
         await Service.repo.save(duplicatedService);
 
@@ -75,8 +77,9 @@ describe('[model] service', () => {
     });
 
     it('should return null object after it was deleted', async () => {
-        const duplicatedService = new Service();
-        duplicatedService.name = "wifi"
+        let duplicatedService = new Service();
+        duplicatedService.id = 101;
+        duplicatedService.name = "wifi";
 
         await Service.repo.save(duplicatedService);
 

@@ -1,6 +1,7 @@
 import {QueryFailedError} from 'typeorm';
 import {DatabaseManager} from '../../src/models';
 import {BuildingService} from '../../src/models/building-service';
+import {Service} from "../../src/models/service";
 
 describe('[model] buildingService', () => {
     beforeAll(async () => {
@@ -26,9 +27,9 @@ describe('[model] buildingService', () => {
     it('should not insert duplicated building and service', async () => {
         // expect.assertions(1);
         try {
-            const duplicatedBuildingService = new BuildingService();
-            duplicatedBuildingService.buildingId = 1;
-            duplicatedBuildingService.serviceId = 1;
+            let duplicatedBuildingService = new BuildingService();
+            duplicatedBuildingService.buildingId = 100;
+            duplicatedBuildingService.serviceId = 100;
             await duplicatedBuildingService.save();
         } catch (error) {
             expect(error).toBeInstanceOf(QueryFailedError);
@@ -46,7 +47,7 @@ describe('[model] buildingService', () => {
         expect(result).toBeTruthy();
     });
 
-    it('should return false if Amenities is not found', async () => {
+    it('should return false if service is not found', async () => {
         const result = await BuildingService.repo.getOneRecord(1, 1000);
         expect(result).toBeFalsy();
     });
@@ -57,9 +58,13 @@ describe('[model] buildingService', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedBuildingService = new BuildingService();
-        duplicatedBuildingService.buildingId = 1;
-        duplicatedBuildingService.serviceId = 1;
+        let service = new Service()
+        service.id = 101;
+        await service.save();
+
+        let duplicatedBuildingService = new BuildingService();
+        duplicatedBuildingService.buildingId = 100;
+        duplicatedBuildingService.serviceId = 101;
 
         await BuildingService.repo.save(duplicatedBuildingService);
 
@@ -68,12 +73,13 @@ describe('[model] buildingService', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedBuildingService = new BuildingService();
-        duplicatedBuildingService.buildingId = 1;
-        duplicatedBuildingService.serviceId = 1;
-        duplicatedBuildingService.servicePrice = 100;
+        let service = new Service()
+        service.id = 101;
+        await service.save();
 
-        await BuildingService.repo.save(duplicatedBuildingService);
+        let duplicatedBuildingService = new BuildingService();
+        duplicatedBuildingService.buildingId = 100;
+        duplicatedBuildingService.serviceId = 101;
 
         let updateBuildingService = duplicatedBuildingService;
         updateBuildingService.servicePrice = 200;

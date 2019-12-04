@@ -25,9 +25,9 @@ describe('[model] amenities', () => {
     it('should not insert duplicated name', async () => {
         // expect.assertions(1);
         try {
-            const duplicatedAmenities = new Amenities();
+            let duplicatedAmenities = new Amenities();
             //duplicatedAmenities.id = 3;
-            duplicatedAmenities.usableName = amenities1.usableName;
+            duplicatedAmenities.usableName = "name";
             await duplicatedAmenities.save();
         } catch (error) {
             expect(error).toBeInstanceOf(QueryFailedError);
@@ -41,7 +41,7 @@ describe('[model] amenities', () => {
     });
 
     it('should return true if amenities name is found', async () => {
-        const result = await Amenities.repo.find({usableName: amenities1.usableName});
+        const result = await Amenities.repo.find({usableName: "name"});
         expect(result).toBeTruthy();
     });
 
@@ -51,8 +51,9 @@ describe('[model] amenities', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedAmenities = new Amenities();
-        duplicatedAmenities.usableName = "wifi"
+        let duplicatedAmenities = new Amenities();
+        duplicatedAmenities.id = 101;
+        duplicatedAmenities.usableName = "wifi";
 
         await Amenities.repo.save(duplicatedAmenities);
 
@@ -61,8 +62,9 @@ describe('[model] amenities', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedAmenities = new Amenities();
-        duplicatedAmenities.usableName = "wifi"
+        let duplicatedAmenities = new Amenities();
+        duplicatedAmenities.id = 101;
+        duplicatedAmenities.usableName = "wifi";
 
         await Amenities.repo.save(duplicatedAmenities);
 
@@ -75,8 +77,9 @@ describe('[model] amenities', () => {
     });
 
     it('should return null object after it was deleted', async () => {
-        const duplicatedAmenities = new Amenities();
-        duplicatedAmenities.usableName = "wifi"
+        let duplicatedAmenities = new Amenities();
+        duplicatedAmenities.id = 101;
+        duplicatedAmenities.usableName = "wifi";
 
         await Amenities.repo.save(duplicatedAmenities);
 

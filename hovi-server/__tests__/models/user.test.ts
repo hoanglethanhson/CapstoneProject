@@ -15,21 +15,17 @@ describe('[model] user', () => {
     beforeEach(async () => {
         await DatabaseManager.clearData();
         await DatabaseManager.insertData();
-        user1 = new User();
-        user1.id = 2;
-        user1.phoneNumber = 'phone number';
-        //user1 = await User.repo.save(user1);
     });
 
 
     it('should not insert duplicated phoneNumber', async () => {
         // expect.assertions(1);
         try {
-            const duplicatedUser = new User();
-            //duplicatedUser.id = 3;
+            let duplicatedUser = new User();
+            duplicatedUser.id = 101;
             duplicatedUser.firstName = 'Duplicated firstName of user1';
             duplicatedUser.lastName = 'Duplicated lastName of user1';
-            duplicatedUser.phoneNumber = user1.phoneNumber;
+            duplicatedUser.phoneNumber = "phone number";
             duplicatedUser.email = 'duplicateduser1@mail.com';
             await duplicatedUser.save();
         } catch (error) {
@@ -44,7 +40,7 @@ describe('[model] user', () => {
     });
 
     it('should return true if phone number is found', async () => {
-        const result = await User.repo.find({phoneNumber: user1.phoneNumber});
+        const result = await User.repo.find({phoneNumber: "phone number"});
         expect(result).toBeTruthy();
     });
 
@@ -54,7 +50,8 @@ describe('[model] user', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedUser = new User();
+        let duplicatedUser = new User();
+        duplicatedUser.id = 101;
         duplicatedUser.firstName = 'Insert first name';
         duplicatedUser.lastName = 'Insert last name';
         duplicatedUser.phoneNumber = '1234';
@@ -67,7 +64,8 @@ describe('[model] user', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedUser = new User();
+        let duplicatedUser = new User();
+        duplicatedUser.id = 101;
         duplicatedUser.firstName = 'Insert first name';
         duplicatedUser.lastName = 'Insert last name';
         duplicatedUser.phoneNumber = '1234';
@@ -84,7 +82,8 @@ describe('[model] user', () => {
     });
 
     it('should return null object after it was deleted', async () => {
-        const duplicatedUser = new User();
+        let duplicatedUser = new User();
+        duplicatedUser.id = 101;
         duplicatedUser.firstName = 'Insert first name';
         duplicatedUser.lastName = 'Insert last name';
         duplicatedUser.phoneNumber = '1234';

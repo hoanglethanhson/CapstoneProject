@@ -92,15 +92,18 @@ export class DatabaseManager {
         }
         let user = new User();
         user.id = 100;
+        user.phoneNumber = "phone number";
         user = await User.repo.save(user);
 
         let buildingType = new RoomType();
         buildingType.id = 100;
+        buildingType.type = "type";
         buildingType = await RoomType.repo.save(buildingType);
 
         let building = new Building();
         building.id = 100;
         building.typeId = 100;
+        building.buildingName = "building";
         building = await Building.repo.save(building);
 
         let roomGroup = new RoomGroup();
@@ -121,10 +124,12 @@ export class DatabaseManager {
 
         let amenities = new Amenities();
         amenities.id = 100;
+        amenities.usableName = "name";
         amenities = await Amenities.repo.save(amenities);
 
         let service = new Service();
         service.id = 100;
+        service.name = "name";
         service = await Service.repo.save(service);
 
         let adminBankAccount = new AdminBankAccount();
@@ -135,6 +140,7 @@ export class DatabaseManager {
         bankTransferHistory.transferId = 100;
         bankTransferHistory.senderUserId = 100;
         bankTransferHistory.receiverUserId = 100;
+        bankTransferHistory.transferCode = "1234";
         bankTransferHistory = await BankTransferHistory.repo.save(bankTransferHistory);
 
         let systemInformation = new SystemInformation();

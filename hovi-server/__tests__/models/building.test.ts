@@ -32,7 +32,7 @@ describe('[model] building', () => {
     });
 
     it('should return true if building name is found', async () => {
-        const result = await Building.repo.find({buildingName: building1.buildingName});
+        const result = await Building.repo.find({buildingName: "building"});
         expect(result).toBeTruthy();
     });
 
@@ -42,7 +42,8 @@ describe('[model] building', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedBuilding = new Building();
+        let duplicatedBuilding = new Building();
+        duplicatedBuilding.id = 101;
         duplicatedBuilding.buildingName = "name";
 
         await Building.repo.save(duplicatedBuilding);
@@ -52,7 +53,8 @@ describe('[model] building', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedBuilding = new Building();
+        let duplicatedBuilding = new Building();
+        duplicatedBuilding.id = 101;
         duplicatedBuilding.buildingName = "name";
 
         await Building.repo.save(duplicatedBuilding);
@@ -66,7 +68,8 @@ describe('[model] building', () => {
     });
 
     it('should return null object after it was deleted', async () => {
-        const duplicatedBuilding = new Building();
+        let duplicatedBuilding = new Building();
+        duplicatedBuilding.id = 101;
         duplicatedBuilding.buildingName = "name";
 
         await Building.repo.save(duplicatedBuilding);

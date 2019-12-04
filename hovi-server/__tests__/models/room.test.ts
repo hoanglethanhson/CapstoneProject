@@ -10,8 +10,7 @@ describe('[model] room', () => {
     let roomGroup1 = new RoomGroup();
     beforeAll(async () => {
         await DatabaseManager.init();
-        roomGroup1.id = 1;
-        //roomGroup1 = await RoomGroup.repo.save(roomGroup1);
+
     });
 
     afterAll(async () => {
@@ -61,8 +60,8 @@ describe('[model] room', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedRoom = new Room();
-        duplicatedRoom.roomGroupId = roomGroup1.id;
+        let duplicatedRoom = new Room();
+        duplicatedRoom.roomGroupId = 100;
         duplicatedRoom.roomName = "name";
 
         await Room.repo.save(duplicatedRoom);
@@ -72,8 +71,8 @@ describe('[model] room', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedRoom = new Room();
-        duplicatedRoom.roomGroupId = roomGroup1.id;
+        let duplicatedRoom = new Room();
+        duplicatedRoom.roomGroupId = 100;
         duplicatedRoom.roomName = "name";
 
         await Room.repo.save(duplicatedRoom);
@@ -87,8 +86,8 @@ describe('[model] room', () => {
     });
 
     it('should return null object after it was deleted', async () => {
-        const duplicatedRoom = new Room();
-        duplicatedRoom.roomGroupId = roomGroup1.id;
+        let duplicatedRoom = new Room();
+        duplicatedRoom.roomGroupId = 100;
         duplicatedRoom.roomName = "name";
 
         await Room.repo.save(duplicatedRoom);

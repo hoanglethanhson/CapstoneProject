@@ -26,9 +26,9 @@ describe('[model] buildingType', () => {
     it('should not insert duplicated building type', async () => {
         // expect.assertions(1);
         try {
-            const duplicatedRoomType = new RoomType();
+            let duplicatedRoomType = new RoomType();
             //duplicatedRoomType.id = 3;
-            duplicatedRoomType.type = buildingType1.type;
+            duplicatedRoomType.type = "type";
             await duplicatedRoomType.save();
         } catch (error) {
             expect(error).toBeInstanceOf(QueryFailedError);
@@ -52,7 +52,8 @@ describe('[model] buildingType', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedType = new RoomType();
+        let duplicatedType = new RoomType();
+        duplicatedType.id = 101;
         duplicatedType.type = "new type";
 
         await User.repo.save(duplicatedType);
@@ -62,7 +63,8 @@ describe('[model] buildingType', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedType = new RoomType();
+        let duplicatedType = new RoomType();
+        duplicatedType.id = 101;
         duplicatedType.type = "new type";
 
         await RoomType.repo.save(duplicatedType);
@@ -76,7 +78,8 @@ describe('[model] buildingType', () => {
     });
 
     it('should return null object after it was deleted', async () => {
-        const duplicatedType = new RoomType();
+        let duplicatedType = new RoomType();
+        duplicatedType.id = 101;
         duplicatedType.type = "new type";
 
         await User.repo.save(duplicatedType);
