@@ -14,7 +14,7 @@ export default [
     {
         path: "/bankTransferHistory/",
         method: "post",
-        authentication: false,
+        authentication: true,
         handler: BankTransferHistoryFunction.createBankTransferHistory
     },
     {

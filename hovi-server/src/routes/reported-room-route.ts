@@ -15,7 +15,7 @@ export default [
     },
     {
         path: "/reportedRoom/",
-        authentication: false,
+        authentication: true,
         method: "post",
         handler: reportedRoomFunction.createReportedRoom
     },
