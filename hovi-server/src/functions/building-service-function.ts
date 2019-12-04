@@ -45,8 +45,6 @@ export default class BuildingServiceFunction {
     for (let i = 0; i < body.data.length; i++)
       error[i] = await validateByModel(BuildingService, body.data[i]);
 
-    console.log(body);
-
     if (error[0]) next(new HTTP400Error(JSON.stringify(error)));
     else {
       let promise = [], buildingId = body.buildingId;

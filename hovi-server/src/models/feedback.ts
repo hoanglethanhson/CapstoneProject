@@ -37,12 +37,13 @@ export class Feedback extends BaseEntity {
 
     @Column({
         type: "varchar",
-        length: 1000,
+        //length: 1000,
         unique: true,
+        nullable: true,
         name: Feedback.schema.email,
     })
-    @MaxLength(1000)
-    @IsEmail()
+    //@MaxLength(1000)
+    //@IsEmail()
     email: string;
 
     @Column({
@@ -54,18 +55,12 @@ export class Feedback extends BaseEntity {
 
     @Column({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: Feedback.schema.createAt
     })
     createAt: Date;
 
     @Column({
         type: "timestamp",
-        precision: 6,
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
         name: Feedback.schema.updateAt
     })
     updateAt: Date;

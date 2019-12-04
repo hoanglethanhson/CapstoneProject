@@ -4,11 +4,13 @@ export default [
     {
         path: "/tenantReview/",
         method: "get",
+        authentication: true,
         handler: TenantReviewFunction.getTenantReviews
     },
     {
         path: "/tenantReview/:tenantReviewId",
         method: "get",
+        authentication: true,
         handler: TenantReviewFunction.getTenantReview
     },
     {
