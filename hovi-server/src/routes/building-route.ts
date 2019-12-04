@@ -13,6 +13,12 @@ export default [
     handler: buildingFunction.getBuilding,
   },
   {
+    path: '/buildingKhuTro/',
+    method: 'get',
+    authentication: true,
+    handler: buildingFunction.getHostBuildings,
+  },
+  {
     path: '/building/',
     method: 'post',
     authentication: true,
