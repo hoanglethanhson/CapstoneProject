@@ -4,7 +4,7 @@ import {DatabaseManager} from "../../src/models";
 
 const supertest = require('supertest');
 
-describe('Test function service', () => {
+describe('Test function buildingService', () => {
     let request = null;
     let token = null;
 
@@ -20,39 +20,39 @@ describe('Test function service', () => {
         done();
     });
 
-    it('Test get all service', () => {
+    it('Test get all buildingService', () => {
         return request
-            .get('/service/')
+            .get('/buildingService/')
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(200);
             });
     });
 
-    it('Test get service by id', () => {
+    it('Test get buildingService by building id', () => {
         return request
-            .get('/service/1')
+            .get('/buildingService/18')
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(200);
             });
     });
 
-    it('Test create service with authentication', () => {
+    /*it('Test create buildingService with authentication', () => {
         return request
-            .post('/service')
+            .post('/buildingService')
+            .send({iconId: 3, name: 'test create', description: 'test create buildingService'})
             .set('Authorization', token)
-            .send({iconId: '3', name: 'test create 100', description: 'test create service'})
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(200);
             });
-    });
+    });*/
 
-    it('Test create service without authentication', () => {
+    it('Test create buildingService without authentication', () => {
         return request
-            .post('/service')
-            .send({iconId: '3', name: 'test create service', description: 'test create service'})
+            .post('/buildingService')
+            .send({iconId: 3, name: 'test create buildingService', description: 'test create buildingService'})
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(401);
@@ -61,21 +61,21 @@ describe('Test function service', () => {
     });
 
 
-    it('Test update service with authentication', () => {
+    /*it('Test update buildingService setting with authentication', () => {
         return request
-            .put('/service/1')
-            .send({iconId: '3', name: 'test update service', description: 'test update service'})
+            .put('/buildingService/1')
+            .send({iconId: 3, name: 'test update buildingService', description: 'test update buildingService'})
             .set('Authorization', token)
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(200);
             });
-    });
+    });*/
 
-    it('Test update service without authentication', () => {
+    it('Test update buildingService setting without authentication', () => {
         return request
-            .put('/service/1')
-            .send({iconId: '3', name: 'test update service', description: 'test update service'})
+            .put('/buildingService/8/1')
+            .send({iconId: 3, name: 'test update buildingService', description: 'test update buildingService'})
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(401);

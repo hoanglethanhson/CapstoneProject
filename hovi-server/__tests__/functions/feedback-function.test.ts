@@ -4,7 +4,7 @@ import {DatabaseManager} from "../../src/models";
 
 const supertest = require('supertest');
 
-describe('Test function service', () => {
+describe('Test function feedback', () => {
     let request = null;
     let token = null;
 
@@ -20,51 +20,10 @@ describe('Test function service', () => {
         done();
     });
 
-    it('Test get all service', () => {
+    it('Test create feedback with authentication', () => {
         return request
-            .get('/service/')
-            .set('Accept', 'application/json')
-            .then(response => {
-                expect(response.status).toBe(200);
-            });
-    });
-
-    it('Test get service by id', () => {
-        return request
-            .get('/service/1')
-            .set('Accept', 'application/json')
-            .then(response => {
-                expect(response.status).toBe(200);
-            });
-    });
-
-    it('Test create service with authentication', () => {
-        return request
-            .post('/service')
-            .set('Authorization', token)
-            .send({iconId: '3', name: 'test create 100', description: 'test create service'})
-            .set('Accept', 'application/json')
-            .then(response => {
-                expect(response.status).toBe(200);
-            });
-    });
-
-    it('Test create service without authentication', () => {
-        return request
-            .post('/service')
-            .send({iconId: '3', name: 'test create service', description: 'test create service'})
-            .set('Accept', 'application/json')
-            .then(response => {
-                expect(response.status).toBe(401);
-                expect(response.body.message).toBe('Unauthorized')
-            });
-    });
-
-
-    it('Test update service with authentication', () => {
-        return request
-            .put('/service/1')
-            .send({iconId: '3', name: 'test update service', description: 'test update service'})
+            .post('/feedback')
+            .send({userId: 1, email: 'test create', content: 'test create feedback'})
             .set('Authorization', token)
             .set('Accept', 'application/json')
             .then(response => {
@@ -72,14 +31,55 @@ describe('Test function service', () => {
             });
     });
 
-    it('Test update service without authentication', () => {
+    it('Test get all feedback', () => {
         return request
-            .put('/service/1')
-            .send({iconId: '3', name: 'test update service', description: 'test update service'})
+            .get('/feedback/')
             .set('Accept', 'application/json')
             .then(response => {
-                expect(response.status).toBe(401);
-                expect(response.body.message).toBe('Unauthorized')
+                expect(response.status).toBe(200);
+            });
+    });
+
+
+    it('Test get feedback by id', () => {
+        return request
+            .get('/feedback/1')
+            .set('Accept', 'application/json')
+            .then(response => {
+                expect(response.status).toBe(200);
+            });
+    });
+
+
+    it('Test create feedback without authentication', () => {
+        return request
+            .post('/feedback')
+            .send({userId: 1, email: 'test create', content: 'test create feedback'})
+            .set('Accept', 'application/json')
+            .then(response => {
+                expect(response.status).toBe(200);
+            });
+    });
+
+
+    it('Test update feedback setting with authentication', () => {
+        return request
+            .put('/feedback/1')
+            .send({userId: 1, email: 'test update', content: 'test create update'})
+            .set('Authorization', token)
+            .set('Accept', 'application/json')
+            .then(response => {
+                expect(response.status).toBe(200);
+            });
+    });
+
+    it('Test update feedback setting without authentication', () => {
+        return request
+            .put('/feedback/1')
+            .send({userId: 1, email: 'test update', content: 'test create feedback'})
+            .set('Accept', 'application/json')
+            .then(response => {
+                expect(response.status).toBe(200);
             });
     });
 

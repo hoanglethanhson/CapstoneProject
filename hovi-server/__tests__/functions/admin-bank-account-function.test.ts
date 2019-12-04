@@ -4,7 +4,7 @@ import {DatabaseManager} from "../../src/models";
 
 const supertest = require('supertest');
 
-describe('Test function service', () => {
+describe('Test function adminBankAccount', () => {
     let request = null;
     let token = null;
 
@@ -20,39 +20,39 @@ describe('Test function service', () => {
         done();
     });
 
-    it('Test get all service', () => {
+    it('Test get all adminBankAccount', () => {
         return request
-            .get('/service/')
+            .get('/adminBankAccount/')
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(200);
             });
     });
 
-    it('Test get service by id', () => {
+    it('Test get adminBankAccount by id', () => {
         return request
-            .get('/service/1')
+            .get('/adminBankAccount/1')
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(200);
             });
     });
 
-    it('Test create service with authentication', () => {
+    it('Test create adminBankAccount with authentication', () => {
         return request
-            .post('/service')
+            .post('/adminBankAccount')
             .set('Authorization', token)
-            .send({iconId: '3', name: 'test create 100', description: 'test create service'})
+            .send({bank: 'bank', accountNumber: '1234', holderName: 'holder'})
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(200);
             });
     });
 
-    it('Test create service without authentication', () => {
+    it('Test create adminBankAccount without authentication', () => {
         return request
-            .post('/service')
-            .send({iconId: '3', name: 'test create service', description: 'test create service'})
+            .post('/adminBankAccount')
+            .send({bank: 'bank', accountNumber: '1234', holderName: 'holder'})
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(401);
@@ -61,10 +61,10 @@ describe('Test function service', () => {
     });
 
 
-    it('Test update service with authentication', () => {
+    it('Test update adminBankAccount with authentication', () => {
         return request
-            .put('/service/1')
-            .send({iconId: '3', name: 'test update service', description: 'test update service'})
+            .put('/adminBankAccount/1')
+            .send({bank: 'bank', accountNumber: '1234', holderName: 'holder update'})
             .set('Authorization', token)
             .set('Accept', 'application/json')
             .then(response => {
@@ -72,10 +72,10 @@ describe('Test function service', () => {
             });
     });
 
-    it('Test update service without authentication', () => {
+    it('Test update adminBankAccount without authentication', () => {
         return request
-            .put('/service/1')
-            .send({iconId: '3', name: 'test update service', description: 'test update service'})
+            .put('/adminBankAccount/1')
+            .send({bank: 'bank', accountNumber: '1234', holderName: 'holder update'})
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(401);
