@@ -33,7 +33,7 @@ describe('[model] feedback', () => {
         expect(result).toBeTruthy();
     });
 
-    it('should return false if building id is not found', async () => {
+    it('should return false if feedback id is not found', async () => {
         const result = await Feedback.repo.findOne({feedbackId: 100000});
         expect(result).toBeFalsy();
     });
@@ -41,6 +41,7 @@ describe('[model] feedback', () => {
     it('should return right object after it was inserted', async () => {
         const duplicatedFeedback = new Feedback();
         duplicatedFeedback.feedbackId = 200;
+        duplicatedFeedback.content = 'test feedback';
 
         await Feedback.repo.save(duplicatedFeedback);
 
@@ -51,6 +52,7 @@ describe('[model] feedback', () => {
     it('should return right object after it was updated', async () => {
         const duplicatedFeedback = new Feedback();
         duplicatedFeedback.feedbackId = 200;
+        duplicatedFeedback.content = 'test feedback';
 
         await Feedback.repo.save(duplicatedFeedback);
 
@@ -65,6 +67,7 @@ describe('[model] feedback', () => {
     it('should return null object after it was deleted', async () => {
         const duplicatedFeedback = new Feedback();
         duplicatedFeedback.feedbackId = 200;
+        duplicatedFeedback.content = 'test feedback';
 
         await Feedback.repo.save(duplicatedFeedback);
         await Feedback.repo.delete(duplicatedFeedback.feedbackId);

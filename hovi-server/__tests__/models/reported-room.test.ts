@@ -44,8 +44,9 @@ describe('[model] reportedRoom', () => {
     });
 
     it('should return right object after it was inserted', async () => {
-        const duplicatedReview = new ReportedRoom();
-        //duplicatedReview.roomGroupId = roomGroup1.id;
+        let duplicatedReview = new ReportedRoom();
+        duplicatedReview.userId = 100;
+        duplicatedReview.roomGroupId = 100;
         duplicatedReview.reportContent = "name";
 
         await ReportedRoom.repo.save(duplicatedReview);
@@ -55,9 +56,9 @@ describe('[model] reportedRoom', () => {
     });
 
     it('should return right object after it was updated', async () => {
-        const duplicatedReview = new ReportedRoom();
-        duplicatedReview.reportId = 3;
-        //duplicatedReview.roomGroupId = roomGroup1.id;
+        let duplicatedReview = new ReportedRoom();
+        duplicatedReview.userId = 100;
+        duplicatedReview.roomGroupId = 100;
         duplicatedReview.reportContent = "name";
 
         await ReportedRoom.repo.save(duplicatedReview);
@@ -71,9 +72,9 @@ describe('[model] reportedRoom', () => {
     });
 
     it('should return null object after it was deleted', async () => {
-        const duplicatedReview = new ReportedRoom();
-        duplicatedReview.reportId = 3;
-        //duplicatedReview.roomGroupId = roomGroup1.id;
+        let duplicatedReview = new ReportedRoom();
+        duplicatedReview.userId = 100;
+        duplicatedReview.roomGroupId = 100;
         duplicatedReview.reportContent = "name";
 
         await ReportedRoom.repo.save(duplicatedReview);

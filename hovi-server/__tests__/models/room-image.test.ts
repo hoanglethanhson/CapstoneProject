@@ -61,7 +61,7 @@ describe('[model] roomImage', () => {
     it('should return right object after it was inserted', async () => {
         const duplicatedRoomImage = new RoomImage();
         duplicatedRoomImage.imageId = 3;
-        duplicatedRoomImage.roomGroupId = roomGroup1.id;
+        duplicatedRoomImage.roomGroupId = 100;
         duplicatedRoomImage.imageUrl = "new";
 
         await RoomImage.repo.save(duplicatedRoomImage);
@@ -73,7 +73,7 @@ describe('[model] roomImage', () => {
     it('should return right object after it was updated', async () => {
         const duplicatedRoomImage = new RoomImage();
         duplicatedRoomImage.imageId = 3;
-        duplicatedRoomImage.roomGroupId = roomGroup1.id;
+        duplicatedRoomImage.roomGroupId = 100;
         duplicatedRoomImage.imageUrl = "name";
 
         await RoomImage.repo.save(duplicatedRoomImage);
@@ -89,7 +89,7 @@ describe('[model] roomImage', () => {
     it('should return null object after it was deleted', async () => {
         const duplicatedRoomImage = new RoomImage();
         duplicatedRoomImage.imageId = 3;
-        duplicatedRoomImage.roomGroupId = roomGroup1.id;
+        duplicatedRoomImage.roomGroupId = 100;
         duplicatedRoomImage.imageUrl = "name";
 
         await RoomImage.repo.save(duplicatedRoomImage);

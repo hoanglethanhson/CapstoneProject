@@ -43,7 +43,7 @@ describe('[model] buildingService', () => {
     });
 
     it('should return true if buildingService name is found', async () => {
-        const result = await BuildingService.repo.getOneRecord(1, 1);
+        const result = await BuildingService.repo.getOneRecord(100, 100);
         expect(result).toBeTruthy();
     });
 
@@ -79,13 +79,13 @@ describe('[model] buildingService', () => {
 
         let duplicatedBuildingService = new BuildingService();
         duplicatedBuildingService.buildingId = 100;
-        duplicatedBuildingService.serviceId = 101;
+        duplicatedBuildingService.serviceId = 100;
 
         let updateBuildingService = duplicatedBuildingService;
         updateBuildingService.servicePrice = 200;
         await BuildingService.repo.updateById(duplicatedBuildingService.buildingId, duplicatedBuildingService.serviceId, updateBuildingService);
 
-        const result = await BuildingService.repo.getOneRecord(duplicatedBuildingService.buildingId, duplicatedBuildingService.serviceId);
+        const result = await BuildingService.repo.getOneRecord(100, 100);
         expect(result.servicePrice).toBe(200);
     });
 

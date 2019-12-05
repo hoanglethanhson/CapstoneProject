@@ -42,7 +42,7 @@ describe('[model] roomAmenities', () => {
     });
 
     it('should return true if roomAmenities name is found', async () => {
-        const result = await RoomAmenities.repo.getOneRecord(1, 1);
+        const result = await RoomAmenities.repo.getOneRecord(100, 100);
         expect(result).toBeTruthy();
     });
 
@@ -62,7 +62,7 @@ describe('[model] roomAmenities', () => {
         await amenities.save();
 
         let duplicatedRoomAmenities = new RoomAmenities();
-        duplicatedRoomAmenities.amenitiesId = 1;
+        duplicatedRoomAmenities.amenitiesId = 100;
         duplicatedRoomAmenities.roomGroupId = 100;
 
         await RoomAmenities.repo.save(duplicatedRoomAmenities);
@@ -81,7 +81,7 @@ describe('[model] roomAmenities', () => {
         await amenities.save();
 
         let duplicatedRoomAmenities = new RoomAmenities();
-        duplicatedRoomAmenities.amenitiesId = 1;
+        duplicatedRoomAmenities.amenitiesId = 100;
         duplicatedRoomAmenities.roomGroupId = 100;
 
         await RoomAmenities.repo.save(duplicatedRoomAmenities);

@@ -113,6 +113,7 @@ export class DatabaseManager {
 
         let room = new Room();
         room.roomId = 100;
+        room.roomName = 'room';
         room.roomGroupId = 100;
         room = await Room.repo.save(room);
 

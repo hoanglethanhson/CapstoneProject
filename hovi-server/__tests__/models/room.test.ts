@@ -50,7 +50,7 @@ describe('[model] room', () => {
     });
 
     it('should return true if room name is found', async () => {
-        const result = await Room.repo.find({roomName: room1.roomName});
+        const result = await Room.repo.find({roomName: 'room'});
         expect(result).toBeTruthy();
     });
 
