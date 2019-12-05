@@ -22,6 +22,7 @@ import {ReportedRoom} from "./reported-room";
 import {Room} from "./room";
 import {RoomGroup} from "./room-group";
 import {SavedRoom} from "./saved-room";
+import {HostReview} from "./host-review";
 
 @Entity(User.tableName)
 @Unique(['phoneNumber'])
@@ -226,6 +227,14 @@ export class User extends BaseEntity {
     @OneToMany(type => SavedRoom, savedRoom => savedRoom.user)
     @JoinColumn({name: User.schema.id})
     savedRooms: SavedRoom[];
+
+    @OneToMany(type => HostReview, hostReview => hostReview.host)
+    @JoinColumn({name: User.schema.id})
+    hosts: SavedRoom[];
+
+    @OneToMany(type => HostReview, hostReview => hostReview.tenant)
+    @JoinColumn({name: User.schema.id})
+    tenants: SavedRoom[];
 
     checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
         return bcrypt.compareSync(unencryptedPassword, this.password);

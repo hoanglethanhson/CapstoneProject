@@ -5,6 +5,7 @@ import {Room} from '../models/room';
 import {ConstantValues} from '../utils/constant-values';
 import {Transaction} from "../models/transaction";
 import {Building} from "../models/building";
+import {TenantReview} from "../models/tenant-review";
 import EsFunction from "./es-function";
 
 export default class RoomGroupFunction {
@@ -76,6 +77,33 @@ export default class RoomGroupFunction {
         if (roomGroupDetail) res.status(200).send(roomGroupDetail);
         else next(new HTTP400Error('error get details.'));
 
+    };
+
+    static getCanComment: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const roomGroupId = req.params['roomGroupId'];
+        const roomGroup = await RoomGroup.repo.findOne(roomGroupId);
+        let result;
+        if (roomGroup == null) {
+            next(new HTTP400Error('error get details.'));
+            return;
+        }
+        let canComment = false;
+        const userId = req['currentUserId'];
+        console.log(userId);
+        if (userId == null || userId == undefined) {
+            result = {
+                canComment: canComment
+            }
+            res.status(200).send(result);
+            return;
+        }
+        const reviewTimes = await TenantReview.repo.find({userId: parseInt(userId), roomGroupId: parseInt(roomGroupId)});
+        canComment = reviewTimes.length == 0 && (await Room.repo.isUserBeingInGroup(userId, roomGroupId) || await Room.repo.isUserCheckedOutGroup(userId, roomGroupId));
+
+        result = {
+            canComment: canComment
+        }
+        res.status(200).send(result);
     };
 
     static getRoomGroupTransactionDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {

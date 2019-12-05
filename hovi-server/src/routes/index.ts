@@ -18,6 +18,7 @@ import ReportedRoomRoutes from "./reported-room-route"
 import AdminBankAccountRoutes from "./admin-bank-account-route";
 import SystemInformationRoutes from "./system-information-route";
 import SavedRoomRoutes from "./saved-room-route";
+import HostReviewRoutes from "./host-review-route";
 
 export default [
     ...AuthRoutes,
@@ -39,5 +40,6 @@ export default [
     ...AdminBankAccountRoutes,
     ...SystemInformationRoutes,
     ...ESRoute,
-    ...SavedRoomRoutes
+    ...SavedRoomRoutes,
+    ...HostReviewRoutes
 ];

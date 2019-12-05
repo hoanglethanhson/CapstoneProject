@@ -1,7 +1,8 @@
 import {Request, Response, NextFunction, Handler} from "express";
 import {validateByModel} from '../utils';
-import {HTTP400Error} from '../utils/httpErrors';
+import {HTTP303Error, HTTP400Error} from '../utils/httpErrors';
 import {TenantReview} from "../models/tenant-review";
+import {Room} from "../models/room";
 
 export default class TenantReviewFunction {
     static getTenantReviews: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +20,11 @@ export default class TenantReviewFunction {
     };
 
     static createTenantReview: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const userId = req['currentUserId'];
         const body = req.body || {};
+        /*if (!await Room.repo.isUserBeingInGroup(userId, body.roomGroupId) && ! await Room.repo.isUserCheckedOutGroup(userId, body.roomGroupId)) {
+            next(new HTTP303Error('You do not have permission to post a review to this room group.'));
+        }*/
         const error = await validateByModel(TenantReview, body);
 
         if (error) next(error);
@@ -33,10 +38,15 @@ export default class TenantReviewFunction {
     static updateTenantReview: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
         const tenantReviewId = req.params['tenantReviewId'];
-        const successResponse = await TenantReview.repo.updateById(tenantReviewId, body);
+        const error = await validateByModel(TenantReview, body);
 
-        if (successResponse) res.status(200).send(successResponse);
-        else next(new HTTP400Error('tenantReviewId not found'));
+        if (error) next(error);
+        else {
+            const successResponse = await TenantReview.repo.updateById(tenantReviewId, body);
+
+            if (successResponse) res.status(200).send(successResponse);
+            else next(new HTTP400Error('tenantReviewId not found'));
+        }
     };
 
     static deleteTenantReview: Handler = async (req: Request, res: Response, next: NextFunction) => {
