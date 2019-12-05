@@ -45,7 +45,7 @@ image_build:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   script:
     - docker pull $SERVER_CACHE_IMAGE:latest || true
-    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:latest -t hovi-server ./hovi-server
+    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:latest -t hovi-server .
     - docker tag hovi-server $SERVER_CACHE_IMAGE:prod
     - docker push $SERVER_CACHE_IMAGE:prod
 

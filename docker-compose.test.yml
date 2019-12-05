@@ -20,7 +20,7 @@ services:
       - mysql-test
   mysql-test:
     build:
-      context: database
+      context: mysql
       cache_from:
         - registry.gitlab.com/hovi-team-development/hovi-backend/database:latest
     image: registry.gitlab.com/hovi-team-development/hovi-backend/database:latest
