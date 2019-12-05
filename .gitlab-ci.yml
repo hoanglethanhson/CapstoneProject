@@ -33,7 +33,7 @@ test:
     name: "test-reports-$CI_PIPELINE_ID-$CI_COMMIT_REF_NAME"
     when: always
     paths:
-      - ./hovi-server/coverage
+      - ./coverage
 
 image_build:
   stage: image_build
