@@ -16,7 +16,7 @@ export default class FeedbackFunction {
         const feedback = await Feedback.repo.findOne(feedbackId);
 
         if (feedback) res.status(200).send(feedback);
-        else next(new HTTP400Error('feedbackId not found.'));
+        else next(new HTTP400Error("feedbackId not found."));
     };
 
     static createFeedback: Handler = async (req: Request, res: Response, next: NextFunction) => {
