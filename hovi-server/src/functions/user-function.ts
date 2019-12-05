@@ -6,6 +6,7 @@ import {HTTP400Error} from '../utils/httpErrors';
 import {User} from '../models/user';
 import FirebaseApp from '../utils/firebaseApp';
 import config from "../../config";
+import {HostReview} from "../models/host-review";
 
 const googleStorage = new GoogleStorage(config.BUCKET_NAME);
 
@@ -28,9 +29,15 @@ export default class UserFunction {
 
     static getUserDetail: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const userId = req.params['id'];
+        const currentUserId = req['currentUserId'];
+        const reviewTimes = await HostReview.repo.find({hostId: parseInt(currentUserId), tenantId: parseInt(userId)});
+        let canComment = (reviewTimes.length == 0) && (await HostReview.repo.isBeingHostAndTenant(currentUserId, userId) || await HostReview.repo.isCheckedOutHostAndTenant(currentUserId, userId));
         const user = await User.repo.getUserDetail(userId);
-
-        if (user) res.status(200).send(user);
+        let result = {
+            user,
+            canComment
+        };
+        if (result) res.status(200).send(result);
         else next(new HTTP400Error('userId not found.'));
     };
 
