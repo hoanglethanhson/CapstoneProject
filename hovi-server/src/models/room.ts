@@ -263,6 +263,19 @@ export class RoomRepository extends Repository<Room> {
             .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
             .getRawMany();
         break;
+      case 4:
+        rawResult = await getManager()
+            .createQueryBuilder(Room, 'room')
+            .select(['*'])
+            .innerJoin(RoomGroup, 'room_group', 'room.room_group_id = room_group.room_group_id')
+            .innerJoin(Building, 'building', 'room_group.building_id = building.building_id')
+            .innerJoin(Transaction, 'transaction', 'room.room_id = transaction.room_id')
+            .innerJoin(User, 'user', 'building.host_id = user.user_id')
+            .where('transaction.user_id = :user_id', {user_id: userId})
+            .andWhere('transaction.transaction_status = :waiting', {waiting: ConstantValues.ACCEPT_WAITING})
+            .andWhere('room.room_status <> :deleted', { deleted: ConstantValues.ROOM_WAS_DELETED })
+            .getRawMany();
+        break;
     }
     for (const record of rawResult) {
       const roomImage = await RoomImage.repo.find({roomGroupId: record.room_group_id});

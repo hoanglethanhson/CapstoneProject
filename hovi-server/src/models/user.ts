@@ -342,4 +342,14 @@ export class UserRepository extends Repository<User> {
         const building = await Building.repo.findOne(roomGroup.buildingId);
         return building.hostId == parseInt(userId);
     }
+
+    async verifyUser(userId: any) {
+        const user = await User.repo.findOne(userId);
+        let userUpdate = user;
+        userUpdate.isGovernmentIdVerified = true;
+        userUpdate.isPhoneNumberVerified = true;
+        userUpdate.isSelfieVerified = true;
+        await User.repo.updateById(userId, userUpdate);
+        return User.repo.findOne(userId);
+    }
 }

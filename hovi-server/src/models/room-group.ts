@@ -377,6 +377,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
         if (host == null) {
             return null;
         }
+        host.password = '';
         const images = await this.getImages(roomGroupId);
         let imageLinks = [];
         images.forEach(function (element) {
@@ -388,6 +389,7 @@ export class RoomGroupRepository extends Repository<RoomGroup> {
 
         const transaction = await Transaction.repo.findOne(transactionId);
         const user = await User.repo.findOne(transaction.userId);
+        user.password = '';
         //console.log(transactionStatuses);
         //console.log(statusValue);
         //console.log("data: " + data);

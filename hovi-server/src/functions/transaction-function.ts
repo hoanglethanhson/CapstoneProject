@@ -272,6 +272,9 @@ export default class TransactionFunction {
         roomUpdate.roomStatus = ConstantValues.ROOM_NOT_AVAILABLE;
         roomUpdate = await Room.repo.updateById(room.roomId, roomUpdate);
 
+        await User.repo.verifyUser(userId);
+        await User.repo.verifyUser(building.hostId);
+
         let successResponse = {
             transactionUpdate: transactionUpdate,
         }
