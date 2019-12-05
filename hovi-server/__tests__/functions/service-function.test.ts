@@ -39,10 +39,11 @@ describe('Test function service', () => {
     });
 
     it('Test create service with authentication', () => {
+        let random = Math.random();
         return request
             .post('/service')
             .set('Authorization', token)
-            .send({iconId: '3', name: 'test create 100', description: 'test create service'})
+            .send({iconId: '3', name: 'test create ' + random, description: 'test create service'})
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(200);
@@ -73,9 +74,10 @@ describe('Test function service', () => {
     });
 
     it('Test update service without authentication', () => {
+        let random = Math.random();
         return request
             .put('/service/1')
-            .send({iconId: '3', name: 'test update service', description: 'test update service'})
+            .send({iconId: '3', name: 'test update service' + random, description: 'test update service'})
             .set('Accept', 'application/json')
             .then(response => {
                 expect(response.status).toBe(401);
