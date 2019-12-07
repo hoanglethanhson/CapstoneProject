@@ -5,6 +5,8 @@ import {Client} from '@elastic/elasticsearch';
 import config from '../../config';
 import {buildingTitle} from '../utils';
 
+const request = require('request');
+
 /**
  * Create connecting to elasticSearch
  */
@@ -56,7 +58,7 @@ export default class EsFunction {
                     });
 
                     let date = createdAt ? Math.round(createdAt.getTime()) : Math.round(new Date().getTime());
-                    if(id<30) date = new Date().getTime();
+                    if (id < 30) date = new Date().getTime();
 
                     // const date = createdAt ? Math.round(createdAt.getTime()) : Math.round(new Date().getTime());
 
@@ -77,29 +79,36 @@ export default class EsFunction {
                     };
                 });
 
-                // format documents (settings id of documents)
-                const documents = posts.reduce(
-                    (res, {id, ...doc}) => res.concat([
-                        {update: {_id: id}},
-                        {
-                            doc, doc_as_upsert: true,
-                        },
-                    ]),
-                    [],
-                );
-
-                // using bulk (elasticSearch) to create multiple locations at once
-                client.bulk({
-                    index: ROOMS_INDEX,
-                    type: ROOMS_TYPE,
-                    body: documents,
-                }).then(response => {
-                    console.debug(response);
-                    res.status(200).send(response);
-                }).catch(error => {
-                    console.log(error.message);
-                    next(new HTTP404Error(error.message));
+                request.post('http://hovi-server.default.svc.cluster.local:8080/rooms/create', {
+                    json: {posts}
+                }, (res) => {
+                    console.log(res);
+                    res.status(200).send(res);
                 });
+
+                // // format documents (settings id of documents)
+                // const documents = posts.reduce(
+                //     (res, {id, ...doc}) => res.concat([
+                //         {update: {_id: id}},
+                //         {
+                //             doc, doc_as_upsert: true,
+                //         },
+                //     ]),
+                //     [],
+                // );
+                //
+                // // using bulk (elasticSearch) to create multiple locations at once
+                // client.bulk({
+                //     index: ROOMS_INDEX,
+                //     type: ROOMS_TYPE,
+                //     body: documents,
+                // }).then(response => {
+                //     console.debug(response);
+                //     res.status(200).send(response);
+                // }).catch(error => {
+                //     console.log(error.message);
+                //     next(new HTTP404Error(error.message));
+                // });
             } else next(new HTTP404Error('Building id not found.'));
         }
     };
