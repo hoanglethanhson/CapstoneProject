@@ -100,3 +100,20 @@ export const FirebaseAuthRequest = (requestPrams: RequestParams, callback) => {
         json: requestPrams.body
     }, callback);
 };
+
+export const SearchServiceRequest = (path: string, method: string = 'GET', idToken: string = '') =>
+    new Promise((resolve, reject) => {
+        const options = {
+            url: `${process.env.SEARCH_SERVICE_PATH || 'http://localhost:8081'}${path}`,
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': idToken
+            }
+        };
+
+        request(options, (error, response, body) => {
+            if (error) reject(error);
+            else resolve(body);
+        });
+    });

@@ -3,10 +3,10 @@ import {HTTP400Error, HTTP401Error} from '../utils/httpErrors';
 import {RoomGroup} from '../models/room-group';
 import {Room} from '../models/room';
 import {ConstantValues} from '../utils/constant-values';
+import {SearchServiceRequest} from '../utils';
 import {Transaction} from "../models/transaction";
 import {Building} from "../models/building";
 import {TenantReview} from "../models/tenant-review";
-import EsFunction from "./es-function";
 
 export default class RoomGroupFunction {
     static getRoomGroups: Handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -70,9 +70,7 @@ export default class RoomGroupFunction {
 
         if (!roomGroup) next(new HTTP400Error('roomGroupId not found.'));
         const roomGroupDetail = await RoomGroup.repo.getRoomGroupDetail(roomGroupId, roomGroup);
-        EsFunction.updateRoomES(roomGroupId)
-            .then(data => console.log(data))
-            .catch(err => console.log(err));
+        await SearchServiceRequest(`/rooms/increase-view/${roomGroupId}`, 'POST');
 
         if (roomGroupDetail) res.status(200).send(roomGroupDetail);
         else next(new HTTP400Error('error get details.'));
@@ -97,7 +95,10 @@ export default class RoomGroupFunction {
             res.status(200).send(result);
             return;
         }
-        const reviewTimes = await TenantReview.repo.find({userId: parseInt(userId), roomGroupId: parseInt(roomGroupId)});
+        const reviewTimes = await TenantReview.repo.find({
+            userId: parseInt(userId),
+            roomGroupId: parseInt(roomGroupId)
+        });
         canComment = reviewTimes.length == 0 && (await Room.repo.isUserBeingInGroup(userId, roomGroupId) || await Room.repo.isUserCheckedOutGroup(userId, roomGroupId));
 
         result = {

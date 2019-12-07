@@ -1,5 +1,5 @@
 import {Handler, NextFunction, Request, Response} from 'express';
-import {validateByModel} from '../utils';
+import {buildingTitle, validateByModel, SearchServiceRequest} from '../utils';
 import {HTTP400Error, HTTP404Error} from '../utils/httpErrors';
 import {Building} from '../models/building';
 
@@ -87,11 +87,67 @@ export default class BuildingFunction {
             const element = {
                 buildingId: building.id,
                 title: building.buildingName
-            }
+            };
             listData.push(element);
         }
 
         if (listData) res.status(200).send(listData);
         else next(new HTTP404Error('No buildings'));
+    };
+
+    static createRoomES: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const idToken = req['idToken'];
+        const buildingId = req.params['buildingId'];
+
+        if (isNaN(Number(buildingId))) next(new HTTP404Error('Building id is invalid.'));
+        else {
+            const building = await Building.repo.getBuildingInformationById(Number(buildingId));
+            if (building) {
+                const {typeId, buildingName, location, roomGroups, province, district, ward} = building;
+                const dataLocation = {
+                    province: JSON.parse(province)[1],
+                    district: JSON.parse(district)[1],
+                    ward: JSON.parse(ward)[1],
+                    coordinates: {
+                        lat: String(location).split(',')[0],
+                        lon: String(location).split(',')[1],
+                    },
+                };
+
+                const posts = roomGroups.map(roomGroup => {
+                    const {id, gender, rentPrice, area, direction, capacity, roomAmenities, roomImages, createdAt} = roomGroup;
+                    const dataRoomImages = roomImages.map(data => data.imageUrl);
+                    const amenities = roomAmenities.map(data => {
+                        const {id, unusableName, usableName} = data.amenities;
+                        return {id, name: unusableName ? unusableName : usableName};
+                    });
+
+                    let date = createdAt ? Math.round(createdAt.getTime()) : Math.round(new Date().getTime());
+                    if (id < 30) date = new Date().getTime();
+
+                    // const date = createdAt ? Math.round(createdAt.getTime()) : Math.round(new Date().getTime());
+
+                    return {
+                        id,
+                        typeId,
+                        gender,
+                        rentPrice,
+                        area,
+                        direction,
+                        capacity,
+                        amenities,
+                        ...dataLocation,
+                        viewAmount: 0,
+                        roomImages: dataRoomImages,
+                        name: buildingTitle(buildingName, province, district, ward),
+                        updatedAt: date
+                    };
+                });
+
+                SearchServiceRequest('/rooms/create', 'POST', idToken)
+                    .then(data => res.status(200).send(data))
+                    .catch(error => next(new HTTP400Error(error)));
+            } else next(new HTTP404Error('Building id not found.'));
+        }
     };
 }

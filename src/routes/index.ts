@@ -13,7 +13,6 @@ import TransactionRoutes from './transaction-route';
 import FeedBackRoutes from './feedback-route';
 import TenantReviewRoutes from "./tenant-review-route";
 import BankTransferHistoryRoutes from "./bank-transfer-history-route";
-import ESRoute from "./es-route"
 import ReportedRoomRoutes from "./reported-room-route"
 import AdminBankAccountRoutes from "./admin-bank-account-route";
 import SystemInformationRoutes from "./system-information-route";
@@ -39,7 +38,6 @@ export default [
     ...ReportedRoomRoutes,
     ...AdminBankAccountRoutes,
     ...SystemInformationRoutes,
-    ...ESRoute,
     ...SavedRoomRoutes,
     ...HostReviewRoutes
 ];
