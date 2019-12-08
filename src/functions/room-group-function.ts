@@ -70,7 +70,7 @@ export default class RoomGroupFunction {
 
         if (!roomGroup) next(new HTTP400Error('roomGroupId not found.'));
         const roomGroupDetail = await RoomGroup.repo.getRoomGroupDetail(roomGroupId, roomGroup);
-        await SearchServiceRequest(`/rooms/increase-view/${roomGroupId}`, 'POST');
+        await SearchServiceRequest(`/rooms/increase-view/${roomGroupId}`, 'post');
 
         if (roomGroupDetail) res.status(200).send(roomGroupDetail);
         else next(new HTTP400Error('error get details.'));

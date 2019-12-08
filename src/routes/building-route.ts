@@ -7,6 +7,12 @@ export default [
     handler: buildingFunction.getBuildings,
   },
   {
+    path: '/createRoomES/:buildingId',
+    method: 'post',
+    authentication: true,
+    handler: buildingFunction.createRoomES,
+  },
+  {
     path: '/building/:buildingTypeId',
     method: 'get',
     authentication: true,

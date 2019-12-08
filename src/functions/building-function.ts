@@ -144,7 +144,7 @@ export default class BuildingFunction {
                     };
                 });
 
-                SearchServiceRequest('/rooms/create', 'POST', idToken)
+                SearchServiceRequest('/rooms/create', 'post', {posts}, idToken)
                     .then(data => res.status(200).send(data))
                     .catch(error => next(new HTTP400Error(error)));
             } else next(new HTTP404Error('Building id not found.'));

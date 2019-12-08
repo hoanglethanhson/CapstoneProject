@@ -101,19 +101,19 @@ export const FirebaseAuthRequest = (requestPrams: RequestParams, callback) => {
     }, callback);
 };
 
-export const SearchServiceRequest = (path: string, method: string = 'GET', idToken: string = '') =>
+export const SearchServiceRequest = (path: string, method: string = 'GET', data?: any, idToken: string = '') =>
     new Promise((resolve, reject) => {
         const options = {
             url: `${process.env.SEARCH_SERVICE_PATH || 'http://localhost:8081'}${path}`,
-            method,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': idToken
-            }
+            },
+            body: JSON.stringify(data)
         };
 
-        request(options, (error, response, body) => {
+        request[method](options, (error, response, body) => {
             if (error) reject(error);
-            else resolve(body);
+            else resolve(JSON.parse(body));
         });
     });
