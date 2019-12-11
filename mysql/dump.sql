@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 29/11/2019 21:07:09
+ Date: 08/12/2019 22:58:31
 */
 
 SET NAMES utf8mb4;
@@ -2751,26 +2751,27 @@ CREATE TABLE `user` (
   `selfie_image` text COMMENT 'Image of user selfie',
   `id_card_back` text COMMENT 'Image of back side of ID card',
   `id_card_front` text COMMENT 'Image of front side of ID card',
-  `is_phone_number_verified` bit(1) DEFAULT b'0',
-  `is_selfie_verified` bit(1) DEFAULT b'0' COMMENT 'User selfie image is verified or not',
-  `is_government_id_verified` bit(1) DEFAULT b'0' COMMENT 'User government id card is verified or not',
-  `is_active` bit(1) DEFAULT b'1' COMMENT 'User is active or not',
+  `is_email_verified` tinyint(1) DEFAULT '0' COMMENT 'User email is verifid or not',
+  `is_phone_number_verified` tinyint(1) DEFAULT '0',
+  `is_selfie_verified` tinyint(1) DEFAULT '0' COMMENT 'User selfie image is verified or not',
+  `is_government_id_verified` tinyint(1) DEFAULT '0' COMMENT 'User government id card is verified or not',
+  `is_active` tinyint(1) DEFAULT '1' COMMENT 'User is active or not',
   `balance` double(20,0) unsigned DEFAULT '0' COMMENT 'Balance of user in system',
   `created_at` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Record create time',
   `updated_at` timestamp(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6) COMMENT 'Record update time',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1, 'Nguyễn Như', 'Thưởng', '+84986352227', '$2a$08$bnWk.ogxlGO.px6ohFd1WO0.Cghq2KFQ6GO9Z/5pVzlHdlvMWzVIu', 'admin', 2, 'your_email_1@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'0', b'0', b'0', b'1', 1000000, '2019-11-13 08:31:27.557877', '2019-11-29 21:05:19.611634');
-INSERT INTO `user` VALUES (15, 'Nguyễn', 'Hoàng', '+84378666519', '$2a$08$5n3kFshjhI.3PqeusnHksefEJ2XNkNKkopocvmtvitHI2F6YfEAm2', NULL, 2, 'your_email_303@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'0', b'0', b'0', b'1', 0, '2019-11-13 15:13:03.579070', '2019-11-29 21:05:20.122231');
-INSERT INTO `user` VALUES (16, 'Hoàng Lê Thanh', 'Sơn', '+84982604182', '$2a$08$5I1pVXjFlNiCKwlzMN5HruULi1XEmpThJgueZzKQj/PradYgU.2k6', NULL, 2, 'your_email_393@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'0', b'0', b'0', b'1', 0, '2019-11-13 15:16:20.430927', '2019-11-29 21:05:20.819361');
-INSERT INTO `user` VALUES (18, 'Phạm Tùng', 'Anh', '+84778364588', '$2a$08$EM2xDcN2PbN61wxkyUiFJuFEhP/r0X01z52/MiShD5TgEfTdafuUK', NULL, 2, 'your_email_392@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'0', b'0', b'0', b'1', 0, '2019-11-13 15:19:39.776997', '2019-11-29 21:05:21.314373');
-INSERT INTO `user` VALUES (21, 'Đinh Đức', 'Việt', '+84386666428', '$2a$08$InYf4/Fw9SSzuwFZjOZ1PugPRZKzROs3gjN4AQsbMjh4eKS4grXXG', NULL, 2, 'your_email_21@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'0', b'0', b'0', b'1', 0, '2019-11-13 15:31:15.343005', '2019-11-29 21:05:21.972116');
-INSERT INTO `user` VALUES (22, 'A', 'Hihi', '+84367120251', '$2a$08$75fsq.dStbaxwmV.tZGyb.rfIaWpZxvudsdp9Lvagri3QTbiE0eCm', NULL, 2, 'your_email_22@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, b'0', b'0', b'0', b'1', 0, '2019-11-13 15:32:47.408454', '2019-11-29 21:05:24.848437');
+INSERT INTO `user` VALUES (1, 'Nguyễn Như', 'Thưởng', '+849863522271', '$2a$08$bnWk.ogxlGO.px6ohFd1WO0.Cghq2KFQ6GO9Z/5pVzlHdlvMWzVIu', 'admin', 2, 'your_email_1@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, 0, 0, 0, 0, 1, 1000000, '2019-11-13 08:31:27.557877', '2019-12-08 21:22:42.426663');
+INSERT INTO `user` VALUES (15, 'Nguyễn', 'Hoàng', '+84378666519', '$2a$08$5n3kFshjhI.3PqeusnHksefEJ2XNkNKkopocvmtvitHI2F6YfEAm2', NULL, 2, 'your_email_303@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, 0, 0, 0, 0, 1, 0, '2019-11-13 15:13:03.579070', '2019-11-29 21:05:20.122231');
+INSERT INTO `user` VALUES (16, 'Hoàng Lê Thanh', 'Sơn', '+84982604182', '$2a$08$5I1pVXjFlNiCKwlzMN5HruULi1XEmpThJgueZzKQj/PradYgU.2k6', NULL, 2, 'your_email_393@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, 0, 0, 0, 0, 1, 0, '2019-11-13 15:16:20.430927', '2019-11-29 21:05:20.819361');
+INSERT INTO `user` VALUES (18, 'Phạm Tùng', 'Anh', '+84778364588', '$2a$08$EM2xDcN2PbN61wxkyUiFJuFEhP/r0X01z52/MiShD5TgEfTdafuUK', NULL, 2, 'your_email_392@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, 0, 0, 0, 0, 1, 0, '2019-11-13 15:19:39.776997', '2019-11-29 21:05:21.314373');
+INSERT INTO `user` VALUES (21, 'Đinh Đức', 'Việt', '+84386666428', '$2a$08$InYf4/Fw9SSzuwFZjOZ1PugPRZKzROs3gjN4AQsbMjh4eKS4grXXG', NULL, 2, 'your_email_21@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, 0, 0, 0, 0, 1, 0, '2019-11-13 15:31:15.343005', '2019-11-29 21:05:21.972116');
+INSERT INTO `user` VALUES (22, 'A', 'Hihi', '+84367120251', '$2a$08$75fsq.dStbaxwmV.tZGyb.rfIaWpZxvudsdp9Lvagri3QTbiE0eCm', NULL, 2, 'your_email_22@example.com', 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b', 'not yet', NULL, NULL, NULL, 0, 0, 0, 0, 1, 0, '2019-11-13 15:32:47.408454', '2019-11-29 21:05:24.848437');
 COMMIT;
 
 -- ----------------------------
