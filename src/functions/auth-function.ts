@@ -38,6 +38,7 @@ export default class AuthFunction {
         body['roleAdmin'] = '';
         body['address'] = ConstantValues.DEFAULT_ADDRESS;
         body['avatar'] = ConstantValues.DEFAULT_AVATAR;
+        body['gender'] = ConstantValues.DEFAULT_GENDER;
 
         const error = await validateByModel(User, body);
         if (error) next(error);

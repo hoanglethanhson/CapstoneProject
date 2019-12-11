@@ -4,6 +4,7 @@ export class ConstantValues {
     static readonly DEFAULT_GOOGLE_ID = 'example-google-id';
     static readonly DEFAULT_AVATAR = 'https://img.icons8.com/pastel-glyph/64/000000/person-male.png';
     static readonly DEFAULT_EMAIL = 'your_email@example.com';
+    static readonly DEFAULT_GENDER = 2;
 
     // DEFINE ROOM GROUP FIELDS
     static readonly DIRECTION = ['Bắc', 'Nam', 'Đông', 'Tây', 'Đông Bắc', 'Đông Nam', 'Tây Bắc', 'Tây Nam'];
