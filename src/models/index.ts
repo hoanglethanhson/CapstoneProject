@@ -93,6 +93,11 @@ export class DatabaseManager {
             return;
         }
 
+        let adminUser = new User();
+        adminUser.id = 1;
+        adminUser.phoneNumber = "+84986352227";
+        await User.repo.save(adminUser);
+
         let user = new User();
         user.id = 100;
         user.phoneNumber = "phone number";
