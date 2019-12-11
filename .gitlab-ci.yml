@@ -23,10 +23,9 @@ test:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   script:
-    - cd ./gitlab-ci
     - docker pull $DATABASE_CACHE_IMAGE:latest || true
     - docker pull $SERVER_CACHE_IMAGE:latest || true
-    - docker-compose up --build --abort-on-container-exit
+    - docker-compose -f ./docker-compose.test.yml up --build --abort-on-container-exit
   after_script:
     - docker push $DATABASE_CACHE_IMAGE:latest
     - docker push $SERVER_CACHE_IMAGE:latest
@@ -34,4 +33,34 @@ test:
     name: "test-reports-$CI_PIPELINE_ID-$CI_COMMIT_REF_NAME"
     when: always
     paths:
-      - ./hovi-server/coverage
+      - ./coverage
+
+image_build:
+  stage: image_build
+  image: docker:stable
+  only:
+    - production
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  script:
+    - docker pull $SERVER_CACHE_IMAGE:latest || true
+    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:latest -t hovi-server .
+    - docker tag hovi-server $SERVER_CACHE_IMAGE:prod
+    - docker push $SERVER_CACHE_IMAGE:prod
+
+deploy_live:
+  stage: deploy_live
+  image: dwdraju/gke-kubectl-docker
+  only:
+    - production
+  when: manual
+  script:
+    - echo "$GCLOUD_SERVICE_KEY" > key.json
+    - gcloud auth activate-service-account --key-file=key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE --project $GCP_PROJECT_ID
+    - kubectl version
+    - kubectl apply -f ./k8s/ingress
+    - kubectl apply -f ./k8s/mysql
+    - kubectl apply -f ./k8s/server/deployment.yaml

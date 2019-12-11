@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  server-test:
+    build:
+      context: .
+      cache_from:
+        - registry.gitlab.com/hovi-team-development/hovi-backend/server:latest
+    image: registry.gitlab.com/hovi-team-development/hovi-backend/server:latest
+    container_name: hovi-server-test
+    command: npm run test
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: gitlabCI
+    networks:
+      - back-tier-test
+    depends_on:
+      - mysql-gitlab-ci-test
+  mysql-gitlab-ci-test:
+    build:
+      context: mysql
+      cache_from:
+        - registry.gitlab.com/hovi-team-development/hovi-backend/database:latest
+    image: registry.gitlab.com/hovi-team-development/hovi-backend/database:latest
+    container_name: hovi-database-gitlab-ci-test
+    ports:
+      - 3308:3306
+    networks:
+      - back-tier-test
+    env_file:
+      - ./config/env-files/.env.gitlabCI
+networks:
+  back-tier-test:

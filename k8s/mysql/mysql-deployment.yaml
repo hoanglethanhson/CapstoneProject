@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+  type: NodePort
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      initContainers:
+        - name: init-script-downloader
+          image: appropriate/curl
+          args:
+            - "-o"
+            - "/tmp/data/init.sql" # we are saving downloaded file as init.sql in /tmp/data directory
+            - "https://raw.githubusercontent.com/thuongnn/mysql-init-scripts/master/init.sql" # download url
+          volumeMounts:
+            - name: init-script
+              mountPath: /tmp/data
+      containers:
+        - image: mysql:5.6
+          args:
+            - "--ignore-db-dir=lost+found"
+          name: mysql
+          env:
+            # Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_DATABASE
+              value: HoviDB
+            - name: MYSQL_USER
+              value: hovi_user
+            - name: MYSQL_PASSWORD
+              value: hovi_password
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+            - name: mysql-cnf
+              mountPath: /etc/mysql/conf.d
+            - name: init-script
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-volumeclaim
+        - name: mysql-cnf
+          configMap:
+            name: mysql-cnf-config
+        - name: init-script # this volume holds downloaded init.sql file.
+          persistentVolumeClaim:
+            claimName: init-script
