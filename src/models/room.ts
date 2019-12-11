@@ -156,6 +156,7 @@ export class RoomRepository extends Repository<Room> {
                 .andWhere('building.host_id = :user_id', {user_id: userId})
                 .andWhere('room.room_status <> :deleted', {deleted: ConstantValues.ROOM_WAS_DELETED})
                 .getRawMany();
+            //console.log(rawResult);
         } else {
             const buildingId = parseInt(keySent.split('-')[1].trim());
             rawResult = await getManager()
@@ -171,8 +172,14 @@ export class RoomRepository extends Repository<Room> {
                 .getRawMany();
         }
         for (const record of rawResult) {
+            let tenant;
             const transaction = await Transaction.repo.findOne(record.transaction_id);
-            const tenant = await User.repo.findOne(transaction.userId);
+            if (transaction) {
+                tenant = await User.repo.findOne(transaction.userId);
+            } else {
+                tenant = null;
+            }
+            console.log(tenant);
             const roomImage = await RoomImage.repo.find({roomGroupId: record.room_group_id});
             const room = await Room.repo.findOne({roomName: record.room_name, roomGroupId: record.room_group_id});
             const transactionInRoom = await Transaction.repo.find({roomId: room.roomId});
@@ -190,8 +197,7 @@ export class RoomRepository extends Repository<Room> {
                 status: (record.transaction_status) ? record.transaction_status : 0,
                 transactionId: (record.transaction_status != ConstantValues.DUMMY_STATUS
                     && record.transaction_status != ConstantValues.HOST_REJECTED) ? record.transaction_id : null,
-                tenant: (transactionInRoom.length > 0 && record.transaction_status != ConstantValues.DUMMY_STATUS
-                    && record.transaction_status != ConstantValues.HOST_REJECTED && record.transaction_status != null) ? {
+                tenant: (tenant != null && true && transactionInRoom.length > 0 && record.transaction_status != ConstantValues.DUMMY_STATUS && record.transaction_status != ConstantValues.HOST_REJECTED && record.transaction_status != null) ? {
                     userId: tenant.id,
                     userName: tenant.firstName + " " + tenant.lastName,
                     phoneNumber: tenant.phoneNumber
