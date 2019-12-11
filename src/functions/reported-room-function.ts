@@ -21,13 +21,14 @@ export default class ReportedRoomFunction {
 
     static createReportedRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
+        const userId = req['currentUserId'];
         const error = await validateByModel(ReportedRoom, body);
 
         if (error) next(error);
         else {
-            const newReportedRoom = await ReportedRoom.repo.save(body);
-            const successResponse = await ReportedRoom.repo.findOne(newReportedRoom.reportId);
-            res.status(200).send(successResponse);
+            const a = await ReportedRoom.repo.save({...body, userId});
+            console.log(a)
+            res.status(200).send({message: 'ok'});
         }
     };
 

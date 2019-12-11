@@ -36,6 +36,12 @@ export default [
         handler: roomFunction.updateRoom
     },
     {
+        path: "/room/update/list",
+        method: "put",
+        authentication: true,
+        handler: roomFunction.updateListRoom
+    },
+    {
         path: "/room/:roomId",
         method: "delete",
         authentication: true,

@@ -29,4 +29,17 @@ export default class SavedRoomFunction {
         }
     };
 
+    static deleteRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const {roomGroupId} = req.params;
+        const userId = req['currentUserId'];
+
+        if (!roomGroupId) next(new HTTP400Error('Room group id not found'));
+        else {
+            const successResponse = await SavedRoom.repo.deleteOneRecord(roomGroupId, userId);
+            if (successResponse.affected != 0) res.status(200).send({
+                message: 'Delete saved room successfully !'
+            });
+            else next(new HTTP400Error(successResponse));
+        }
+    }
 }

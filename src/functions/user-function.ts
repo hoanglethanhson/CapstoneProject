@@ -1,7 +1,5 @@
 import {Request, Response, NextFunction, Handler} from 'express';
 import GoogleStorage from '../utils/gcp';
-import * as bcrypt from 'bcryptjs';
-import {validateByModel} from '../utils';
 import {HTTP400Error} from '../utils/httpErrors';
 import {User} from '../models/user';
 import FirebaseApp from '../utils/firebaseApp';

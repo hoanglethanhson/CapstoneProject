@@ -20,6 +20,9 @@ spec:
         - name: hovi-server
           image: registry.gitlab.com/hovi-team-development/hovi-backend/server:prod
           imagePullPolicy: Always
+          env:
+            - name: SEARCH_SERVICE_PATH
+              value: http://hovi-search-svc:8081
           args:
             - npm
             - run

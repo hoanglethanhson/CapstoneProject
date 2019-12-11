@@ -17,9 +17,19 @@ export default [
         handler: AuthFunction.resetPassword,
     },
     {
+        path: '/auth/forgot-password',
+        method: 'post',
+        handler: AuthFunction.sendResetPasswordEmail,
+    },
+    {
         path: '/auth/verify-email',
         method: 'post',
         handler: AuthFunction.verifyEmail,
+    },
+    {
+        path: '/auth/verify-phone-number',
+        method: 'post',
+        handler: AuthFunction.verifyPhoneNumber,
     },
     {
         path: "/auth/change-password",

@@ -13,4 +13,10 @@ export default [
         authentication: true,
         handler: savedRoomFunction.saveRoom
     },
+    {
+        path: "/saved-rooms/:roomGroupId",
+        method: "delete",
+        authentication: true,
+        handler: savedRoomFunction.deleteRoom
+    },
 ];

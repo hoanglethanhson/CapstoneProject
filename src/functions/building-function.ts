@@ -13,10 +13,7 @@ export default class BuildingFunction {
     static getBuilding: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const typeId = req.params['buildingTypeId'];
         const hostId = req['currentUserId'];
-        console.log(typeId);
-        console.log(hostId);
-
-        const buildings = await Building.repo.getBuildingInformation(Number(typeId), hostId);
+        const buildings = await Building.repo.getBuildingInformation(Number(typeId), hostId, !!req.query.isUpdate);
         if (buildings) {
             const dataResponse = buildings.map(data => {
                 const {id, typeId, buildingName, buildingServices, floorQuantity, roomGroups, province, district, ward, addressDescription, detailedAddress, location} = data;
@@ -101,7 +98,7 @@ export default class BuildingFunction {
 
         if (isNaN(Number(buildingId))) next(new HTTP404Error('Building id is invalid.'));
         else {
-            const building = await Building.repo.getBuildingInformationById(Number(buildingId));
+            const building = await Building.repo.getBuildingInformationById(Number(buildingId), false);
             if (building) {
                 const {typeId, buildingName, location, roomGroups, province, district, ward} = building;
                 const dataLocation = {
@@ -145,9 +142,27 @@ export default class BuildingFunction {
                 });
 
                 SearchServiceRequest('/rooms/create', 'post', {posts}, idToken)
-                    .then(data => res.status(200).send(data))
-                    .catch(error => next(new HTTP400Error(error)));
+                    .then(data => {
+                        console.log(data)
+                        res.status(200).send(data)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        next(new HTTP400Error(error))
+                    });
             } else next(new HTTP404Error('Building id not found.'));
         }
     };
+
+    static getBuildingInformationById: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const buildingId = req.params['buildingId'];
+
+        if (isNaN(Number(buildingId))) next(new HTTP404Error('Building id is invalid.'));
+        else {
+            const building = await Building.repo.getBuildingInformationById(Number(buildingId), true);
+            if (building) res.status(200).send(building);
+            else next(new HTTP404Error('Building id not found.'));
+        }
+
+    }
 }

@@ -2780,8 +2780,6 @@ DROP TRIGGER IF EXISTS `before_insert_user`;
 delimiter ;;
 CREATE TRIGGER `before_insert_user` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
 	SET @user_id = (SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = "HoviDB" AND TABLE_NAME = "user");
-	SET @email = CONCAT('your_email_',@user_id, '@example.com');
-	SET new.email = @email;
 	SET new.address = 'not yet';
 	SET new.avatar = 'https://firebasestorage.googleapis.com/v0/b/hovi-dev.appspot.com/o/default_avatar.png?alt=media&token=ac1a882c-c8ad-47c2-9c2d-f85ab0c1d79b';
 END

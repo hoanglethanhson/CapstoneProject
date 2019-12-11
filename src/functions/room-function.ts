@@ -65,6 +65,24 @@ export default class RoomFunction {
         else next(new HTTP400Error('RoomId not found'));
     };
 
+    static updateListRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const {updateRooms, createRooms} = req.body || {};
+
+        let promise = [];
+        if (updateRooms && Array.isArray(updateRooms)){
+            updateRooms.forEach(u => promise.push(Room.repo.updateById(u.roomId, u)));
+        }
+
+        if (createRooms && Array.isArray(createRooms)) createRooms.forEach(async c => {
+            const error = await validateByModel(Room, c);
+            if (!error) promise.push(Room.repo.save(c));
+        });
+
+        Promise.all(promise)
+            .then(() => res.status(200).send({message: 'ok'}))
+            .catch(error => next(new HTTP400Error(error)));
+    };
+
     static deleteRoom: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const roomId = req.params['roomId'];
         const room = await Room.repo.findOne(roomId);

@@ -36,7 +36,6 @@ export default class AuthFunction {
         const body = req.body || {};
 
         body['roleAdmin'] = '';
-        body['email'] = ConstantValues.DEFAULT_EMAIL;
         body['address'] = ConstantValues.DEFAULT_ADDRESS;
         body['avatar'] = ConstantValues.DEFAULT_AVATAR;
 
@@ -44,7 +43,9 @@ export default class AuthFunction {
         if (error) next(error);
         else {
             const checkPhoneNumber = await User.repo.findOne({phoneNumber: body['phoneNumber']});
-            if (checkPhoneNumber) next(new HTTP409Error('Phone number already exists'));
+            const checkEmail = await User.repo.findOne({email: body['email']});
+            if (checkPhoneNumber) next(new HTTP409Error('phoneNumber'));
+            else if (checkEmail) next(new HTTP409Error('email'));
             else {
                 body['password'] = bcrypt.hashSync(body['password'], 8);
                 const newUser = await User.repo.save(body);
@@ -86,6 +87,22 @@ export default class AuthFunction {
         });
     };
 
+    static sendResetPasswordEmail: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const {email} = req.body || {};
+        const user = await User.repo.findOne({email});
+
+        if (!user) next(new HTTP404Error('email'));
+        else if (!user.isPhoneNumberVerified) next(new HTTP404Error('phoneNumber'));
+        else FirebaseAuthRequest({
+                method: 'post',
+                path: 'sendOobCode',
+                body: {email, requestType: 'PASSWORD_RESET'}
+            }, (error, response, body) => {
+                if (error) next(new HTTP400Error('Error send reset password !'));
+                else res.status(200).send(body);
+            });
+    };
+
     static changePassword: Handler = async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body || {};
         const userId = req['currentUserId'];
@@ -110,7 +127,12 @@ export default class AuthFunction {
             if (error) next(new HTTP400Error('Error verify email !'));
             else {
                 if (body.error) next(new HTTP400Error(body.error.message));
-                else res.status(200).send({message: 'Verify email successfully !'});
+                else {
+                    const updateUser = new User();
+                    updateUser.isEmailVerified = true;
+                    await User.repo.updateById(body.localId, updateUser);
+                    res.status(200).send({message: 'Verify email successfully !'});
+                }
             }
         });
     };
@@ -130,5 +152,17 @@ export default class AuthFunction {
                 else resolve(body.idToken);
             });
         });
-    }
+    };
+
+    static verifyPhoneNumber: Handler = async (req: Request, res: Response, next: NextFunction) => {
+        const {phoneNumber} = req.body || {};
+        console.log(phoneNumber);
+
+        if (!phoneNumber) next(new HTTP400Error({
+            phoneNumber: 'Phone number not be empty',
+        }));
+
+        await User.repo.verifyPhoneNumber(phoneNumber);
+        res.status(200).send({messages: 'Verified phone number successfully !'});
+    };
 }

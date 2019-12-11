@@ -42,6 +42,7 @@ export class User extends BaseEntity {
         idCardFront: 'id_card_front',
         idCardBack: 'id_card_back',
         selfieImage: 'selfie_image',
+        isEmailVerified: 'is_email_verified',
         isPhoneNumberVerified: 'is_phone_number_verified',
         isSelfieVerified: 'is_selfie_verified',
         isGovernmentIdVerified: 'is_government_id_verified',
@@ -154,6 +155,12 @@ export class User extends BaseEntity {
 
     @Column({
         type: 'boolean',
+        name: User.schema.isEmailVerified,
+    })
+    isEmailVerified: boolean;
+
+    @Column({
+        type: 'boolean',
         name: User.schema.isPhoneNumberVerified,
     })
     isPhoneNumberVerified: boolean;
@@ -255,10 +262,11 @@ export class UserRepository extends Repository<User> {
             user.idCardFront = userUpdate.idCardFront ? userUpdate.idCardFront : user.idCardFront;
             user.idCardBack = userUpdate.idCardBack ? userUpdate.idCardBack : user.idCardBack;
             user.selfieImage = userUpdate.selfieImage ? userUpdate.selfieImage : user.selfieImage;
-            user.isPhoneNumberVerified = userUpdate.isPhoneNumberVerified ? userUpdate.isPhoneNumberVerified : user.isPhoneNumberVerified;
-            user.isGovernmentIdVerified = userUpdate.isGovernmentIdVerified ? userUpdate.isGovernmentIdVerified : user.isGovernmentIdVerified;
-            user.isSelfieVerified = userUpdate.isSelfieVerified ? userUpdate.isSelfieVerified : user.isSelfieVerified;
-            user.isActive = userUpdate.isActive ? userUpdate.isActive : user.isActive;
+            user.isEmailVerified = typeof userUpdate.isEmailVerified === 'boolean' ? userUpdate.isEmailVerified : user.isEmailVerified;
+            user.isPhoneNumberVerified = typeof userUpdate.isPhoneNumberVerified === 'boolean' ? userUpdate.isPhoneNumberVerified : user.isPhoneNumberVerified;
+            user.isGovernmentIdVerified = typeof userUpdate.isGovernmentIdVerified === 'boolean' ? userUpdate.isGovernmentIdVerified : user.isGovernmentIdVerified;
+            user.isSelfieVerified = typeof userUpdate.isSelfieVerified === 'boolean' ? userUpdate.isSelfieVerified : user.isSelfieVerified;
+            user.isActive = typeof userUpdate.isActive === 'boolean' ? userUpdate.isActive : user.isActive;
             user.balance = userUpdate.balance ? userUpdate.balance : user.balance;
             await this.save(user);
         }
@@ -302,7 +310,7 @@ export class UserRepository extends Repository<User> {
                 },
                 {
                     name: 'Địa chỉ email',
-                    isVerified: (user.email != ConstantValues.DEFAULT_EMAIL) ? true : false
+                    isVerified: user.isEmailVerified
                 },
                 {
                     name: 'Số điện thoại',
@@ -341,5 +349,11 @@ export class UserRepository extends Repository<User> {
         const roomGroup = await RoomGroup.repo.findOne(room.roomGroupId);
         const building = await Building.repo.findOne(roomGroup.buildingId);
         return building.hostId == parseInt(userId);
+    }
+
+    async verifyPhoneNumber(phoneNumber: string) {
+        let user = await this.findOne({phoneNumber});
+        user.isPhoneNumberVerified = true;
+        await this.save(user);
     }
 }

@@ -2,6 +2,7 @@ import {Router, Handler} from 'express';
 import {validate} from 'class-validator';
 import multer, {memoryStorage} from 'multer';
 import Authentication from '../middleware/authentication';
+import adminHandlers from '../middleware/adminHandlers';
 import {HTTP400Error} from './httpErrors';
 
 const request = require('request');
@@ -21,6 +22,7 @@ type Route = {
     path: string;
     method: string;
     authentication?: boolean;
+    admin?: boolean,
     uploadOptions?: UploadOptions;
     handler: Handler;
 }
@@ -34,8 +36,8 @@ type UploadOptions = {
 
 export const applyRoutes = (routes: Route[], router: Router) => {
     for (const route of routes) {
-        let imageMiddleware = [];
-        const {method, path, handler, authentication = false, uploadOptions} = route;
+        let imageMiddleware = [], authMiddleware: any = [];
+        const {method, path, handler, authentication = false, admin = false, uploadOptions} = route;
 
         if (uploadOptions) {
             const {type, fileSize, isMultiple, maxQuantity} = uploadOptions;
@@ -43,7 +45,10 @@ export const applyRoutes = (routes: Route[], router: Router) => {
             imageMiddleware = isMultiple ? upload.array(type, maxQuantity) : upload.single(type);
         }
 
-        (router as any)[method](path, authentication ? Authentication : [], imageMiddleware, handler);
+        if (admin) authMiddleware = adminHandlers;
+        else if (authentication) authMiddleware = Authentication;
+
+        (router as any)[method](path, authMiddleware, imageMiddleware, handler);
     }
 };
 
@@ -70,14 +75,6 @@ export const validateByModel = async (modelClass: any, body: any) => {
         );
         return new HTTP400Error(detailErrors);
     }
-};
-
-export const getCurrentDate = () => {
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1; //January is 0!
-    let yyyy = today.getFullYear();
-    return `${dd < 10 ? `0${dd}` : dd}-${mm < 10 ? `0${mm}` : mm}-${yyyy}`;
 };
 
 export const isObject = (value) => {
@@ -113,6 +110,7 @@ export const SearchServiceRequest = (path: string, method: string = 'GET', data?
         };
 
         request[method](options, (error, response, body) => {
+            console.log(response)
             if (error) reject(error);
             else resolve(JSON.parse(body));
         });
