@@ -10,6 +10,8 @@ describe('Test function building type', () => {
 
     beforeEach(async () => {
         await DatabaseManager.init();
+        await DatabaseManager.clearData();
+        await DatabaseManager.insertData();
         token = await AuthFunction.getIdToken('+84986352227');
         request = supertest(server);
     });
